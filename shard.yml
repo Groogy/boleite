@@ -1,0 +1,17 @@
+name: boleite
+version: 0.1.0
+
+authors:
+  - Henrik Valter Vogelius Hansson <groogy@groogy.se>
+
+dependencies:
+  crystal-clear:
+    github: Groogy/crystal-clear
+  lib_glfw3:
+    github: jellymann/crystal_lib_glfw3
+  lib_gl:
+    github: jellymann/crystal_lib_gl
+
+crystal: 0.23.0
+
+license: zlib
