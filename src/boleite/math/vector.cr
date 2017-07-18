@@ -35,7 +35,7 @@ module Boleite
 
     def self.dot(left : VectorImp(T, N), right : VectorImp(T, N)) forall T, N
       dot = T.zero
-      0..N.each { |index| dot += left[index] * right[index] }
+      N.times { |index| dot += left[index] * right[index] }
       dot
     end
 
