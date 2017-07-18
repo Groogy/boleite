@@ -26,26 +26,56 @@ module Boleite
       def initialize(@value : Type = nil)
       end
 
-      def marshal(index : Int32, obj)
-        child = Node.new()
-        child.internal_marshal(obj)
-        @value = [] of Type if @value.nil?
-        if arr = @value.as? Array(Type)
-          arr[index] = child
+      private macro marshal_primitive(key, value, expected_target)
+        @value = {{expected_target}}.new if @value.nil?
+        if target = @value.as? {{expected_target}}
+          target[{{key}}] = {{value}}
         else
-          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected #{Array(Type)}")
+          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected {{expected_target}}")
         end
       end
 
-      def marshal(key : String, obj)
+      private macro marshal_obj(key, obj, expected_target)
         child = Node.new()
-        child.internal_marshal(obj)
-        @value = {} of Type => Type if @value.nil?
-        if hash = @value.as? Hash(Type, Type)
-          hash[key] = child
+        child.internal_marshal({{obj}})
+        @value = {{expected_target}}.new if @value.nil?
+        if target = @value.as? {{expected_target}}
+          target[{{key}}] = child
         else
-          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected #{Hash(Type, Type)}")
+          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected {{expected_target}}")
         end
+      end
+
+      def marshal(index : Int32, string : String)
+        marshal_primitive(index, string, Array(Type))
+      end
+
+      def marshal(key : String, string : String)
+        marshal_primitive(key, string, Hash(Type, Type))
+      end
+
+      def marshal(index : Int32, int : Int)
+        marshal_primitive(index, int.to_i32, Array(Type))
+      end
+
+      def marshal(key : String, int : Int)
+        marshal_primitive(key, int.to_i32, Hash(Type, Type))
+      end
+
+      def marshal(index : Int32, float : Float)
+        marshal_primitive(index, float.to_f64, Array(Type))
+      end
+
+      def marshal(key : String, float : Float)
+        marshal_primitive(key, float.to_f64, Hash(Type, Type))
+      end
+
+      def marshal(index : Int32, obj)
+        marshal_obj(index, obj, Array(Type))
+      end
+
+      def marshal(key : String, obj)
+        marshal_obj(key, obj, Hash(Type, Type))
       end
 
       def unmarshal(index : Int32, type)
