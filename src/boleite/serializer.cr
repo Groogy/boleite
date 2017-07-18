@@ -78,22 +78,53 @@ module Boleite
         marshal_obj(key, obj, Hash(Type, Type))
       end
 
-      def unmarshal(index : Int32, type)
-        if arr = @value.as? Array(Type)
-          child = Node.new(arr[key])
-          child.internal_unmarshal(type)
+      private macro unmarshal_primitive(key, type, expected_target)
+        if target = @value.as? {{expected_target}}
+          target[{{key}}].as({{type}})
         else
-          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected #{Array(Type)}")
+          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected {{expected_target}}")
         end
       end
 
-      def unmarshal(key : String, type)
-        if hash = @value.as? Hash(Type, Type)
-          child = Node.new(hash[key])
-          child.internal_unmarshal(type)
+      private macro unmarshal_obj(key, type, expected_target)
+        if target = @value.as? {{expected_target}}
+          child = Node.new(target[{{key}}])
+          child.internal_unmarshal({{type}})
         else
-          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected #{Hash(Type, Type)}")
+          raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected {{expected_target}}")
         end
+      end
+
+      def unmarshal_string(index : Int32)
+        unmarshal_primitive(index, String, Array(Type))
+      end
+
+      def unmarshal_string(key : String)
+        unmarshal_primitive(key, String, Hash(Type, Type))
+      end
+
+      def unmarshal_int(index : Int32)
+        unmarshal_primitive(index, Int32, Array(Type))
+      end
+
+      def unmarshal_int(key : String)
+        unmarshal_primitive(key, Int32, Hash(Type, Type))
+      end
+
+      def unmarshal_float(index : Int32)
+        unmarshal_primitive(index, Float64, Array(Type))
+      end
+
+      def unmarshal_float(key : String)
+        unmarshal_primitive(key, Float64, Hash(Type, Type))
+      end
+
+      def unmarshal(index : Int32, type)
+        unmarshal_obj(index, type, Array(Type))
+      end
+
+      def unmarshal(key : String, type)
+        unmarshal_obj(index, type, Hash(Type, Type))
       end
 
       def to_yaml(io : IO)
