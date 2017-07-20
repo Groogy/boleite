@@ -124,7 +124,7 @@ module Boleite
       end
 
       def unmarshal(key : String, type)
-        unmarshal_obj(index, type, Hash(Type, Type))
+        unmarshal_obj(key, type, Hash(Type, Type))
       end
 
       def to_yaml(io : IO)
