@@ -5,9 +5,11 @@ module Boleite
   abstract class Application
     getter :configuration
 
+    @backend : Backend
     @configuration : Configuration
 
     def initialize
+      @backend = Backend.create_glfw
       @configuration = create_configuration
     end
 
