@@ -10,7 +10,9 @@ module Boleite
 
       def finalize()
         unless @surface.null?
-          LibGLFW3.destroyWindow(@surface)
+          GLFW.safe_call do
+            LibGLFW3.destroyWindow(@surface)
+          end
           @surface = Pointer(Void).null.as(LibGLFW3::Window)
         end
       end
