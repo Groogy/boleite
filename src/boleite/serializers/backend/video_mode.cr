@@ -11,7 +11,7 @@ module Boleite
         video_mode = VideoMode.new
         video_mode.resolution = node.unmarshal("resolution", Vector2u)
         video_mode.mode = Mode.parse(node.unmarshal_string("mode"))
-        video_mode.refresh_rate = node.unmarshal_int("refresh_rate").to_i16
+        video_mode.refresh_rate = node.unmarshal_int("refresh_rate").to_u16
         video_mode
       end
     end

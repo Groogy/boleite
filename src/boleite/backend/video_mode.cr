@@ -12,12 +12,12 @@ module Boleite
 
     @resolution = Vector2u.zero
     @mode = Mode::Windowed
-    @refresh_rate = Int16.zero
+    @refresh_rate = UInt16.zero
 
     def initialize()
     end
 
-    def initialize(width, height, @mode, @refresh_rate = Int16.zero)
+    def initialize(width, height, @mode, @refresh_rate = UInt16.zero)
       @resolution.x = width
       @resolution.y = height
     end
