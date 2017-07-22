@@ -54,6 +54,12 @@ module Boleite
         else
           LibGLFW3.windowHint(LibGLFW3::REFRESH_RATE, LibGLFW3::DONT_CARE)
         end
+        if config.double_buffering
+          LibGLFW3.windowHint(LibGLFW3::DOUBLEBUFFER, 1)
+        else
+          LibGLFW3.windowHint(LibGLFW3::DOUBLEBUFFER, 0)
+        end
+        LibGLFW3.windowHint(LibGLFW3::SAMPLES, config.multisamples)
         resolution = config.video_mode.resolution
         surface = LibGLFW3.createWindow(resolution.x, resolution.y, "Hello Crystal!", nil, nil)
 
