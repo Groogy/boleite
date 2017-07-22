@@ -6,6 +6,7 @@ require "./boleite/math/*"
 require "./boleite/serializers/*"
 require "./boleite/serializers/backend/*"
 require "./boleite/backend/*"
+require "./boleite/graphics/*"
 
 module Boleite
   VERSION = Version.new(0, 1, 0)

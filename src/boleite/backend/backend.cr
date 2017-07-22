@@ -7,6 +7,7 @@ module Boleite
       Private::GLFWBackend.new
     end
 
+    abstract def create_main_target(config : BackendConfiguration) : RenderTarget
     abstract def default_config : BackendConfiguration
   end
 end

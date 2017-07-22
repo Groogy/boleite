@@ -9,3 +9,5 @@
 
 # Editor Specific Ignores
 .editorconfig
+/.vscode/
+builder.sh

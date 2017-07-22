@@ -25,13 +25,17 @@ module Boleite
         @initialized = LibGLFW3.init != 0
         LibGLFW3.setErrorCallback(->GLFWBackend.on_error) if @initialized
 
+        @primary_surface = nil
         @primary_monitor = GLFWMonitor.new(LibGLFW3.getPrimaryMonitor)
       end
 
       def finalize()
         if @initialized
-          LibGLFW3.terminate
           @initialized = false
+          unless @primary_surface.nil?
+            @primary_surface.as(GLFWSurface).finalize
+          end
+          LibGLFW3.terminate
         end
       end
 
@@ -39,12 +43,24 @@ module Boleite
         @initialized
       end
 
+      requires(create_main_target(config : BackendConfiguration), config.gfx == BackendConfiguration::GfxType::OpenGL)
+      def create_main_target(config : BackendConfiguration)
+        LibGLFW3.windowHint(LibGLFW3::OPENGL_PROFILE, LibGLFW3::OPENGL_CORE_PROFILE)
+        LibGLFW3.windowHint(LibGLFW3::OPENGL_FORWARD_COMPAT, 1)
+        LibGLFW3.windowHint(LibGLFW3::CONTEXT_VERSION_MAJOR, config.version.major)
+        LibGLFW3.windowHint(LibGLFW3::CONTEXT_VERSION_MINOR, config.version.minor)
+        resolution = config.video_mode.resolution
+        surface = LibGLFW3.createWindow(resolution.x, resolution.y, "Hello Crystal!", nil, nil)
+
+        @primary_surface = GLFWSurface.new(surface)
+      end
+
       def default_config
         current = @primary_monitor.current_video_mode
         config = BackendConfiguration.new
         config.gfx = BackendConfiguration::GfxType::OpenGL
         config.version = Version.new(4, 5)
-        config.video_mode = VideoMode.new(current.width.to_u, current.height.to_u, VideoMode::Mode::Fullscreen)
+        config.video_mode = VideoMode.new(current.width.to_u, current.height.to_u, VideoMode::Mode::Borderless)
         config
       end
 
