@@ -7,6 +7,10 @@ module Boleite
       def current_video_mode
         LibGLFW3.getVideoMode(@ptr).value
       end
+
+      def ptr
+        @ptr
+      end
     end
   end
 end
