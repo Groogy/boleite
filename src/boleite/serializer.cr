@@ -70,6 +70,14 @@ module Boleite
         marshal_primitive(key, float.to_f64, Hash(Type, Type))
       end
 
+      def marshal(index : Int32, bool : Bool)
+        marshal_primitive(index, bool, Array(Type))
+      end
+
+      def marshal(key : String, bool : Bool)
+        marshal_primitive(key, bool, Hash(Type, Type))
+      end
+
       def marshal(index : Int32, obj)
         marshal_obj(index, obj, Array(Type))
       end
@@ -117,6 +125,14 @@ module Boleite
 
       def unmarshal_float(key : String)
         unmarshal_primitive(key, Float64, Hash(Type, Type))
+      end
+
+      def unmarshal_bool(index : Int32)
+        unmarshal_primitive(index, Bool, Array(Type))
+      end
+
+      def unmarshal_bool(key : String)
+        unmarshal_primitive(key, Bool, Hash(Type, Type))
       end
 
       def unmarshal(index : Int32, type)
