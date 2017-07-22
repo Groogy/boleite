@@ -49,6 +49,11 @@ module Boleite
         LibGLFW3.windowHint(LibGLFW3::OPENGL_FORWARD_COMPAT, 1)
         LibGLFW3.windowHint(LibGLFW3::CONTEXT_VERSION_MAJOR, config.version.major)
         LibGLFW3.windowHint(LibGLFW3::CONTEXT_VERSION_MINOR, config.version.minor)
+        if config.video_mode.any_refresh_rate?
+          LibGLFW3.windowHint(LibGLFW3::REFRESH_RATE, config.video_mode.refresh_rate)
+        else
+          LibGLFW3.windowHint(LibGLFW3::REFRESH_RATE, LibGLFW3::DONT_CARE)
+        end
         resolution = config.video_mode.resolution
         surface = LibGLFW3.createWindow(resolution.x, resolution.y, "Hello Crystal!", nil, nil)
 
