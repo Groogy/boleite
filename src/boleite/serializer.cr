@@ -128,11 +128,25 @@ module Boleite
       end
 
       def unmarshal_bool(index : Int32)
-        unmarshal_primitive(index, Bool, Array(Type))
+        val = unmarshal_primitive(index, String, Array(Type))
+        if val == "true"
+          true
+        elsif val == "false"
+          false
+        else
+          raise Exception.new("Unmarshaling a boolean, got \"#{val}\" while expecting \"true\" or \"false\".")
+        end
       end
 
       def unmarshal_bool(key : String)
-        unmarshal_primitive(key, Bool, Hash(Type, Type))
+        val = unmarshal_primitive(key, String, Hash(Type, Type))
+        if val == "true"
+          true
+        elsif val == "false"
+          false
+        else
+          raise Exception.new("Unmarshaling a boolean, got \"#{val}\" while expecting \"true\" or \"false\".")
+        end
       end
 
       def unmarshal(index : Int32, type)
