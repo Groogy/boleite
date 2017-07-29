@@ -10,6 +10,10 @@ module Boleite
       @receivers << receiver
     end
 
+    def unregister(receiver)
+      @receivers.remove(receiver)
+    end
+
     def process(event : InputEvent)
       @receivers.each &.process(event)
     end
