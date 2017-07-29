@@ -24,12 +24,10 @@ module Boleite
       end
 
       def self.bind_callbacks(window)
-        puts "oi"
         LibGLFW3.setWindowCloseCallback(window, ->self.on_window_close)
       end
 
       def self.on_window_close(window)
-        puts "aw yiz"
         @@events << ClosedEvent.new
       end
     end
