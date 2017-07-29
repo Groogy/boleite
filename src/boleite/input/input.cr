@@ -1,5 +1,0 @@
-require "./keys.cr"
-require "./input_event.cr"
-require "./input_router.cr"
-require "./input_receiver.cr"
-require "./input_action.cr"
