@@ -14,12 +14,15 @@ module Boleite
     end
 
     getter :configuration
+    getter :input_router
+    getter :state_stack
 
     @backend : Backend
     @configuration : Configuration
     @graphics : GraphicsContext
     @input_handler = InputHandler.new
     @input_router = InputRouter.new
+    @state_stack = StateStack.new
     @running = true
 
     def initialize
@@ -37,6 +40,9 @@ module Boleite
         end
 
         @graphics.clear Color.black
+        top_state = @state_stack.top
+        top_state.update
+        top_state.render
         @graphics.present
       end
     end
