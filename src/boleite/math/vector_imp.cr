@@ -83,6 +83,11 @@ module Boleite
     def_vector_property(:z, 2)
     def_vector_property(:w, 3)
 
+    def_vector_property(:r, 0)
+    def_vector_property(:g, 1)
+    def_vector_property(:b, 2)
+    def_vector_property(:a, 3)
+
     private macro def_vector_math(operator, arg_type)
       def {{operator.id}}(other : {{arg_type}}) : self
         self.class.new().do_math(self, other) do |a, b|
