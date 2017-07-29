@@ -11,7 +11,7 @@ module Boleite
     end
 
     def process(event : InputEvent)
-      @receivers.each &process(event)
+      @receivers.each &.process(event)
     end
   end
 end

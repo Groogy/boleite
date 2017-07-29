@@ -46,16 +46,21 @@ module Boleite
       requires(create_main_target(config : BackendConfiguration), config.gfx == BackendConfiguration::GfxType::OpenGL)
       def create_main_target(config : BackendConfiguration)
         setup_main_target_settings(config)
-        @primary_surface = GLFWSurface.new(create_surface(config.video_mode))
+        native = create_surface(config.video_mode)
+        GLFWInput.bind_callbacks(native)
+        @primary_surface = GLFWSurface.new(native)
       end
 
       def default_config
-        
         config = BackendConfiguration.new
         config.gfx = BackendConfiguration::GfxType::OpenGL
         config.version = Version.new(4, 5)
         config.video_mode = default_video_mode(VideoMode::Mode::Borderless)
         config
+      end
+
+      def poll_event : InputEvent | Nil
+        GLFWInput.poll
       end
 
       def default_video_mode(mode)
