@@ -192,4 +192,8 @@ module Boleite
   alias Vector4i  = Vector4i32
   alias Vector4u  = Vector4u32
   alias Vector4f  = Vector4f64
+
+  alias Color32f  = Vector4f32
+  alias Color64f  = Vector4f64
+  alias Colorf    = Color32f
 end
