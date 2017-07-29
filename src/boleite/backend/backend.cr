@@ -7,7 +7,7 @@ module Boleite
       Private::GLFW.new
     end
 
-    abstract def create_main_target(config : BackendConfiguration) : RenderTarget
+    abstract def create_graphics(config : BackendConfiguration) : GraphicsContext
     abstract def default_config : BackendConfiguration
     abstract def poll_event : InputEvent | Nil
   end

@@ -16,6 +16,10 @@ module Boleite
           @surface = Pointer(Void).null.as(LibGLFW3::Window)
         end
       end
+
+      def ptr
+        @surface
+      end
     end
   end
 end

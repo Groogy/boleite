@@ -43,12 +43,13 @@ module Boleite
         @initialized
       end
 
-      requires(create_main_target(config : BackendConfiguration), config.gfx == BackendConfiguration::GfxType::OpenGL)
-      def create_main_target(config : BackendConfiguration)
-        setup_main_target_settings(config)
-        native = create_surface(config.video_mode)
-        GLFWInput.bind_callbacks(native)
-        @primary_surface = GLFWSurface.new(native)
+      requires(create_graphics(config : BackendConfiguration), config.gfx == BackendConfiguration::GfxType::OpenGL)
+      def create_graphics(config : BackendConfiguration)
+        setup_main_target_settings config
+        native = create_surface config.video_mode
+        GLFWInput.bind_callbacks native
+        @primary_surface = GLFWSurface.new native
+        create_graphics_context @primary_surface, config
       end
 
       def default_config
@@ -87,6 +88,25 @@ module Boleite
 
       protected def self.on_error(error : Int32, description : Int8*)
         @@errors << ErrorData.new(ErrorCode.new(error), String.new(description.as(UInt8*)))
+      end
+
+      private def create_graphics_context(surface, config : BackendConfiguration) : GraphicsContext
+        case config.gfx
+        when BackendConfiguration::GfxType::OpenGL
+        create_opengl_context surface, config
+        when BackendConfiguration::GfxType::Vulkan
+        create_vulkan_context surface, config
+        else
+          raise BackendException.new("Unknown requested graphics context! Given #{config.gfx}.")
+        end
+      end
+
+      private def create_opengl_context(surface, config : BackendConfiguration)
+        GLFWOpenGLContext.new surface.as(GLFWSurface)
+      end
+
+      private def create_vulkan_context(surface, config : BackendConfiguration)
+        raise BackendException.new("Vulkan support has not yet been implemented!")
       end
 
       private def setup_main_target_settings(config : BackendConfiguration)

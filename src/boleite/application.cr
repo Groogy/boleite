@@ -17,7 +17,7 @@ module Boleite
 
     @backend : Backend
     @configuration : Configuration
-    @render_target : RenderTarget
+    @graphics : GraphicsContext
     @input_handler = InputHandler.new
     @input_router = InputRouter.new
     @running = true
@@ -25,7 +25,7 @@ module Boleite
     def initialize
       @backend = Backend.create_glfw
       @configuration = create_configuration
-      @render_target = @backend.create_main_target(@configuration.backend)
+      @graphics = @backend.create_graphics(@configuration.backend)
       @input_handler.bind(self)
       @input_router.register(@input_handler)
     end
@@ -35,6 +35,9 @@ module Boleite
         while event = @backend.poll_event
           @input_router.process event
         end
+
+        @graphics.clear Color.black
+        @graphics.present
       end
     end
 
