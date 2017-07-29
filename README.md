@@ -3,7 +3,7 @@
 ![Boleite](http://i.imgur.com/BKTwCEH.png)
 
 
-Work In Progress Framework for developing Games in Crystal
+Work In Progress Framework for developing Games in Crystal. You can view it in use at my other project [Ego](https://github.com/Groogy/ego).
 
 ## Installation
 
