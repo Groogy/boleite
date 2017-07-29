@@ -124,11 +124,34 @@ module Boleite
     Menu
   end
 
+  enum Mouse
+    Unknown
+    Button1
+    Button2
+    Button3
+    Button4
+    Button5
+    Button6
+    Button7
+    Button8
+    Last = Button8
+    Left = Button1
+    Right = Button2
+    Middle = Button3
+  end
+
   @[Flags]
   enum KeyMod
     Shift
     Control
     Alt
     Super
+  end
+
+  enum InputAction
+    Unknown
+    Press
+    Release
+    Repeat
   end
 end
