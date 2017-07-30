@@ -19,7 +19,7 @@ module Boleite
     def disable
     end
 
-    abstract def update()
-    abstract def render()
+    abstract def update(delta)
+    abstract def render(delta)
   end
 end

@@ -23,6 +23,7 @@ module Boleite
     @input_handler = InputHandler.new
     @input_router = InputRouter.new
     @state_stack = StateStack.new
+    @clock = Clock.new
     @running = true
 
     def initialize
@@ -34,16 +35,12 @@ module Boleite
     end
 
     def run
+      @clock.restart
       while @running
-        while event = @backend.poll_event
-          @input_router.process event
-        end
-
-        @graphics.clear Color.black
+        tick_time = @clock.restart
         top_state = @state_stack.top
-        top_state.update
-        top_state.render
-        @graphics.present
+        process_events
+        process_state top_state, tick_time
       end
     end
 
@@ -52,5 +49,18 @@ module Boleite
     end
 
     abstract def create_configuration : Configuration
+
+    private def process_events
+      while event = @backend.poll_event
+        @input_router.process event
+      end
+    end
+
+    private def process_state(state, delta)
+      state.update(delta)
+      @graphics.clear Color.black
+      state.render(delta)
+      @graphics.present
+    end
   end
 end
