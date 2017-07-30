@@ -8,7 +8,7 @@ module Boleite
         if @@iterator >= @@events.size
           @@events.clear
           @@iterator = 0
-          LibGLFW3.pollEvents
+          GLFW.safe_call{ LibGLFW3.pollEvents }
         end
       end
 
@@ -24,12 +24,14 @@ module Boleite
       end
 
       def self.bind_callbacks(window)
-        LibGLFW3.setWindowCloseCallback(window, ->self.on_window_close)
-        LibGLFW3.setKeyCallback(window, ->self.on_key)
-        LibGLFW3.setCharCallback(window, ->self.on_char)
-        LibGLFW3.setMouseButtonCallback(window, ->self.on_mouse_button)
-        LibGLFW3.setScrollCallback(window, ->self.on_scroll)
-        LibGLFW3.setCursorPosCallback(window, ->self.on_cursor_pos)
+        GLFW.safe_call do
+          LibGLFW3.setWindowCloseCallback(window, ->self.on_window_close)
+          LibGLFW3.setKeyCallback(window, ->self.on_key)
+          LibGLFW3.setCharCallback(window, ->self.on_char)
+          LibGLFW3.setMouseButtonCallback(window, ->self.on_mouse_button)
+          LibGLFW3.setScrollCallback(window, ->self.on_scroll)
+          LibGLFW3.setCursorPosCallback(window, ->self.on_cursor_pos)
+        end
       end
 
       def self.on_window_close(window)
