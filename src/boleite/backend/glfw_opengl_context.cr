@@ -20,6 +20,10 @@ module Boleite
       def present
         GLFW.safe_call{ LibGLFW3.swapBuffers(@glfw_surface.ptr) }
       end
+
+      def create_vertex_buffer_object : VertexBufferObject
+        GLFWOpenGLVertexBufferObject.new
+      end
     end
   end
 end

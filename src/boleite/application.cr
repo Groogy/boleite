@@ -16,6 +16,7 @@ module Boleite
     getter :configuration
     getter :input_router
     getter :state_stack
+    getter :graphics
 
     @backend : Backend
     @configuration : Configuration
@@ -57,8 +58,9 @@ module Boleite
     end
 
     private def process_state(state, delta)
+      LibGL.viewport 0, 0, 1024, 768
       state.update(delta)
-      @graphics.clear Color.black
+      @graphics.clear Color.red
       state.render(delta)
       @graphics.present
     end
