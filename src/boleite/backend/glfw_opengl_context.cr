@@ -24,6 +24,10 @@ module Boleite
       def create_vertex_buffer_object : VertexBufferObject
         GLFWOpenGLVertexBufferObject.new
       end
+
+      def create_shader(parser : ShaderParser) : Shader
+        GLFWOpenGLShader.new(parser)
+      end
     end
   end
 end
