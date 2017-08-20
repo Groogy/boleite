@@ -6,4 +6,5 @@ abstract class Boleite::GraphicsContext
   abstract def create_vertex_buffer_object : VertexBufferObject
   abstract def create_shader(parser : ShaderParser) : Shader
   abstract def create_texture() : Texture
+  abstract def create_frame_buffer() : FrameBuffer
 end

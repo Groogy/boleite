@@ -30,4 +30,8 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
   def create_texture : Texture
     OpenGLTexture.new
   end
+
+  def create_frame_buffer : FrameBuffer
+    OpenGLFrameBuffer.new
+  end
 end

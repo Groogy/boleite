@@ -106,4 +106,8 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
   def bind
     GL.safe_call { LibGL.bindTexture LibGL::TEXTURE_2D, @object_id }
   end
+
+  def identifier
+    @object_id
+  end
 end
