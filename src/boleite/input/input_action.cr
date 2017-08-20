@@ -1,21 +1,19 @@
-module Boleite
-  class ClosedAction
-    def interested?(event : InputEvent) : Bool
-      event.class == ClosedEvent
-    end
-
-    def translate(event : InputEvent)
-      Tuple.new
-    end
+class Boleite::ClosedAction
+  def interested?(event : InputEvent) : Bool
+    event.class == ClosedEvent
   end
 
-  class PassThroughAction
-    def interested?(event : InputEvent) : Bool
-      true
-    end
+  def translate(event : InputEvent)
+    Tuple.new
+  end
+end
 
-    def translate(event : InputEvent)
-      {event}
-    end
+class Boleite::PassThroughAction
+  def interested?(event : InputEvent) : Bool
+    true
+  end
+
+  def translate(event : InputEvent)
+    {event}
   end
 end
