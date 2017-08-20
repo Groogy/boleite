@@ -23,7 +23,7 @@ module Boleite
 
       def finalize
         if @program_id > 0
-          GLFW.safe_call { LibGL.deleteProgram @program_id }
+          GL.safe_call { LibGL.deleteProgram @program_id }
           @program_id = LibGL::UInt.zero
         end
       end
@@ -33,55 +33,55 @@ module Boleite
       end
 
       def activate(use_settings, &block)
-        GLFW.safe_call { LibGL.useProgram @program_id }
+        GL.safe_call { LibGL.useProgram @program_id }
         if use_settings
           apply_settings
           apply_textures
         end
         result = yield
-        GLFW.safe_call{ LibGL.useProgram 0 }
+        GL.safe_call{ LibGL.useProgram 0 }
         result
       end
 
       def set_parameter(name, value : Float32) : Void
         activate false do 
           loc = uniform_location_for name
-          GLFW.safe_call { LibGL.uniform1f loc, value }
+          GL.safe_call { LibGL.uniform1f loc, value }
         end
       end
 
       def set_parameter(name, value : Vector2f32) : Void
         activate false do 
           loc = uniform_location_for name
-          GLFW.safe_call { LibGL.uniform2f loc, value.x, value.y }
+          GL.safe_call { LibGL.uniform2f loc, value.x, value.y }
         end
       end
 
       def set_parameter(name, value : Vector3f32) : Void
         activate false do 
           loc = uniform_location_for name
-          GLFW.safe_call { LibGL.uniform3f loc, value.x, value.y, value.z }
+          GL.safe_call { LibGL.uniform3f loc, value.x, value.y, value.z }
         end
       end
 
       def set_parameter(name, value : Vector4f32) : Void
         activate false do 
           loc = uniform_location_for name
-          GLFW.safe_call { LibGL.uniform4f loc, value.x, value.y, value.z, value.w }
+          GL.safe_call { LibGL.uniform4f loc, value.x, value.y, value.z, value.w }
         end
       end
 
       def set_parameter(name, value : Matrix33f32 ) : Void
         activate false do
           loc = uniform_location_for name
-          GLFW.safe_call { LibGL.uniformMatrix3fv loc, 1, LibGL::FALSE, value.elements }
+          GL.safe_call { LibGL.uniformMatrix3fv loc, 1, LibGL::FALSE, value.elements }
         end
       end
 
       def set_parameter(name, value : Matrix44f32 ) : Void
         activate false do
           loc = uniform_location_for name
-          GLFW.safe_call { LibGL.uniformMatrix4fv loc, 1, LibGL::FALSE, value.elements }
+          GL.safe_call { LibGL.uniformMatrix4fv loc, 1, LibGL::FALSE, value.elements }
         end
       end
 
@@ -134,14 +134,14 @@ module Boleite
       private def uniform_location_for(name) : LibGL::Int
         loc = @uniforms[name]?
         if loc.nil?
-          loc = GLFW.safe_call { LibGL.getUniformLocation @program_id, name.to_unsafe.as(Int8*) }
+          loc = GL.safe_call { LibGL.getUniformLocation @program_id, name.to_unsafe.as(Int8*) }
           @uniforms[name] = loc
         end
         loc
       end
 
       private def apply_settings
-        GLFW.safe_call do
+        GL.safe_call do
           if @depth_settings.enabled
             LibGL.enable LibGL::DEPTH_TEST
             LibGL.depthFunc self.class.translate_depth_func(@depth_settings.func)
@@ -162,12 +162,12 @@ module Boleite
       private def apply_textures
         slot = 1
         @textures.each do |loc, texture|
-          GLFW.safe_call { LibGL.uniform1i loc, slot }
-          GLFW.safe_call { LibGL.activeTexture LibGL::TEXTURE0 + slot }
+          GL.safe_call { LibGL.uniform1i loc, slot }
+          GL.safe_call { LibGL.activeTexture LibGL::TEXTURE0 + slot }
           texture.bind
           slot += 1
         end
-        GLFW.safe_call { LibGL.activeTexture LibGL::TEXTURE0 }
+        GL.safe_call { LibGL.activeTexture LibGL::TEXTURE0 }
       end
 
       private def compile_objects(parser)
@@ -185,7 +185,7 @@ module Boleite
 
       private def link_shader
         finalize
-        GLFW.safe_call do 
+        GL.safe_call do 
           @program_id = LibGL.createProgram
           @objects.each { |obj| LibGL.attachShader @program_id, obj.gl_identifier }
           LibGL.linkProgram @program_id
@@ -253,10 +253,10 @@ module Boleite
       @type : ShaderType
 
       def initialize(source : String, type : ShaderType)
-        @object_id = GLFW.safe_call { LibGL.createShader self.class.translate_shader_type(type) }
+        @object_id = GL.safe_call { LibGL.createShader self.class.translate_shader_type(type) }
         @type = type
 
-        GLFW.safe_call do
+        GL.safe_call do
           conv_source = [source.to_unsafe.as(LibGL::Char*)].to_unsafe.as(LibGL::Char*)
           LibGL.shaderSource @object_id, 1, conv_source, nil
           LibGL.compileShader @object_id
@@ -274,7 +274,7 @@ module Boleite
 
       def finalize
         if @object_id > 0
-          GLFW.safe_call { LibGL.deleteShader @object_id }
+          GL.safe_call { LibGL.deleteShader @object_id }
           @object_id = LibGL::UInt.zero
         end
       end

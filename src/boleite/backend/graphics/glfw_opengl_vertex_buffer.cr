@@ -5,12 +5,12 @@ module Boleite
 
       def initialize
         @activated = false
-        GLFW.safe_call { LibGL.genVertexArrays 1, pointerof(@object_id) }
+        GL.safe_call { LibGL.genVertexArrays 1, pointerof(@object_id) }
         super
       end
 
       def finalize
-        GLFW.safe_call { LibGL.deleteVertexArrays 1, pointerof(@object_id) }
+        GL.safe_call { LibGL.deleteVertexArrays 1, pointerof(@object_id) }
       end
 
       def allocate_buffer : VertexBuffer 
@@ -26,7 +26,7 @@ module Boleite
           update_layout
 
           primitive = self.class.translate_primitive(@primitive)
-          GLFW.safe_call { LibGL.drawArrays primitive, 0, num_vertices }
+          GL.safe_call { LibGL.drawArrays primitive, 0, num_vertices }
         end
       end
 
@@ -37,8 +37,8 @@ module Boleite
               attribute = @layout.attributes[index]
               attribute_type = self.class.translate_type(attribute.type)
               attribute_offset = Pointer(Void).new(attribute.offset)
-              GLFW.safe_call { LibGL.enableVertexAttribArray index }
-              GLFW.safe_call { LibGL.vertexAttribPointer index, attribute.size, attribute_type, LibGL::FALSE, attribute.stride, attribute_offset }
+              GL.safe_call { LibGL.enableVertexAttribArray index }
+              GL.safe_call { LibGL.vertexAttribPointer index, attribute.size, attribute_type, LibGL::FALSE, attribute.stride, attribute_offset }
             end
           end
           @update_layout = false
@@ -47,11 +47,11 @@ module Boleite
       
       def activate(&block)
         was_activated = @activated
-        GLFW.safe_call { LibGL.bindVertexArray @object_id } unless was_activated
+        GL.safe_call { LibGL.bindVertexArray @object_id } unless was_activated
         @activated = true
         result = yield
         @activated = false unless was_activated
-        GLFW.safe_call { LibGL.bindVertexArray 0 } unless was_activated
+        GL.safe_call { LibGL.bindVertexArray 0 } unless was_activated
         result
       end
 
@@ -80,21 +80,21 @@ module Boleite
       @buffer_id : LibGL::UInt = 0_u32
       
       def initialize
-        GLFW.safe_call { LibGL.genBuffers 1, pointerof(@buffer_id) }
+        GL.safe_call { LibGL.genBuffers 1, pointerof(@buffer_id) }
       end
 
       def finalize
-        GLFW.safe_call { LibGL.deleteBuffers 1, pointerof(@buffer_id) }
+        GL.safe_call { LibGL.deleteBuffers 1, pointerof(@buffer_id) }
       end
 
       def activate
-        GLFW.safe_call { LibGL.bindBuffer LibGL::ARRAY_BUFFER, @buffer_id }
+        GL.safe_call { LibGL.bindBuffer LibGL::ARRAY_BUFFER, @buffer_id }
       end
       
       def build
         if needs_rebuild?
           activate
-          GLFW.safe_call { LibGL.bufferData LibGL::ARRAY_BUFFER, size, @data.to_unsafe, LibGL::STATIC_DRAW }
+          GL.safe_call { LibGL.bufferData LibGL::ARRAY_BUFFER, size, @data.to_unsafe, LibGL::STATIC_DRAW }
           @rebuild = false
         end        
       end

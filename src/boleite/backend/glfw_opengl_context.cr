@@ -13,8 +13,8 @@ module Boleite
       end
 
       def clear(color)
-        GLFW.safe_call { LibGL.clearColor(color.r, color.g, color.b, color.a) }
-        GLFW.safe_call { LibGL.clear(LibGL::COLOR_BUFFER_BIT) }
+        GL.safe_call { LibGL.clearColor(color.r, color.g, color.b, color.a) }
+        GL.safe_call { LibGL.clear(LibGL::COLOR_BUFFER_BIT) }
       end
 
       def present

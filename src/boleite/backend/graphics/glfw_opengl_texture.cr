@@ -33,11 +33,11 @@ module Boleite
       end
 
       def initialize
-        GLFW.safe_call { LibGL.genTextures 1, pointerof(@object_id) }
+        GL.safe_call { LibGL.genTextures 1, pointerof(@object_id) }
       end
 
       def finalize
-        GLFW.safe_call { LibGL.deleteTextures 1, pointerof(@object_id) }
+        GL.safe_call { LibGL.deleteTextures 1, pointerof(@object_id) }
       end
 
       def create(width : UInt32, height : UInt32, format : Format, type : Type) : Void
@@ -56,7 +56,7 @@ module Boleite
 
       def create_internal(width, height, format)
         activate do
-          GLFW.safe_call do
+          GL.safe_call do
             LibGL.texImage2D LibGL::TEXTURE_2D, 0, format, width, height, 0, LibGL::RGBA, LibGL::UNSIGNED_BYTE, nil
             LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_MIN_FILTER, @smooth ? LibGL::LINEAR : LibGL::NEAREST
             LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_MAG_FILTER, @smooth ? LibGL::LINEAR : LibGL::NEAREST
@@ -69,7 +69,7 @@ module Boleite
       requires(update(pixels, width, height, x_dest, y_dest, bpp), @depth == false)
       def update(pixels, width, height, x_dest, y_dest, bpp)
         activate do
-          GLFW.safe_call do
+          GL.safe_call do
             external_format = self.class.translate_bpp(bpp)
             LibGL.texSubImage2D LibGL::TEXTURE_2D, 0, x_dest, y_dest, width, height, external_format, LibGL::UNSIGNED_BYTE, pixels
           end
@@ -91,7 +91,7 @@ module Boleite
       def smooth=(val : Boolean) : Boolean
         @smooth = val
         activate do
-          GLFW.safe_call do
+          GL.safe_call do
             LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_MIN_FILTER, @smooth ? LibGL::LINEAR : LibGL::NEAREST
             LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_MAG_FILTER, @smooth ? LibGL::LINEAR : LibGL::NEAREST
           end
@@ -99,14 +99,14 @@ module Boleite
       end
 
       def activate(&block)
-        GLFW.safe_call { LibGL.bindTexture LibGL::TEXTURE_2D, @object_id }
+        GL.safe_call { LibGL.bindTexture LibGL::TEXTURE_2D, @object_id }
         result = yield
-        GLFW.safe_call { LibGL.bindTexture LibGL::TEXTURE_2D, 0 }
+        GL.safe_call { LibGL.bindTexture LibGL::TEXTURE_2D, 0 }
         result
       end
 
       def bind
-        GLFW.safe_call { LibGL.bindTexture LibGL::TEXTURE_2D, @object_id }
+        GL.safe_call { LibGL.bindTexture LibGL::TEXTURE_2D, @object_id }
       end
     end
   end
