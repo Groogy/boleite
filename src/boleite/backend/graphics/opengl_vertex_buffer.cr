@@ -1,6 +1,6 @@
 module Boleite
   module Private
-    class GLFWOpenGLVertexBufferObject < VertexBufferObject
+    class OpenGLVertexBufferObject < VertexBufferObject
       @object_id : LibGL::UInt = 0_u32
 
       def initialize
@@ -14,7 +14,7 @@ module Boleite
       end
 
       def allocate_buffer : VertexBuffer 
-        buf = activate { GLFWOpenGLVertexBuffer.new }
+        buf = activate { OpenGLVertexBuffer.new }
       end
       
       def render
@@ -76,7 +76,7 @@ module Boleite
       end
     end
 
-    class GLFWOpenGLVertexBuffer < VertexBuffer
+    class OpenGLVertexBuffer < VertexBuffer
       @buffer_id : LibGL::UInt = 0_u32
       
       def initialize

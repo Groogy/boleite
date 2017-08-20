@@ -3,14 +3,14 @@ module Boleite
   end
 
   module Private
-    class GLFWOpenGLShader < Shader
+    class OpenGLShader < Shader
       @program_id = LibGL::UInt.zero
-      @objects = [] of GLFWOpenGLShaderObject
+      @objects = [] of OpenGLShaderObject
       @depth_settings : ShaderDepthSettings
       @blend_settings : ShaderBlendSettings
       @value_settings : ShaderValueSettings
       @uniforms = {} of String => LibGL::Int
-      @textures = {} of LibGL::Int => GLFWOpenGLTexture
+      @textures = {} of LibGL::Int => OpenGLTexture
 
       def initialize(parser : ShaderParser)
         @depth_settings = parser.depth_settings
@@ -88,7 +88,7 @@ module Boleite
       def set_parameter(name, value : Texture) : Void
         activate false do
           loc = uniform_location_for name
-          @textures[loc] = value.as(GLFWOpenGLTexture)
+          @textures[loc] = value.as(OpenGLTexture)
         end
       end
 
@@ -177,7 +177,7 @@ module Boleite
           end
 
           if parser.has_shader type
-            obj = GLFWOpenGLShaderObject.new parser.shader_source(type), type
+            obj = OpenGLShaderObject.new parser.shader_source(type), type
             @objects << obj
           end
         end
@@ -248,7 +248,7 @@ module Boleite
       end
     end
 
-    class GLFWOpenGLShaderObject
+    class OpenGLShaderObject
       @object_id : LibGL::UInt
       @type : ShaderType
 

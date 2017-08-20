@@ -1,6 +1,6 @@
 module Boleite
   module Private
-    class GLFWOpenGLTexture < Texture
+    class OpenGLTexture < Texture
       @@internal_formats = {
         {Format::Red, Type::Integer8} => LibGL::R8, {Format::Red, Type::Integer16} => LibGL::R16,
         {Format::Red, Type::Float16} => LibGL::R16F, {Format::Red, Type::Float32} => LibGL::R32F,

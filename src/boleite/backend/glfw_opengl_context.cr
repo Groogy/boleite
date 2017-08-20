@@ -22,15 +22,15 @@ module Boleite
       end
 
       def create_vertex_buffer_object : VertexBufferObject
-        GLFWOpenGLVertexBufferObject.new
+        OpenGLVertexBufferObject.new
       end
 
       def create_shader(parser : ShaderParser) : Shader
-        GLFWOpenGLShader.new(parser)
+        OpenGLShader.new(parser)
       end
 
       def create_texture : Texture
-        GLFWOpenGLTexture.new
+        OpenGLTexture.new
       end
     end
   end
