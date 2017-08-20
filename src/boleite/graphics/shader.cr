@@ -19,7 +19,8 @@ module Boleite
     abstract def set_parameter(name, value : Vector2f32) : Void
     abstract def set_parameter(name, value : Vector3f32) : Void
     abstract def set_parameter(name, value : Vector4f32) : Void
-    abstract def set_parameter(name, value : Matrix33f32 ) : Void
-    abstract def set_parameter(name, value : Matrix44f32 ) : Void
+    abstract def set_parameter(name, value : Matrix33f32) : Void
+    abstract def set_parameter(name, value : Matrix44f32) : Void
+    abstract def set_parameter(name, value : Texture) : Void
   end
 end

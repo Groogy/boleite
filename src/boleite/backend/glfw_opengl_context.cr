@@ -28,6 +28,10 @@ module Boleite
       def create_shader(parser : ShaderParser) : Shader
         GLFWOpenGLShader.new(parser)
       end
+
+      def create_texture : Texture
+        GLFWOpenGLTexture.new
+      end
     end
   end
 end

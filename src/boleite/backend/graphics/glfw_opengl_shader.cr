@@ -10,6 +10,7 @@ module Boleite
       @blend_settings : ShaderBlendSettings
       @value_settings : ShaderValueSettings
       @uniforms = {} of String => LibGL::Int
+      @textures = {} of LibGL::Int => GLFWOpenGLTexture
 
       def initialize(parser : ShaderParser)
         @depth_settings = parser.depth_settings
@@ -33,7 +34,10 @@ module Boleite
 
       def activate(use_settings, &block)
         GLFW.safe_call { LibGL.useProgram @program_id }
-        apply_settings if use_settings
+        if use_settings
+          apply_settings
+          apply_textures
+        end
         result = yield
         GLFW.safe_call{ LibGL.useProgram 0 }
         result
@@ -78,6 +82,13 @@ module Boleite
         activate false do
           loc = uniform_location_for name
           GLFW.safe_call { LibGL.uniformMatrix4fv loc, 1, LibGL::FALSE, value.elements }
+        end
+      end
+
+      def set_parameter(name, value : Texture) : Void
+        activate false do
+          loc = uniform_location_for name
+          @textures[loc] = value.as(GLFWOpenGLTexture)
         end
       end
 
@@ -146,6 +157,17 @@ module Boleite
             LibGL.disable LibGL::BLEND
           end
         end
+      end
+
+      private def apply_textures
+        slot = 1
+        @textures.each do |loc, texture|
+          GLFW.safe_call { LibGL.uniform1i loc, slot }
+          GLFW.safe_call { LibGL.activeTexture LibGL::TEXTURE0 + slot }
+          texture.bind
+          slot += 1
+        end
+        GLFW.safe_call { LibGL.activeTexture LibGL::TEXTURE0 }
       end
 
       private def compile_objects(parser)

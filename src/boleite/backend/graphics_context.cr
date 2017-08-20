@@ -6,5 +6,6 @@ module Boelite
 
     abstract def create_vertex_buffer_object : VertexBufferObject
     abstract def create_shader(parser : ShaderParser) : Shader
+    abstract def create_texture() : Texture
   end
 end

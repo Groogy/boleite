@@ -6,6 +6,10 @@ module Boleite
 
     getter width, height, bpp
 
+    def self.load_file(file)
+      Image.new file
+    end
+
     def initialize(@width, @height, @bpp = 32)
       @native = LibFreeImage.allocate(@width, @height, @bpp, 0, 0, 0)
     end
@@ -25,7 +29,7 @@ module Boleite
     end
 
     def size
-      Vector2ui.new(@width, @height)
+      Vector2u.new(@width, @height)
     end
 
     def byte_size
@@ -36,9 +40,9 @@ module Boleite
       Image.new LibFreeImage.clone @native
     end
 
-    def pixels
+    def pixels : Bytes
       ptr = LibFreeImage.getBits @native
-      Slice.new ptr, byte_size
+      Bytes.new ptr, byte_size
     end
 
     protected def initialize(@native : LibFreeImage::FIBITMAP*)
