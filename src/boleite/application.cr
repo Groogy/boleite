@@ -20,6 +20,7 @@ abstract class Boleite::Application
   @backend : Backend
   @configuration : Configuration
   @graphics : GraphicsContext
+  @renderer : Renderer
   @input_handler = InputHandler.new
   @input_router = InputRouter.new
   @state_stack = StateStack.new
@@ -30,6 +31,7 @@ abstract class Boleite::Application
     @backend = Backend.create_glfw
     @configuration = create_configuration
     @graphics = @backend.create_graphics(@configuration.backend)
+    @renderer = create_renderer(@graphics)
     @input_handler.bind(self)
     @input_router.register(@input_handler)
   end
@@ -49,6 +51,7 @@ abstract class Boleite::Application
   end
 
   abstract def create_configuration : Configuration
+  abstract def create_renderer(gfx : GraphicsContext) : Renderer
 
   private def process_events
     while event = @backend.poll_event
@@ -59,8 +62,8 @@ abstract class Boleite::Application
   private def process_state(state, delta)
     LibGL.viewport 0, 0, 1024, 768
     state.update(delta)
-    @graphics.clear Color.red
-    state.render(delta)
-    @graphics.present
+    @renderer.clear Color.red
+    state.render(delta, @renderer)
+    @renderer.present
   end
 end
