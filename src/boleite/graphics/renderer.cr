@@ -1,5 +1,5 @@
 abstract class Boleite::Renderer
-  def initialize(@gfx : GraphicsContext)
+  def initialize(@gfx : GraphicsContext, @camera)
   end
 
   abstract def clear(color : Colorf) : Void
