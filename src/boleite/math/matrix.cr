@@ -131,7 +131,7 @@ module Boleite::Matrix
     det = matrix[0] * inv[0] + matrix[1] * inv[4] + matrix[2] * inv[8] + matrix[3] * inv[12]
 
     assert(det != 0)
-    det = T.new(1) / detMatrixImp
+    det = T.new(1) / det
     MatrixImp(T, 4, 16).new do |index|
       inv[index] * det
     end
