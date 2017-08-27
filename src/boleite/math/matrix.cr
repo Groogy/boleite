@@ -136,4 +136,33 @@ module Boleite::Matrix
       inv[index] * det
     end
   end
+
+  def self.calculate_fov_projection(fov : T, aspect : T, near : T, far : T, left_handed : T) forall T
+    result = MatrixImp(T, 4, 16).identity
+    one = T.new(1)
+    half = T.new(0.5)
+    frustrum_depth = far - near
+    one_over_depth = one / frustum_depth
+    result[1, 1] = one / Math.tan(half * fov)
+    result[0, 0] = (left_handed ? one : -one) * result[1, 1] / aspect
+    result[2, 2] = far * one_over_depth
+    result[3, 2] = (-far * near) * one_over_depth
+    result[2, 3] = one
+    result[3, 3] = 0
+    result
+  end
+
+  def self.calculate_ortho_projection(left : T, right : T, top : T, bottom : T, near : T, far : T) forall T
+    result = MatrixImp(T, 4, 16).identity
+    two = T.new(2)
+    one = T.new(1)
+    result[0, 0] = two / (right - left)
+    result[1, 1] = two / (top - bottom)
+    result[2, 2] = -two / (far - near)
+    result[3, 0] = -(right + left)/(right - left)
+    result[3, 1] = -(top + bottom)/(top - bottom)
+    result[3, 2] = -(far + near)/(far - near)
+    result[3, 3] = one
+    result
+  end
 end
