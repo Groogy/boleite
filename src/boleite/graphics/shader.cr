@@ -21,4 +21,12 @@ abstract class Boleite::Shader
   abstract def set_parameter(name, value : Matrix33f32) : Void
   abstract def set_parameter(name, value : Matrix44f32) : Void
   abstract def set_parameter(name, value : Texture) : Void
+
+  abstract def world_transform=(value : Matrix44f32) : Void
+  abstract def view_transform=(value : Matrix44f32) : Void
+  abstract def projection_transform=(value : Matrix44f32) : Void
+
+  abstract def has_world_transform?() : Bool
+  abstract def has_view_transform?() : Bool
+  abstract def has_projection_transform?() : Bool
 end
