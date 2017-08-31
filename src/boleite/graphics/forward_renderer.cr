@@ -9,9 +9,10 @@ class Boleite::ForwardRenderer < Boleite::Renderer
     @gfx.clear color
   end
 
-  def draw(vbo : VertexBufferObject)
-    apply_shader_settings
-    @default_shader.activate do
+  def draw_vertices(vbo, shader, transform)
+    shader = ensure_shader shader
+    apply_shader_settings shader, transform
+    shader.activate do
       vbo.render
     end
   end
@@ -19,10 +20,18 @@ class Boleite::ForwardRenderer < Boleite::Renderer
   def present
     @gfx.present
   end
+  
+  def ensure_shader(shader) : Shader
+    if shader
+      shader
+    else
+      @default_shader
+    end
+  end
 
-  def apply_shader_settings
-    @default_shader.world_transform = Matrix44f32.identity
-    @default_shader.view_transform = @camera.inverse_transformation
-    @default_shader.projection_transform = @camera.projection
+  def apply_shader_settings(shader, transform)
+    shader.world_transform = transform
+    shader.view_transform = @camera.inverse_transformation
+    shader.projection_transform = @camera.projection
   end
 end
