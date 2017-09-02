@@ -8,7 +8,7 @@ struct Boleite::MatrixImp(Type, Dimension, Size)
   end
 
   private macro to_index(x, y)
-    {{y}} * Dimension + {{x}}
+    {{y}} + Dimension * {{x}}
   end
   
   def self.identity : self
