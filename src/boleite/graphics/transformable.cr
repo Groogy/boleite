@@ -52,7 +52,6 @@ module Boleite::Transformable
 
   def update_transformation
     angle = @rot * Math::PI / 180.0
-    p angle
     cosine = Math.cos angle
     sine = Math.sin angle
     sc = Vector2f.new @scale.x * cosine, @scale.y * cosine
