@@ -1,8 +1,12 @@
 abstract struct Boleite::Vertex
 end
 
+module Boleite::Transformable
+end
+
 class Boleite::Sprite
   include Drawable
+  include Transformable
 
   struct Vertex < Vertex
     @pos = Vector2f32.zero
@@ -17,14 +21,20 @@ class Boleite::Sprite
   @@vertices : VertexBufferObject?
   @@shader : Shader?
 
-  property texture
+  property texture, size
+
+  @size : Vector2u
 
   def initialize(@texture : Texture)
+    @size = @texture.size
   end
 
   protected def internal_render(renderer, transform)
     vertices = get_vertices(renderer.gfx)
     shader = get_shader(renderer.gfx)
+    scale_transform = Matrix.scale Matrix44f32.identity, Vector4f32.new(@size.x.to_f32, @size.y.to_f32, 1f32, 1f32)
+    transform = Matrix.mul transform, self.transformation
+    transform = Matrix.mul scale_transform, transform
     drawcall = DrawCallContext.new vertices, shader, transform
     drawcall.uniforms["colorTexture"] = texture
     renderer.draw drawcall
@@ -42,9 +52,9 @@ class Boleite::Sprite
   private def create_vertices(gfx) : VertexBufferObject
     vertices = [
       Vertex.new([0.0f32, 0.0f32], [0.0f32, 1.0f32]),
-      Vertex.new([0.0f32, 600.0f32], [0.0f32, 0.0f32]),
-      Vertex.new([600.0f32, 0.0f32], [1.0f32, 1.0f32]),
-      Vertex.new([600.0f32, 600.0f32], [1.0f32, 0.0f32]),
+      Vertex.new([0.0f32, 1.0f32], [0.0f32, 0.0f32]),
+      Vertex.new([1.0f32, 0.0f32], [1.0f32, 1.0f32]),
+      Vertex.new([1.0f32, 1.0f32], [1.0f32, 0.0f32]),
     ]
   
     layout = VertexLayout.new [
