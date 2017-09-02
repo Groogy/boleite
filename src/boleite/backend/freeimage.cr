@@ -45,6 +45,18 @@ lib LibFreeImage
     FIF_JXR	    = 36
   end
 
+  {% if flag?(:osx) %}
+    RGBA_RED = 0
+    RGBA_GREEN = 1
+    RGBA_BLUE = 2
+    RGBA_ALPHA = 3
+  {% else %}
+    RGBA_RED = 2
+    RGBA_GREEN = 1
+    RGBA_BLUE = 0
+    RGBA_ALPHA = 3
+  {% end %}
+
   fun allocate = FreeImage_Allocate(width : Int32, height : Int32, bpp : Int32, red_mask : UInt32, green_mask : UInt32, blue_mask : UInt32) : FIBITMAP*
   fun load = FreeImage_Load(fif : FORMAT, filename : LibC::Char*, flags : Int32) : FIBITMAP*
   fun clone = FreeImage_Clone(dib : FIBITMAP*) : FIBITMAP*
@@ -56,5 +68,6 @@ lib LibFreeImage
   fun getHeight = FreeImage_GetHeight(dib : FIBITMAP*) : UInt32
   fun getBPP = FreeImage_GetBPP(dib : FIBITMAP*) : UInt32
   fun getLine = FreeImage_GetLine(dib : FIBITMAP*) : UInt32
+  fun getPitch = FreeImage_GetPitch(dib : FIBITMAP*) : UInt32
   fun getBits = FreeImage_GetBits(dib : FIBITMAP*) : BYTE*
 end
