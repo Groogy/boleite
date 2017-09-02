@@ -9,12 +9,10 @@ class Boleite::Sprite
   include Transformable
 
   struct Vertex < Vertex
-    @pos = Vector2f32.zero
-    @uv  = Vector2f32.zero
+    @data = Vector2f32.zero
   
-    def initialize(pos, uv)
-      @pos   = Vector2f32.new(pos)
-      @uv    = Vector2f32.new(uv)
+    def initialize(x, y)
+      @data = Vector2f32.new(x, y)
     end
   end
 
@@ -24,19 +22,29 @@ class Boleite::Sprite
   property texture, size
 
   @size : Vector2u
+  @uv_buffer : VertexBuffer?
 
   def initialize(@texture : Texture)
     @size = @texture.size
+
+    @uv_vertices = [
+      Vertex.new(0.0f32, 1.0f32),
+      Vertex.new(0.0f32, 0.0f32),
+      Vertex.new(1.0f32, 1.0f32),
+      Vertex.new(1.0f32, 0.0f32),
+    ]
   end
 
   protected def internal_render(renderer, transform)
     vertices = get_vertices(renderer.gfx)
     shader = get_shader(renderer.gfx)
+    uv = get_uv(renderer.gfx)
     scale_transform = Matrix.scale Matrix44f32.identity, Vector4f32.new(@size.x.to_f32, @size.y.to_f32, 1f32, 1f32)
     transform = Matrix.mul transform, self.transformation
     transform = Matrix.mul scale_transform, transform
     drawcall = DrawCallContext.new vertices, shader, transform
     drawcall.uniforms["colorTexture"] = texture
+    drawcall.buffers << uv
     renderer.draw drawcall
   end
 
@@ -49,17 +57,28 @@ class Boleite::Sprite
     vertices
   end
 
+  private def get_uv(gfx) : VertexBuffer
+    buffer = @uv_buffer
+    if buffer.nil?
+      buffer = gfx.create_vertex_buffer
+      @uv_buffer = buffer
+    end
+    buffer.clear
+    @uv_vertices.each { |uv| buffer.add_data uv }
+    buffer
+  end
+
   private def create_vertices(gfx) : VertexBufferObject
     vertices = [
-      Vertex.new([0.0f32, 0.0f32], [0.0f32, 1.0f32]),
-      Vertex.new([0.0f32, 1.0f32], [0.0f32, 0.0f32]),
-      Vertex.new([1.0f32, 0.0f32], [1.0f32, 1.0f32]),
-      Vertex.new([1.0f32, 1.0f32], [1.0f32, 0.0f32]),
+      Vertex.new(0.0f32, 0.0f32),
+      Vertex.new(0.0f32, 1.0f32),
+      Vertex.new(1.0f32, 0.0f32),
+      Vertex.new(1.0f32, 1.0f32),
     ]
   
     layout = VertexLayout.new [
-      VertexAttribute.new(2, :float, 16_u32, 0_u32),
-      VertexAttribute.new(2, :float, 16_u32, 8_u32),
+      VertexAttribute.new(0, 2, :float, 8_u32, 0_u32),
+      VertexAttribute.new(1, 2, :float, 8_u32, 0_u32),
     ]
     vbo = gfx.create_vertex_buffer_object
     vbo.layout = layout
