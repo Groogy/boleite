@@ -50,6 +50,8 @@ lib LibFreeImage
   fun clone = FreeImage_Clone(dib : FIBITMAP*) : FIBITMAP*
   fun unload = FreeImage_Unload(dib : FIBITMAP*) : Void
 
+  fun getFileType = FreeImage_GetFileType(filename : LibC::Char*, size : Int32) : FORMAT
+
   fun getWidth = FreeImage_GetWidth(dib : FIBITMAP*) : UInt32
   fun getHeight = FreeImage_GetHeight(dib : FIBITMAP*) : UInt32
   fun getBPP = FreeImage_GetBPP(dib : FIBITMAP*) : UInt32

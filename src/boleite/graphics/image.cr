@@ -1,4 +1,7 @@
 class Boleite::Image
+  class Error < Exception
+  end
+  
   @width : UInt32
   @height : UInt32
   @bpp : UInt32
@@ -14,7 +17,9 @@ class Boleite::Image
   end
 
   def initialize(file : String)
-    @native = LibFreeImage.load LibFreeImage::FORMAT::FIF_BMP, file, 0
+    format = LibFreeImage.getFileType file, 0
+    @native = LibFreeImage.load format, file, 0
+    raise Error.new "Failed to load image #{file}" if @native.null?
     @width = LibFreeImage.getWidth @native
     @height = LibFreeImage.getHeight @native
     @bpp = LibFreeImage.getBPP @native
