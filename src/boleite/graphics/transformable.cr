@@ -42,6 +42,18 @@ module Boleite::Transformable
     @update_transform = true
   end
 
+  def move(offset)
+    self.position = position + offset
+  end
+
+  def move(x, y)
+    self.position = position + Vector2f.new(x, y)
+  end
+
+  def rotate(rot)
+    self.rotation = rotation + rot
+  end
+
   def transformation
     if @update_transform
       update_transformation
