@@ -12,19 +12,20 @@ class Boleite::Private::OpenGLVertexBufferObject < Boleite::VertexBufferObject
   end
 
   def allocate_buffer : VertexBuffer 
-    buf = activate { OpenGLVertexBuffer.new }
+    OpenGLVertexBuffer.new
   end
   
-  def render
+  def render(instances)
     activate do
       @buffers.each do |buffer|
-        buffer.activate
         buffer.build
       end
       update_layout
 
       primitive = self.class.translate_primitive(@primitive)
-      GL.safe_call { LibGL.drawArrays primitive, 0, num_vertices }
+      GL.safe_call { LibGL.drawArraysInstanced primitive, 0, num_vertices, instances }
+
+      clear_tmp_buffers
     end
   end
 
@@ -35,6 +36,8 @@ class Boleite::Private::OpenGLVertexBufferObject < Boleite::VertexBufferObject
           attribute = @layout.attributes[index]
           attribute_type = self.class.translate_type(attribute.type)
           attribute_offset = Pointer(Void).new(attribute.offset)
+          buffer = @buffers[attribute.buffer]
+          buffer.activate
           GL.safe_call { LibGL.enableVertexAttribArray index }
           GL.safe_call { LibGL.vertexAttribPointer index, attribute.size, attribute_type, LibGL::FALSE, attribute.stride, attribute_offset }
         end

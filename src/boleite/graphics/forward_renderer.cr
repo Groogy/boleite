@@ -12,8 +12,9 @@ class Boleite::ForwardRenderer < Boleite::Renderer
   def draw(drawcall : DrawCallContext)
     shader = ensure_shader drawcall.shader
     apply_shader_settings shader, drawcall.transformation, drawcall.uniforms
+    drawcall.buffers.each { |buffer| drawcall.vertices.attach_buffer(buffer, true) }
     shader.activate do
-      drawcall.vertices.render
+      drawcall.vertices.render(1)
     end
   end
 

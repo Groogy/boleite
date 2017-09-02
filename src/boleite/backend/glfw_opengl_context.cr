@@ -23,6 +23,10 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
     OpenGLVertexBufferObject.new
   end
 
+  def create_vertex_buffer : VertexBuffer
+    OpenGLVertexBuffer.new
+  end
+
   def create_shader(parser : ShaderParser) : Shader
     OpenGLShader.new(parser)
   end

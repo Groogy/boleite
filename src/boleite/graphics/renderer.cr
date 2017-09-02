@@ -1,10 +1,12 @@
 struct Boleite::DrawCallContext
-  property vertices, transformation, shader, uniforms
+  property vertices, transformation, shader
+  property uniforms, buffers
 
   @vertices : VertexBufferObject
   @transformation = Matrix44f32.identity
   @shader = nil
   @uniforms = DrawCallUniforms.new
+  @buffers = [] of VertexBuffer
 
   def initialize(@vertices : VertexBufferObject, @transformation = Matrix44f32.identity)
   end

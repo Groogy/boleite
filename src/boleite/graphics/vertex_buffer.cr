@@ -16,22 +16,24 @@ struct Boleite::VertexAttribute
     Int
   end
 
-  property :size
-  property :type
-  property :stride
-  property :offset
+  property buffer
+  property size
+  property type
+  property stride
+  property offset
 
   def initialize
+    @buffer = 0
     @size = 0
     @type = Type::Float
     @stride = 0_u32
     @offset = 0_u32
   end
 
-  def initialize(@size, @type, @stride, @offset)
+  def initialize(@buffer, @size, @type, @stride, @offset)
   end
 
-  def initialize(@size, type : Symbol, @stride, @offset)
+  def initialize(@buffer, @size, type : Symbol, @stride, @offset)
     @type = case type
     when :float
       Type::Float
@@ -79,6 +81,7 @@ end
 
 abstract class Boleite::VertexBufferObject
   @buffers = [] of VertexBuffer
+  @tmp_buffers = [] of VertexBuffer
   @primitive = Primitive::Triangles
   @layout = VertexLayout.new
   @update_layout = true
@@ -96,7 +99,13 @@ abstract class Boleite::VertexBufferObject
 
   def create_buffer()
     buffer = activate { allocate_buffer }
+    attach_buffer buffer
+  end
+
+  def attach_buffer(buffer, temp = false)
     @buffers << buffer
+    @tmp_buffers << buffer if temp
+    @update_layout = true
     buffer
   end
 
@@ -120,9 +129,20 @@ abstract class Boleite::VertexBufferObject
   end
 
   abstract def allocate_buffer : VertexBuffer 
-  abstract def render
+  abstract def render(instances)
   abstract def update_layout
   abstract def activate(&block)
+
+  private def clear_tmp_buffers
+    @layout.attributes.each do |attribute|
+      buffer = @buffers[attribute.buffer]
+      if @tmp_buffers.includes? buffer
+        @buffers.delete buffer
+        @update_layout = true
+      end
+    end
+    @tmp_buffers.clear
+  end
 end
 
 abstract class Boleite::VertexBuffer
@@ -140,6 +160,10 @@ abstract class Boleite::VertexBuffer
       @data << byte
     end
     @rebuild = true
+  end
+
+  def clear : Void
+    @data.clear
   end
 
   def size
