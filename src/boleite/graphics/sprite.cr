@@ -77,8 +77,8 @@ class Boleite::Sprite
     ]
   
     layout = VertexLayout.new [
-      VertexAttribute.new(0, 2, :float, 8_u32, 0_u32),
-      VertexAttribute.new(1, 2, :float, 8_u32, 0_u32),
+      VertexAttribute.new(0, 2, :float, 8_u32, 0_u32, 0_u32),
+      VertexAttribute.new(1, 2, :float, 8_u32, 0_u32, 0_u32),
     ]
     vbo = gfx.create_vertex_buffer_object
     vbo.layout = layout

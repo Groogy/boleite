@@ -40,6 +40,7 @@ class Boleite::Private::OpenGLVertexBufferObject < Boleite::VertexBufferObject
           buffer.activate
           GL.safe_call { LibGL.enableVertexAttribArray index }
           GL.safe_call { LibGL.vertexAttribPointer index, attribute.size, attribute_type, LibGL::FALSE, attribute.stride, attribute_offset }
+          GL.safe_call { LibGL.vertexAttribDivisor index, attribute.frequency }
         end
       end
       @update_layout = false

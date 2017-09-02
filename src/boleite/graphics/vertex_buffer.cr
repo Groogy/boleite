@@ -21,6 +21,7 @@ struct Boleite::VertexAttribute
   property type
   property stride
   property offset
+  property frequency
 
   def initialize
     @buffer = 0
@@ -28,12 +29,13 @@ struct Boleite::VertexAttribute
     @type = Type::Float
     @stride = 0_u32
     @offset = 0_u32
+    @frequency = 0_u32
   end
 
-  def initialize(@buffer, @size, @type, @stride, @offset)
+  def initialize(@buffer, @size, @type, @stride, @offset, @frequency)
   end
 
-  def initialize(@buffer, @size, type : Symbol, @stride, @offset)
+  def initialize(@buffer, @size, type : Symbol, @stride, @offset, @frequency)
     @type = case type
     when :float
       Type::Float
