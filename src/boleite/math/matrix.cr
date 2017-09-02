@@ -35,9 +35,26 @@ module Boleite::Matrix
 
   def self.translate(matrix : MatrixImp(T, 4, 16), translation : VectorImp(T, 3)) forall T
     cpy = matrix.dup
-    cpy[3, 0] = translation.x
-    cpy[3, 1] = translation.y
-    cpy[3, 2] = translation.z
+    cpy[3, 0] += translation.x
+    cpy[3, 1] += translation.y
+    cpy[3, 2] += translation.z
+    cpy
+  end
+
+  def self.scale(matrix : MatrixImp(T, 3, 9), scale : VectorImp(T, 3)) forall T
+    cpy = matrix.dup
+    cpy[0, 0] *= scale.x
+    cpy[1, 1] *= scale.y
+    cpy[2, 2] *= scale.z
+    cpy
+  end
+
+  def self.scale(matrix : MatrixImp(T, 4, 16), scale : VectorImp(T, 4)) forall T
+    cpy = matrix.dup
+    cpy[0, 0] *= scale.x
+    cpy[1, 1] *= scale.y
+    cpy[2, 2] *= scale.z
+    cpy[3, 3] *= scale.w
     cpy
   end
   
