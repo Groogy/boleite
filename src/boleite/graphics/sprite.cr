@@ -23,16 +23,21 @@ class Boleite::Sprite
 
   @size : Vector2u
   @uv_buffer : VertexBuffer?
+  @uv_vertices = StaticArray(Vertex, 4).new(Vertex.new(0f32, 0f32))
 
   def initialize(@texture : Texture)
     @size = @texture.size
+    @texture_rect = IntRect.new(0, 0, @size.x.to_i, @size.y.to_i)
+    update_uv_vertices
+  end
 
-    @uv_vertices = [
-      Vertex.new(0.0f32, 1.0f32),
-      Vertex.new(0.0f32, 0.0f32),
-      Vertex.new(1.0f32, 1.0f32),
-      Vertex.new(1.0f32, 0.0f32),
-    ]
+  def texture_rect
+    @texture_rect
+  end
+
+  def texture_rect=(rect)
+    @texture_rect = rect
+    update_uv_vertices
   end
 
   protected def internal_render(renderer, transform)
@@ -88,6 +93,18 @@ class Boleite::Sprite
     vbo
   end
 
+  private def update_uv_vertices
+    tex_size = @texture.size.to_f32
+    tex_min, tex_max = @texture_rect.bounds
+    tex_min = tex_min.to_f32 / tex_size
+    tex_max = tex_max.to_f32 / tex_size
+
+    @uv_vertices[0] = Vertex.new(tex_min.x, tex_max.y)
+    @uv_vertices[1] = Vertex.new(tex_min.x, tex_min.y)
+    @uv_vertices[2] = Vertex.new(tex_max.x, tex_max.y)
+    @uv_vertices[3] = Vertex.new(tex_max.x, tex_min.y)
+  end
+
   private def get_shader(gfx) : Shader
     shader = @@shader
     if shader.nil?
@@ -128,7 +145,7 @@ class Boleite::Sprite
         vec4 worldPos = world * vec4(position, 0, 1);
         vec4 viewPos = camera * worldPos;
         gl_Position = projection * viewPos;
-        outputVertex.uv = uv;
+        outputVertex.uv = vec2(uv.x, 1-uv.y);
       }
     }
 
