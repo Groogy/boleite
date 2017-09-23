@@ -83,6 +83,18 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     end
   end
 
+  requires(update(texture, x, y), x + texture.size.x <= @size.x)
+  requires(update(texture, x, y), y + texture.size.y <= @size.y)
+  def update(texture, x, y)
+    src_fb = OpenGLFrameBuffer.new
+    dst_fb = OpenGLFrameBuffer.new
+    tex_size = texture.size.to_i
+
+    src_fb.attach_buffer texture, :src, 0u8
+    dst_fb.attach_buffer self, :src, 0u8
+    dst_fb.blit src_fb, IntRect.new(0, 0, tex_size.x, tex_size.y), IntRect.new(x, y, x + tex_size.x, y + tex_size.y)
+  end
+
   def size : Vector2u
     @size
   end

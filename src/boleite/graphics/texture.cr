@@ -30,10 +30,15 @@ abstract class Boleite::Texture
     update(img.pixels, size.x, size.y, 0u32, 0u32, img.bpp)
   end
 
+  def update(texture : Texture) : Void
+    update(texture, 0, 0)
+  end
+
   abstract def create(width : UInt32, height : UInt32, format : Format, type : Type) : Void
   abstract def create_depth(width : UInt32, height : UInt32) : Void
 
   abstract def update(pixels : Bytes, width : UInt32, height : UInt32, x_dest : UInt32, y_dest : UInt32, bpp : UInt32) : Void
+  abstract def update(texture : Texture, x : UInt32, y : UInt32) : Void
 
   abstract def size : Vector2u
 
