@@ -37,13 +37,15 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
 
   def initialize
     GL.safe_call { LibGL.genTextures 1, pointerof(@object_id) }
+    @format = Format::Red
+    @type   = Type::Integer8
   end
 
   def finalize
     GL.safe_call { LibGL.deleteTextures 1, pointerof(@object_id) }
   end
 
-  def create(width : UInt32, height : UInt32, format : Format, type : Type) : Void
+  def create(width : UInt32, height : UInt32, @format : Format, @type : Type) : Void
     @size = Vector2u.new(width, height)
     @depth = false
 
@@ -53,6 +55,8 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
 
   def create_depth(width : UInt32, height : UInt32) : Void
     @size = Vector2u.new(width, height)
+    @format = Format::Red
+    @type = Format::Float32
     @depth = true
     create_internal width, height LibGL::DEPTH_COMPONENT
   end
@@ -81,6 +85,14 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
 
   def size : Vector2u
     @size
+  end
+
+  def format : Format
+    @format
+  end
+
+  def type : Type
+    @type
   end
 
   def is_depth? : Boolean

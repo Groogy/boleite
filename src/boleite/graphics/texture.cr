@@ -37,6 +37,9 @@ abstract class Boleite::Texture
 
   abstract def size : Vector2u
 
+  abstract def format : Format
+  abstract def type : Type
+
   abstract def is_depth? : Boolean
   abstract def is_smooth? : Boolean
   abstract def smooth=(val : Boolean) : Boolean
