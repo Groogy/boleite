@@ -55,6 +55,20 @@ struct Boleite::Rect(Type)
     max_y = Math.max @top, @top + @height
     return VectorImp(Type, 2).new(min_x, min_y), VectorImp(Type, 2).new(max_x, max_y)
   end
+
+  def shrink(amount)
+    @left += amount
+    @top += amount
+    @width -= amount * 2
+    @height -= amount * 2
+  end
+
+  def expand(amount)
+    @left -= amount * 2
+    @top -= amount * 2
+    @width += amount
+    @height += amount
+  end
 end
 
 module Boleite
