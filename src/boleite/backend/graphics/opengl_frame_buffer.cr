@@ -19,10 +19,24 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
   end
 
   def activate(&block)
-    GL.safe_call { LibGL.bindFramebuffer LibGL::FRAMEBUFFER, @object_id }
+    activate LibGL::FRAMEBUFFER, &block
+  end
+
+  def activate(target, &block)
+    GL.safe_call { LibGL.bindFramebuffer target, @object_id }
     result = yield
-    GL.safe_call { LibGL.bindFramebuffer LibGL::FRAMEBUFFER, 0 }
+    GL.safe_call { LibGL.bindFramebuffer target, 0 }
     result
+  end
+
+  def blit(src, src_rect, dst_rect)
+    activate(LibGL::DRAW_FRAMEBUFFER) do
+      src.activate(LibGL::READ_FRAMEBUFFER) do
+        src1, src2 = src_rect.bounds
+        dst1, dst2 = dst_rect.bounds
+        GL.safe_call { LibGL.blitFramebuffers src1.x, src1.y, src2.x, src2.y, dst1.x, dst1.y, dst2.x, dst2.y LibGL::COLOR_BUFFER_BIT, LibGL::NEAREST }
+      end
+    end
   end
   
   def attach_buffer(texture, identifier, slot)
