@@ -30,6 +30,11 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     end
   end
 
+  def self.maximum_size : UInt32
+    GL.safe_call { LibGL.getIntegerv LibGL::MAX_TEXTURE_SIZE, out size }
+    size.to_ui
+  end
+
   def initialize
     GL.safe_call { LibGL.genTextures 1, pointerof(@object_id) }
   end

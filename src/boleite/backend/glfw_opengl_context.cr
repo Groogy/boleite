@@ -38,4 +38,8 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
   def create_frame_buffer : FrameBuffer
     OpenGLFrameBuffer.new
   end
+
+  def texture_maximum_size : UInt32
+    OpenGLTexture.maximum_size
+  end
 end

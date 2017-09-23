@@ -8,4 +8,6 @@ abstract class Boleite::GraphicsContext
   abstract def create_shader(parser : ShaderParser) : Shader
   abstract def create_texture() : Texture
   abstract def create_frame_buffer() : FrameBuffer
+
+  abstract def texture_maximum_size : UInt32
 end
