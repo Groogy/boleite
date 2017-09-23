@@ -2,7 +2,7 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
   struct AttachmentData
     getter texture, slot
 
-    def initialize(@texture, @slot)
+    def initialize(@texture : OpenGLTexture, @slot : UInt8)
     end
   end
   
@@ -34,16 +34,16 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
       src.activate(LibGL::READ_FRAMEBUFFER) do
         src1, src2 = src_rect.bounds
         dst1, dst2 = dst_rect.bounds
-        GL.safe_call { LibGL.blitFramebuffers src1.x, src1.y, src2.x, src2.y, dst1.x, dst1.y, dst2.x, dst2.y LibGL::COLOR_BUFFER_BIT, LibGL::NEAREST }
+        GL.safe_call { LibGL.blitFramebuffer src1.x, src1.y, src2.x, src2.y, dst1.x, dst1.y, dst2.x, dst2.y, LibGL::COLOR_BUFFER_BIT, LibGL::NEAREST }
       end
     end
   end
   
-  def attach_buffer(texture, identifier, slot)
+  def attach_buffer(texture : Texture, identifier : Symbol, slot : UInt8)
     activate do
       tex = texture.as(OpenGLTexture)
       GL.safe_call { LibGL.framebufferTexture2D LibGL::FRAMEBUFFER, LibGL::COLOR_ATTACHMENT0 + slot, LibGL::TEXTURE_2D, tex.identifier, 0 }
-      @attachments[identifer] = AttachmentData.new tex, slot
+      @attachments[identifier] = AttachmentData.new tex, slot
     end
   end
 
