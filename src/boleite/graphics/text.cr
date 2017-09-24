@@ -1,3 +1,6 @@
+require "./text/formatter.cr"
+require "./text/format_rule.cr"
+
 abstract struct Boleite::Vertex
 end
 
@@ -20,8 +23,8 @@ class Boleite::Text
   end
 
   class Line
-    getter glyphs, top
-    def initialize(@glyphs : Array(Font::Glyph))
+    getter glyphs, top, text
+    def initialize(@glyphs : Array(Font::Glyph), @text : String)
       @top = 0.0
       @glyphs.each do |glyph|
         @top = glyph.bounds.height if glyph.bounds.height > @top
@@ -32,7 +35,7 @@ class Boleite::Text
   @@shader : Shader?
 
   property font
-  getter text, size, default_color
+  getter text, size, default_color, formatter
 
   @vertices : VertexBufferObject?
   @font : Font
@@ -41,6 +44,7 @@ class Boleite::Text
   @size = 12u32
   @rebuild = true
   @default_color = Color.white
+  @formatter = Formatter.new
 
   def initialize(@font, @text = "")
   end
@@ -102,11 +106,12 @@ class Boleite::Text
     baseline = 0
     @lines.each do |line|
       advance = 0
+      colors = @formatter.format(line.text, @default_color)
       prev_glyph = nil
-      line.glyphs.each do |glyph|
-        create_glyph_vertices vertices, glyph, advance, baseline + line.top, texture_size
-        kerning = 0
-        kerning = @font.get_kerning prev_glyph.code, glyph.code, @size if prev_glyph
+      line.glyphs.each_index do |index|
+        glyph = line.glyphs[index]
+        create_glyph_vertices vertices, glyph, colors[index], advance, baseline + line.top, texture_size
+        kerning = prev_glyph ? @font.get_kerning prev_glyph.code, glyph.code, @size : 0
         advance += glyph.advance + kerning
         prev_glyph = glyph
       end
@@ -115,7 +120,7 @@ class Boleite::Text
     vertices
   end
 
-  private def create_glyph_vertices(vertices, glyph, advance, top, texture_size)
+  private def create_glyph_vertices(vertices, glyph, color, advance, top, texture_size)
     top = glyph.bounds.height - top
     min, max = glyph.bounds.bounds
     min, max = min.to_f32, max.to_f32
@@ -123,12 +128,12 @@ class Boleite::Text
     tex_min, tex_max = tex_min.to_f32 / texture_size.to_f32, tex_max.to_f32 / texture_size.to_f32
     tex_min.y = 1 - tex_min.y
     tex_max.y = 1 - tex_max.y
-    vertices << Vertex.new(min.x + advance, min.y - top, tex_min.x, tex_min.y, @default_color)
-    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, @default_color)
-    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, @default_color)
-    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, @default_color)
-    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, @default_color)
-    vertices << Vertex.new(max.x + advance, max.y - top, tex_max.x, tex_max.y, @default_color)
+    vertices << Vertex.new(min.x + advance, min.y - top, tex_min.x, tex_min.y, color)
+    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, color)
+    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, color)
+    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, color)
+    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, color)
+    vertices << Vertex.new(max.x + advance, max.y - top, tex_max.x, tex_max.y, color)
   end
 
   private def get_shader(gfx) : Shader
@@ -207,15 +212,18 @@ class Boleite::Text
   end
 
   private def find_glyphs
-    line = [] of Font::Glyph
+    glyph_line = [] of Font::Glyph
+    line = ""
     @text.each_char do |char|
       if char == '\n'
-        @lines << Line.new line
-        line = [] of Font::Glyph
+        @lines << Line.new glyph_line, line
+        glyph_line = [] of Font::Glyph
+        line = ""
       else
-        line << @font.get_glyph char, @size
+        glyph_line << @font.get_glyph char, @size
+        line += char
       end
     end
-    @lines << Line.new line unless line.empty?
+    @lines << Line.new glyph_line, line unless glyph_line.empty?
   end
 end
