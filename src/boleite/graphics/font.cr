@@ -175,6 +175,11 @@ class Boleite::Font
     LibFreeType.done_FreeType @library
   end
 
+  def texture_for(size) : Texture
+    page = get_page size
+    page.texture
+  end
+
   def get_glyph(code : Char, size : UInt32)
     page = get_page size
     key = Glyph.generate_hash code
