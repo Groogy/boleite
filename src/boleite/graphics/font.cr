@@ -67,11 +67,11 @@ class Boleite::Font
       glyph.advance = raw_glyph.value.advance.x >> 6
       width, height = bitmap.width + 2, bitmap.rows + 2 # Add padding to glyph space
       glyph.texture_rect = find_glyph_rect(width, height)
-      #glyph.texture_rect.shrink 1 # Remove the padding
-      #glyph.bounds.left   = raw_glyph.value.bitmap_left.to_f
-      #glyph.bounds.top    = raw_glyph.value.bitmap.rows - raw_glyph.value.bitmap_top.to_f
-      #glyph.bounds.width  = raw_glyph.value.bitmap.width.to_f
-      #glyph.bounds.height = raw_glyph.value.bitmap.rows.to_f
+      glyph.texture_rect.shrink 1 # Remove the padding
+      glyph.bounds.left   = raw_glyph.value.bitmap_left.to_f
+      glyph.bounds.top    = raw_glyph.value.bitmap.rows - raw_glyph.value.bitmap_top.to_f
+      glyph.bounds.width  = raw_glyph.value.bitmap.width.to_f
+      glyph.bounds.height = raw_glyph.value.bitmap.rows.to_f
       render_glyph_to_texture glyph, width, height
       glyph
     end
@@ -121,7 +121,7 @@ class Boleite::Font
 
     private def render_glyph_to_texture(glyph, width, height) : Nil
       bitmap = @face.value.glyph.value.bitmap  
-      buffer = bitmap.buffer
+      buffer = Bytes.new bitmap.buffer, (bitmap.width * bitmap.rows).to_i
       pixels = Bytes.new (width * height).to_i, 0u8
       (1...height-1).each do |y|
         (1...width-1).each do |x|
@@ -136,7 +136,7 @@ class Boleite::Font
   end
 
   @gfx : GraphicsContext
-  @pages : Hash(UInt32, Page)
+  @pages = {} of UInt32 => Page
 
   def initialize(@gfx, file)
     error = LibFreeType.init_FreeType(out @library)
@@ -145,8 +145,6 @@ class Boleite::Font
     raise Error.new("Failed to read #{file}") if error != LibFreeType::Err_Ok
     error = LibFreeType.select_Charmap(@face, LibFreeType::Encoding::UNICODE)
     raise Error.new("Failed to select unicode charset for #{file}") if error != LibFreeType::Err_Ok
-
-    @pages = Hash(UInt32, Page).new { Page.new @face, @gfx }
   end
 
   def finalize
