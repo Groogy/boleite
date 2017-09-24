@@ -57,6 +57,20 @@ class Boleite::Font
       @glyphs[glyph.generate_hash] = glyph
     end
 
+    def get_kerning(first, second) : Int32
+      if @face.value.face_flags & LibFreeType::FaceFlag::KERNING.to_i
+        apply_size
+        index1 = LibFreeType.get_Char_Index @face, first.hash
+        index2 = LibFreeType.get_Char_Index @face, second.hash
+        error = LibFreeType.get_Kerning @face, index1, index2, 0, out kerning
+        raise Error.new("Failed to fetch kerning between #{first} and #{second}") if error != LibFreeType::Err_Ok
+        return kerning.x.to_i unless @face.value.face_flags & LibFreeType::FaceFlag::SCALABLE.to_i
+        return (kerning.x >> 6).to_i
+      else
+        0
+      end
+    end
+
     private def apply_size
       error = LibFreeType.set_Pixel_Sizes @face, @size, @size
       raise Error.new("Failed to set charset size to #{@size}") if error != LibFreeType::Err_Ok
@@ -169,6 +183,11 @@ class Boleite::Font
       glyph = page.create_glyph code
     end
     return glyph
+  end
+
+  def get_kerning(first : Char, second : Char, size : UInt32)
+    page = get_page size
+    page.get_kerning first, second
   end
 
   def get_page(size) : Page
