@@ -36,25 +36,34 @@ class Boleite::Font
     @gfx : GraphicsContext
     @face : LibFreeType::Face
     @texture : Texture
+    @size : UInt32
     @glyphs = {} of UInt64 => Glyph
     @next_row = 0u32
     @rows = [] of Row
 
-    def initialize(@face, @gfx)
+    def initialize(@face, @gfx, @size)
       @texture = @gfx.create_texture
       @texture.create 64u32, 64u32, Texture::Format::Red, Texture::Type::Integer8
     end
 
-    def create_glyph(code, size) : Glyph
-      load_glyph code, size
+    def character_size
+      @size
+    end
+
+    def create_glyph(code) : Glyph
+      load_glyph code
       glyph = render_glyph
       glyph.code = code
       @glyphs[glyph.generate_hash] = glyph
     end
 
-    private def load_glyph(code, size)
-      error = LibFreeType.set_Pixel_Sizes @face, size, size
-      raise Error.new("Failed to set charset size to #{size}") if error != LibFreeType::Err_Ok
+    private def apply_size
+      error = LibFreeType.set_Pixel_Sizes @face, @size, @size
+      raise Error.new("Failed to set charset size to #{@size}") if error != LibFreeType::Err_Ok
+    end
+
+    private def load_glyph(code)
+      apply_size
       flags = LibFreeType::Load::RENDER
       error = LibFreeType.load_Char @face, code.hash, flags
       raise Error.new("Failed to load glyph for #{code}") if error != LibFreeType::Err_Ok
@@ -153,13 +162,21 @@ class Boleite::Font
   end
 
   def get_glyph(code : Char, size : UInt32)
-    page = @pages[size]
-    @pages[size] = page
+    page = get_page size
     key = Glyph.generate_hash code
     glyph = page.glyphs[key]?
     if glyph.nil?
-      glyph = page.create_glyph code, size
+      glyph = page.create_glyph code
     end
     return glyph
+  end
+
+  def get_page(size) : Page
+    page = @pages[size]?
+    unless page
+      page = Page.new @face, @gfx, size
+      @pages[size] = page
+    end
+    page
   end
 end
