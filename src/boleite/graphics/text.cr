@@ -11,9 +11,9 @@ class Boleite::Text
   struct Vertex < Vertex
     @pos = Vector2f32.zero
     @uv = Vector2f32.zero
-
+    @color = Vector4f32.zero
   
-    def initialize(x, y, u, v)
+    def initialize(x, y, u, v, @color)
       @pos = Vector2f32.new(x, y)
       @uv  = Vector2f32.new(u, v)
     end
@@ -32,7 +32,7 @@ class Boleite::Text
   @@shader : Shader?
 
   property font
-  getter text, size
+  getter text, size, default_color
 
   @vertices : VertexBufferObject?
   @font : Font
@@ -40,6 +40,7 @@ class Boleite::Text
   @lines = [] of Line
   @size = 12u32
   @rebuild = true
+  @default_color = Color.white
 
   def initialize(@font, @text = "")
   end
@@ -54,6 +55,11 @@ class Boleite::Text
     @size = val
     @rebuild = true
     find_glyphs
+  end
+
+  def default_color=(val)
+    @default_color = val
+    @rebuild = true
   end
 
   protected def internal_render(renderer, transform)
@@ -78,8 +84,9 @@ class Boleite::Text
   private def create_vertices(gfx) : VertexBufferObject
     vertices = build_vertices gfx
     layout = VertexLayout.new [
-      VertexAttribute.new(0, 2, :float, 16_u32, 0_u32, 0_u32),
-      VertexAttribute.new(0, 2, :float, 16_u32, 8_u32, 0_u32),
+      VertexAttribute.new(0, 2, :float, 32u32, 0u32,  0u32),
+      VertexAttribute.new(0, 2, :float, 32u32, 8u32,  0u32),
+      VertexAttribute.new(0, 4, :float, 32u32, 16u32, 0u32),
     ]
     vbo = gfx.create_vertex_buffer_object
     vbo.layout = layout
@@ -116,12 +123,12 @@ class Boleite::Text
     tex_min, tex_max = tex_min.to_f32 / texture_size.to_f32, tex_max.to_f32 / texture_size.to_f32
     tex_min.y = 1 - tex_min.y
     tex_max.y = 1 - tex_max.y
-    vertices << Vertex.new(min.x + advance, min.y - top, tex_min.x, tex_min.y)
-    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y)
-    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y)
-    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y)
-    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y)
-    vertices << Vertex.new(max.x + advance, max.y - top, tex_max.x, tex_max.y)
+    vertices << Vertex.new(min.x + advance, min.y - top, tex_min.x, tex_min.y, @default_color)
+    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, @default_color)
+    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, @default_color)
+    vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, @default_color)
+    vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, @default_color)
+    vertices << Vertex.new(max.x + advance, max.y - top, tex_max.x, tex_max.y, @default_color)
   end
 
   private def get_shader(gfx) : Shader
@@ -161,11 +168,13 @@ class Boleite::Text
     {
       layout(location = 0) in vec2 position;
       layout(location = 1) in vec2 uv;
+      layout(location = 2) in vec4 color;
       uniform mat4 world;
       uniform mat4 camera;
       uniform mat4 projection;
       out VertexData {
         vec2 uv;
+        vec4 color;
       } outputVertex;
       void main()
       {
@@ -173,6 +182,7 @@ class Boleite::Text
         vec4 viewPos = camera * worldPos;
         gl_Position = projection * viewPos;
         outputVertex.uv = vec2(uv.x, 1-uv.y);
+        outputVertex.color = color;
       }
     }
 
@@ -182,11 +192,12 @@ class Boleite::Text
       uniform sampler2D fontTexture;
       in VertexData {
         vec2 uv;
+        vec4 color;
       } inputVertex;
       void main()
       {
-        float color = texture(fontTexture, inputVertex.uv).r;
-        outputColor = vec4(color);
+        float mask = texture(fontTexture, inputVertex.uv).r;
+        outputColor = inputVertex.color * mask;
       }
     }
     SRC
