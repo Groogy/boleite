@@ -219,6 +219,8 @@ class Boleite::Private::OpenGLShader < Boleite::Shader
     when ShaderBlendSettings::Factor::OneMinusSource; LibGL::ONE_MINUS_SRC_COLOR
     when ShaderBlendSettings::Factor::Destination; LibGL::DST_COLOR
     when ShaderBlendSettings::Factor::OneMinusDestination; LibGL::ONE_MINUS_DST_COLOR
+    when ShaderBlendSettings::Factor::SourceAlpha; LibGL::SRC_ALPHA
+    when ShaderBlendSettings::Factor::OneMinusSourceAlpha; LibGL::ONE_MINUS_SRC_ALPHA
     when ShaderBlendSettings::Factor::DestinationAlpha; LibGL::DST_ALPHA
     when ShaderBlendSettings::Factor::OneMinusDestinationAlpha; LibGL::ONE_MINUS_DST_ALPHA
     when ShaderBlendSettings::Factor::Constant; LibGL::CONSTANT_COLOR
