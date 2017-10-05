@@ -1,4 +1,6 @@
 class Boleite::Private::GLFW < Boleite::Backend
+  include CrystalClear
+  
   enum ErrorCode
     NotInitialized = LibGLFW3::NOT_INITIALIZED
     NoCurrentContext = LibGLFW3::NO_CURRENT_CONTEXT
@@ -41,7 +43,7 @@ class Boleite::Private::GLFW < Boleite::Backend
     @initialized
   end
 
-  requires(create_graphics(config : BackendConfiguration), config.gfx == BackendConfiguration::GfxType::OpenGL)
+  requires config.gfx == BackendConfiguration::GfxType::OpenGL
   def create_graphics(config : BackendConfiguration)
     setup_main_target_settings config
     native = create_surface config.video_mode

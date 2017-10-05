@@ -1,4 +1,6 @@
 class Boleite::StateStack
+  include CrystalClear
+  
   def initialize
     @state = nil
   end
@@ -7,14 +9,14 @@ class Boleite::StateStack
     @state.nil?
   end
 
-  requires(push(state : State), state.nil? == false)
+  requires state.nil? == false
   def push(state : State)
     state.next = @state
     @state = state
     state.enable
   end
 
-  requires(pop, empty? == false)
+  requires empty? == false
   def pop
     old_state = @state.as(State)
     @state = old_state.next
@@ -29,7 +31,7 @@ class Boleite::StateStack
     end
   end
 
-  requires(top, empty? == false)
+  requires empty? == false
   def top
     @state.as(State)
   end

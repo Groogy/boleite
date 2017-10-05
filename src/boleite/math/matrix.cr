@@ -63,7 +63,7 @@ module Boleite::Matrix
       matrix[0, 1] * (matrix[1, 0] * matrix[2, 2] - matrix[1, 2] * matrix[2, 0]) +
       matrix[0, 2] * (matrix[1, 0] * matrix[2, 1] - matrix[1, 1] * matrix[2, 0])
 
-    assert(det != 0)
+    assert det != 0
     invdet = T.new(1) / det
 
     inv = MatrixImp(T, 3, 9).new
@@ -147,7 +147,7 @@ module Boleite::Matrix
 
     det = matrix[0] * inv[0] + matrix[1] * inv[4] + matrix[2] * inv[8] + matrix[3] * inv[12]
 
-    assert(det != 0)
+    assert det != 0
     det = T.new(1) / det
     MatrixImp(T, 4, 16).new do |index|
       inv[index] * det

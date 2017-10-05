@@ -1,4 +1,6 @@
 class Boleite::Private::OpenGLTexture < Boleite::Texture
+  include CrystalClear
+  
   @@internal_formats = {
     {Format::Red, Type::Integer8} => LibGL::R8, {Format::Red, Type::Integer16} => LibGL::R16,
     {Format::Red, Type::Float16} => LibGL::R16F, {Format::Red, Type::Float32} => LibGL::R32F,
@@ -79,9 +81,9 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     end
   end
 
-  requires(update(pixels, width, height, x_dest, y_dest, bpp), x_dest + width <= @size.x)
-  requires(update(pixels, width, height, x_dest, y_dest, bpp), y_dest + height <= @size.y)
-  requires(update(pixels, width, height, x_dest, y_dest, bpp), @depth == false)
+  requires x_dest + width <= @size.x
+  requires y_dest + height <= @size.y
+  requires @depth == false
   def update(pixels, width, height, x_dest, y_dest, bpp)
     activate do
       GL.safe_call do
@@ -94,8 +96,8 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     end
   end
 
-  requires(update(texture, x, y), x + texture.size.x <= @size.x)
-  requires(update(texture, x, y), y + texture.size.y <= @size.y)
+  requires x + texture.size.x <= @size.x
+  requires y + texture.size.y <= @size.y
   def update(texture, x, y)
     src_fb = OpenGLFrameBuffer.new
     dst_fb = OpenGLFrameBuffer.new

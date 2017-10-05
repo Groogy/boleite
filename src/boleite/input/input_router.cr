@@ -1,10 +1,12 @@
 class Boleite::InputRouter
+  include CrystalClear
+  
   @receivers = [] of InputReceiver
 
   def initialize()
   end
 
-  requires(register(receiver), @receivers.includes?(receiver) == false)
+  requires @receivers.includes?(receiver) == false
   def register(receiver)
     @receivers << receiver
   end

@@ -1,4 +1,6 @@
 class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
+  include CrystalClear
+  
   struct AttachmentData
     getter texture, slot
 
@@ -47,7 +49,7 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
     end
   end
 
-  requires(attach_depth_buffer(texture), texture.is_depth?)
+  requires texture.is_depth?
   def attach_depth_buffer(texture)
     activate do
       tex = texture.as(OpenGLTexture)

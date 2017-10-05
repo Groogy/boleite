@@ -1,4 +1,6 @@
 class Boleite::Private::OpenGLShader < Boleite::Shader
+  include CrystalClear
+  
   @program_id = LibGL::UInt.zero
   @objects = [] of OpenGLShaderObject
   @depth_settings : ShaderDepthSettings
@@ -99,17 +101,17 @@ class Boleite::Private::OpenGLShader < Boleite::Shader
     @value_settings.projection_transform.empty? == false
   end
 
-  requires(set_world_transform(value), has_world_transform?())
+  requires has_world_transform?
   def set_world_transform(value)
     set_parameter @value_settings.world_transform, value
   end
 
-  requires(set_view_transform(value), has_view_transform?)
+  requires has_view_transform?
   def set_view_transform(value)
     set_parameter @value_settings.view_transform, value
   end
 
-  requires(set_projection_transform(value), has_projection_transform?)
+  requires has_projection_transform?
   def set_projection_transform(value)
     set_parameter @value_settings.projection_transform, value
   end
