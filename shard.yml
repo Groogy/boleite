@@ -8,7 +8,7 @@ dependencies:
   crystal-clear:
     github: Groogy/crystal-clear
   lib_glfw3:
-    github: jellymann/crystal_lib_glfw3
+    github: Groogy/crystal_lib_glfw3
   lib_gl:
     github: jellymann/crystal_lib_gl
 
