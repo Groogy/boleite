@@ -159,13 +159,13 @@ module Boleite::Matrix
     one = T.new(1)
     half = T.new(0.5)
     frustrum_depth = far - near
-    one_over_depth = one / frustum_depth
+    one_over_depth = one / frustrum_depth
     result[1, 1] = one / Math.tan(half * fov)
     result[0, 0] = (left_handed ? one : -one) * result[1, 1] / aspect
     result[2, 2] = far * one_over_depth
     result[3, 2] = (-far * near) * one_over_depth
     result[2, 3] = one
-    result[3, 3] = 0
+    result[3, 3] = T.new(0)
     result
   end
 
