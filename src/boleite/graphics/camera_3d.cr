@@ -53,8 +53,9 @@ class Boleite::Camera3D < Boleite::Camera
   def update_transformation
     @transform = Matrix44f32.identity
     @transform = Matrix.translate @transform, @pos.to_f32
-    @transform = Matrix.rotate_around_x @transform, @rot.x.to_f32
-    @transform = Matrix.rotate_around_y @transform, @rot.y.to_f32
-    @transform = Matrix.rotate_around_z @transform, @rot.z.to_f32
+    rot = Matrix.rotate_around_x Matrix44f32.identity, @rot.x.to_f32
+    rot = Matrix.rotate_around_y rot, @rot.y.to_f32
+    rot = Matrix.rotate_around_z rot, @rot.z.to_f32
+    @transform = Matrix.mul rot, @transform
   end
 end
