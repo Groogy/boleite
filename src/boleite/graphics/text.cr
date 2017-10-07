@@ -105,19 +105,23 @@ class Boleite::Text
     texture_size = @font.texture_for(@size).size
     baseline = 0
     @lines.each do |line|
-      advance = 0
-      colors = @formatter.format(line.text, @default_color)
-      prev_glyph = nil
-      line.glyphs.each_index do |index|
-        glyph = line.glyphs[index]
-        create_glyph_vertices vertices, glyph, colors[index], advance, baseline + line.top, texture_size
-        kerning = prev_glyph ? @font.get_kerning prev_glyph.code, glyph.code, @size : 0
-        advance += glyph.advance + kerning
-        prev_glyph = glyph
-      end
       baseline += line.top
+      colors = @formatter.format line.text, @default_color
+      build_line_vertices vertices, line, colors, baseline, texture_size
     end
     vertices
+  end
+
+  private def build_line_vertices(vertices, line, colors, baseline, texture_size)
+    prev_glyph = nil
+    advance = 0
+    line.glyphs.zip colors do |glyph, color|
+      kerning = 0
+      kerning = @font.get_kerning prev_glyph.code, glyph.code, @size if prev_glyph
+      create_glyph_vertices vertices, glyph, color, advance, baseline, texture_size
+      advance += glyph.advance + kerning
+      prev_glyph = glyph
+    end
   end
 
   private def create_glyph_vertices(vertices, glyph, color, advance, top, texture_size)
