@@ -7,6 +7,7 @@ class Boleite::ForwardRenderer < Boleite::Renderer
 
   def clear(color : Colorf)
     @gfx.clear color
+    @gfx.clear_depth
   end
 
   def draw(drawcall : DrawCallContext)

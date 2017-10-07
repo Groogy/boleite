@@ -12,7 +12,11 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
 
   def clear(color)
     GL.safe_call { LibGL.clearColor(color.r, color.g, color.b, color.a) }
-    GL.safe_call { LibGL.clear(LibGL::COLOR_BUFFER_BIT) }
+    GL.safe_call { LibGL.clear LibGL::COLOR_BUFFER_BIT }
+  end
+
+  def clear_depth
+    GL.safe_call { LibGL.clear LibGL::DEPTH_BUFFER_BIT }
   end
 
   def present

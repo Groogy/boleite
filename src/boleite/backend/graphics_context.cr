@@ -1,6 +1,7 @@
 abstract class Boleite::GraphicsContext
   abstract def main_target : RenderTarget
   abstract def clear(color : Colorf) : Void
+  abstract def clear_depth() : Void
   abstract def present : Void
 
   abstract def create_vertex_buffer_object : VertexBufferObject
