@@ -154,7 +154,7 @@ module Boleite::Matrix
     end
   end
 
-  def self.calculate_fov_projection(fov : T, aspect : T, near : T, far : T, left_handed : T) forall T
+  def self.calculate_fov_projection(fov : T, aspect : T, near : T, far : T, left_handed : Bool) forall T
     result = MatrixImp(T, 4, 16).identity
     one = T.new(1)
     half = T.new(0.5)
