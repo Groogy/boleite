@@ -19,5 +19,5 @@ abstract class Boleite::State
   end
 
   abstract def update(delta)
-  abstract def render(delta, renderer)
+  abstract def render(delta)
 end
