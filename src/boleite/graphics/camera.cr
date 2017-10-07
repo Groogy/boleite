@@ -1,14 +1,14 @@
 abstract class Boleite::Camera
   def initialize(@projection : Matrix44f32)
-    @transformation = Matrix44f32.identity
+    @transform = Matrix44f32.identity
   end
 
   def transformation
-    @transformation
+    @transform
   end
 
   def inverse_transformation
-    Matrix.inverse(@transformation)
+    Matrix.inverse(self.transformation)
   end
 
   def projection
