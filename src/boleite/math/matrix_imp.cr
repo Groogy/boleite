@@ -15,33 +15,6 @@ struct Boleite::MatrixImp(Type, Dimension, Size)
     self.new()
   end
 
-  def self.rotate_around_x(angle : Type) : self
-    rotation = self.identity
-    rotation[to_index(1, 1)] =  Math.cos(angle)
-    rotation[to_index(2, 1)] = -Math.sin(angle)
-    rotation[to_index(1, 2)] =  Math.sin(angle)
-    rotation[to_index(2, 2)] =  Math.cos(angle)
-    rotation
-  end
-
-  def self.rotate_around_y(angle : Type) : self
-    rotation = self.identity
-    rotation[to_index(0, 0)] =  Math.cos(angle)
-    rotation[to_index(2, 0)] =  Math.sin(angle)
-    rotation[to_index(0, 2)] = -Math.sin(angle)
-    rotation[to_index(2, 2)] =  Math.cos(angle)
-    rotation
-  end
-
-  def self.rotate_around_z(angle : Type) : self
-    rotation = self.identity
-    rotation[to_index(0, 0)] =  Math.cos(angle)
-    rotation[to_index(1, 0)] = -Math.sin(angle)
-    rotation[to_index(0, 1)] =  Math.sin(angle)
-    rotation[to_index(1, 1)] =  Math.cos(angle)
-    rotation
-  end
-
   @elements : StaticArray(Type, Size)
 
   def initialize()

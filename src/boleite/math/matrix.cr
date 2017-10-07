@@ -57,6 +57,33 @@ module Boleite::Matrix
     cpy[3, 3] *= scale.w
     cpy
   end
+
+  def self.rotate_around_x(matrix : MatrixImp(T, 4, 16), angle : T) forall T
+    rotation = matrix.dup
+    rotation[1, 1] =  Math.cos(angle)
+    rotation[2, 1] = -Math.sin(angle)
+    rotation[1, 2] =  Math.sin(angle)
+    rotation[2, 2] =  Math.cos(angle)
+    rotation
+  end
+
+  def self.rotate_around_y(matrix : MatrixImp(T, 4, 16), angle : T) forall T
+    rotation = matrix.dup
+    rotation[0, 0] =  Math.cos(angle)
+    rotation[2, 0] =  Math.sin(angle)
+    rotation[0, 2] = -Math.sin(angle)
+    rotation[2, 2] =  Math.cos(angle)
+    rotation
+  end
+
+  def self.rotate_around_z(matrix : MatrixImp(T, 4, 16), angle : T) forall T
+    rotation = matrix.dup
+    rotation[0, 0] =  Math.cos(angle)
+    rotation[1, 0] = -Math.sin(angle)
+    rotation[0, 1] =  Math.sin(angle)
+    rotation[1, 1] =  Math.cos(angle)
+    rotation
+  end
   
   def self.inverse(matrix : MatrixImp(T, 3, 9)) forall T
     det = matrix[0, 0] * (matrix[1, 1] * matrix[2, 2] - matrix[2, 1] * matrix[1, 2]) -
