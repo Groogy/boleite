@@ -120,15 +120,15 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     @type
   end
 
-  def is_depth? : Boolean
+  def is_depth? : Bool
     @depth
   end
 
-  def is_smooth? : Boolean
+  def is_smooth? : Bool
     @smooth
   end
 
-  def smooth=(val : Boolean) : Boolean
+  def smooth=(val : Bool) : Bool
     @smooth = val
     activate do
       GL.safe_call do
@@ -136,6 +136,7 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
         LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_MAG_FILTER, @smooth ? LibGL::LINEAR : LibGL::NEAREST
       end
     end
+    @smooth
   end
 
   def activate(&block)

@@ -45,9 +45,9 @@ abstract class Boleite::Texture
   abstract def format : Format
   abstract def type : Type
 
-  abstract def is_depth? : Boolean
-  abstract def is_smooth? : Boolean
-  abstract def smooth=(val : Boolean) : Boolean
+  abstract def is_depth? : Bool
+  abstract def is_smooth? : Bool
+  abstract def smooth=(val : Bool) : Bool
 
   abstract def activate(&block)
 end
