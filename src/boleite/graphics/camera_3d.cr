@@ -5,7 +5,8 @@ class Boleite::Camera3D < Boleite::Camera
   
   def initialize(@fov : Float32, @width : Float32, @height : Float32, @near : Float32, @far : Float32)
     aspect = width / height
-    super(Matrix.calculate_fov_projection(@fov, aspect, @near, @far, true))
+    fov = @fov * (Math::PI / 180)
+    super(Matrix.calculate_fov_projection(fov, aspect, @near, @far, true))
   end
 
   def position
