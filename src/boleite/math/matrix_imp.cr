@@ -79,6 +79,39 @@ struct Boleite::MatrixImp(Type, Dimension, Size)
     @elements = other.elements
   end
 
+  private macro def_conv_meth(name, type)
+    {% if type == TYPE %}
+      def {{name}}
+        self
+      end  
+    {% else %}
+      def {{name}}
+        MatrixImp({{type}}, Dimension, Size).new(
+          StaticArray({{type}}, Size).new { |index|
+            @elements[index].{{name}}
+          }
+        )
+      end
+    {% end %}
+  end
+
+  def_conv_meth(to_i8,  Int8)
+  def_conv_meth(to_i16, Int16)
+  def_conv_meth(to_i32, Int32)
+  def_conv_meth(to_i64, Int64)
+
+  def_conv_meth(to_u8,  UInt8)
+  def_conv_meth(to_u16, UInt16)
+  def_conv_meth(to_u32, UInt32)
+  def_conv_meth(to_u64, UInt64)
+
+  def_conv_meth(to_f32, Float32)
+  def_conv_meth(to_f64, Float64)
+
+  def_conv_meth(to_i, Int32)
+  def_conv_meth(to_u, UInt32)
+  def_conv_meth(to_f, Float64)
+
   protected def elements
     @elements
   end
