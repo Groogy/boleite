@@ -30,6 +30,7 @@ class Boleite::Text
   @vertices = Vertices.new
 
   def initialize(@font, @text = "")
+    find_glyphs
   end
 
   def text=(val)
