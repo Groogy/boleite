@@ -62,6 +62,7 @@ class Boleite::Text
   private def find_glyphs
     glyph_line = [] of Font::Glyph
     line = ""
+    @lines.clear
     @text.each_char do |char|
       if char == '\n'
         @lines << Line.new glyph_line, line
