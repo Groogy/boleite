@@ -31,6 +31,7 @@ class Boleite::Text
             pos = text.size
           end
         end
+        pos = text.size if match.group_size <= 0
       end
     end
 
