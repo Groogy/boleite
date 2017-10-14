@@ -97,8 +97,8 @@ class Boleite::Text
       vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, color)
       vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, color)
       vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, color)
-      vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, color)
       vertices << Vertex.new(max.x + advance, max.y - top, tex_max.x, tex_max.y, color)
+      vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, color)
     end
   
     def get_shader(gfx) : Shader
