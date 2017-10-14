@@ -33,6 +33,18 @@ module Boleite::Matrix
     tmp
   end
 
+  def self.left(mat : MatrixImp(T, 4, 16)) forall T
+    VectorImp(T, 3).new(mat[0, 0], mat[0, 1], mat[0, 2])
+  end
+
+  def self.up(mat : MatrixImp(T, 4, 16)) forall T
+    VectorImp(T, 3).new(mat[1, 0], mat[1, 1], mat[1, 2])
+  end
+
+  def self.forward(mat : MatrixImp(T, 4, 16)) forall T
+    VectorImp(T, 3).new(mat[2, 0], mat[2, 1], mat[2, 2])
+  end
+
   def self.translate(matrix : MatrixImp(T, 4, 16), translation : VectorImp(T, 3)) forall T
     cpy = matrix.dup
     cpy[3, 0] += translation.x
