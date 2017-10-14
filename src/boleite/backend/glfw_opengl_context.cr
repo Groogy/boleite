@@ -4,6 +4,7 @@ end
 class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
   def initialize(@glfw_surface : GLFWSurface)
     GLFW.safe_call { LibGLFW3.makeContextCurrent(@glfw_surface.ptr) }
+    GLFW.safe_call { LibGLFW3.swapInterval 0 }
     GL.safe_call { LibGL.cullFace LibGL::BACK }
     GL.safe_call { LibGL.enable LibGL::CULL_FACE }
   end
