@@ -36,9 +36,10 @@ struct Boleite::DrawCallUniforms
 end
 
 abstract class Boleite::Renderer
+  property camera
   getter gfx
 
-  def initialize(@gfx : GraphicsContext, @camera)
+  def initialize(@gfx : GraphicsContext, @camera : Camera)
   end
 
   def draw(drawable : Drawable, transform = Matrix44f32.identity)
