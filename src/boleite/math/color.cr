@@ -22,4 +22,8 @@ module Boleite::Color
   def self.yellow
     Colorf.new 1f32, 1f32, 0f32, 1f32
   end
+
+  def self.transparent
+    Colorf.new 0f32, 0f32, 0f32, 0f32
+  end
 end
