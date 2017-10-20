@@ -17,7 +17,12 @@ class Boleite::Shape
     @rebuild = true
 
     def add(pos)
-      @vertices << Vertex.new(pos)
+      @vertices << Vertex.new pos
+      @rebuild = true
+    end
+
+    def set(index, pos)
+      @vertices[index] = Vertex.new pos
       @rebuild = true
     end
 

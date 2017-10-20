@@ -25,6 +25,10 @@ class Boleite::Shape
     @vertices.add pos
   end
 
+  def []=(index, pos)
+    @vertices.set index, pos
+  end
+
   def clear_vertices
     @vertices.clear
   end
