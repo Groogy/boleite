@@ -7,31 +7,65 @@ class Boleite::GUI
 
   class DefaultDesign < Design
     class WindowDesign < DesignDrawer
-      @cache = DrawableCache(Tuple(Shape, Shape)).new do |widget|
-        Tuple(Shape, Shape).new Shape.new, Shape.new
+      struct WindowDrawables
+        property body, body_border, header, header_border
+
+        @body = Shape.new
+        @body_border = Shape.new
+        @header = Shape.new
+        @header_border = Shape.new
+      end
+
+      @cache = DrawableCache(WindowDrawables).new do |widget|
+        WindowDrawables.new
       end
 
       def render(widget, graphics)
         window = widget.as(Window)
-        body, border = @cache.find widget
-        update_body body, window
-        update_border border, window
-        graphics.draw border
-        graphics.draw body
+        drawables = @cache.find widget
+        update_drawables drawables, window
+        draw_drawables drawables, graphics
       end
 
-      def update_body(shape, window)
-        shape.position = window.position
-        shape.color = PRIMARY_COLOR
-        size = window.size.to_f32
-        update_vertices shape, size
+      def update_drawables(drawables, window)
+        update_drawables_header drawables, window
+        update_drawables_body drawables, window
       end
 
-      def update_border(shape, window)
-        border_size = window.border_size
-        shape.position = window.position - border_size
+      def draw_drawables(drawables, graphics)
+        graphics.draw drawables.header_border
+        graphics.draw drawables.header
+        graphics.draw drawables.body_border
+        graphics.draw drawables.body
+      end
+
+      def update_drawables_header(drawables, window)
+        no_offset = Vector2f.zero
+        header_size = Vector2f.new window.size.x, window.header_size
+        pos = window.position
+        size = window.size
+        update_border drawables.header_border, pos, header_size, window.border_size, no_offset
+        update_body drawables.header, pos, size, PRIMARY_COLOR, no_offset
+      end
+
+      def update_drawables_body(drawables, window)
+        header_offset = Vector2f.new 0.0, window.header_size
+        pos = window.position
+        size = window.size
+        update_border drawables.body_border, pos, size, window.border_size, header_offset
+        update_body drawables.body, pos, size, SECONDARY_COLOR, header_offset
+      end
+
+      def update_body(shape, pos, size, color, offset)
+        shape.position = pos + offset
+        shape.color = color
+        update_vertices shape, size.to_f32
+      end
+
+      def update_border(shape, pos, size, border, offset)
+        shape.position = pos - border + offset
         shape.color = BORDER_COLOR
-        shape_size = (window.size + border_size * 2.0).to_f32
+        shape_size = (size + border * 2.0).to_f32
         update_vertices shape, shape_size
       end
 
