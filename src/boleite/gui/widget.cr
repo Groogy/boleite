@@ -1,9 +1,13 @@
+require "weak_ref"
+
 class Boleite::GUI
   abstract class Widget
-    getter name, parent, allocation
+    include CrystalClear
+
+    getter name, allocation
   
     @name = ""
-    @parent : Widget?
+    @parent : WeakRef(Widget)?
     @allocation = FloatRect.new
     @visible = true
     @enabled = true
@@ -71,5 +75,18 @@ class Boleite::GUI
       @repaint = true
     end
 
+    requires self.parent.nil? || parent == nil
+    requires parent != self
+    def parent=(parent)
+      @parent = WeakRef(Widget).new parent
+    end
+
+    def parent
+      if parent = @parent
+        parent.value 
+      else
+        @parent
+      end
+    end
   end
 end
