@@ -26,16 +26,16 @@ struct Boleite::Rect(Type)
     @width, @height = vec.z, vec.w
   end
 
-  def contains(x, y) : Bool
+  def contains?(x, y) : Bool
     min, max = bounds
     x >= min.x && x < max.x && y >= min.y && y < max.y
   end
 
-  def contains(point) : Bool
-    contains(point.x, point.y)
+  def contains?(point) : Bool
+    contains? point.x, point.y
   end
 
-  def intersects(other) : Rect(Type) | Bool
+  def intersects?(other) : Rect(Type) | Bool
     my_min, my_max = bounds
     other_min, other_max = other.bounds
 
