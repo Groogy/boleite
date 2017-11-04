@@ -5,6 +5,17 @@ class Boleite::GUI
   class DefaultDesign < Design
     class DrawableCache(T)
       @drawables = [] of {UInt64, T}
+      
+      def initialize()
+        @allocator = ->(widget : Widget) { T.new }
+      end
+
+      def initialize(@allocator : Proc(Widget, T))
+      end
+
+      def initialize(&block : Widget -> T)
+        @allocator = block
+      end
 
       def find(widget)
         id = widget.object_id
@@ -12,11 +23,11 @@ class Boleite::GUI
         if index
           tup = @drawables[index]
           return tup[1] if tup[0] == id
-          tup = {id, T.new}
+          tup = {id, @allocator.call(widget)}
           @drawables.insert index, tup
           return tup[1]
         else
-          tup = {id, T.new}
+          tup = {id, @allocator.call(widget)}
           @drawables.push tup
           return tup[1]
         end
