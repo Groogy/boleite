@@ -11,6 +11,8 @@ dependencies:
     github: Groogy/crystal_lib_glfw3
   lib_gl:
     github: jellymann/crystal_lib_gl
+  cute:
+    github: Papierkorb/cute
 
 crystal: 0.23.0
 
