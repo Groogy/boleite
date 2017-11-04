@@ -11,6 +11,7 @@ class Boleite::GUI
     getter border_size
 
     def initialize
+      super
       self.min_size = DEFAULT_SIZE
     end
 

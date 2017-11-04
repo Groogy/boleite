@@ -1,21 +1,45 @@
 require "weak_ref"
+require "cute"
 
 class Boleite::GUI
   abstract class Widget
     include CrystalClear
 
-    getter name, allocation
+    getter name, allocation, input
   
     @name = ""
-    @parent : WeakRef(Widget)?
+    @input = InputHandler.new
+    @parent = WeakRef(Widget | Nil).new nil
     @allocation = FloatRect.new
     @visible = true
     @enabled = true
     @repaint = true
 
+    Cute.signal mouse_enter
+    Cute.signal mouse_leave
+    Cute.signal mouse_over
+    Cute.signal left_click
+    Cute.signal right_click
+    Cute.signal key_pressed
+    Cute.signal key_released
+    Cute.signal text_entered
+    Cute.signal state_change
+    Cute.signal pulse
+
+    def initialize
+      state_change.on &->on_state_change
+
+      @input.register_instance WidgetMouseEnter.new(self), ->{ mouse_enter.emit }
+    end
+
+    def name=(name)
+      @name = name
+      state_change.emit
+    end
+
     def visible?
       visible = @visible
-      if parent = @parent && visible
+      if parent = self.parent && visible
         visible &= parent.visible?
       end
       visible
@@ -23,12 +47,12 @@ class Boleite::GUI
 
     def visible=(flag)
       @visible = flag
-      @repaint = true
+      state_change.emit
     end
 
     def enabled?
       enabled = @enabled
-      if parent = @parent && enabled
+      if parent = self.parent && enabled
         enabled &= parent.enabled?
       end
       enabled
@@ -36,7 +60,7 @@ class Boleite::GUI
 
     def enabled=(flag)
       @enabled = flag
-      @repaint = true
+      state_change.emit
     end
 
     def repaint?
@@ -54,12 +78,12 @@ class Boleite::GUI
     def position=(pos)
       @allocation.left = pos.x
       @allocation.top = pos.y
-      @repaint = true
+      state_change.emit
     end
 
     def absolute_position
       pos = position
-      if parent = @parent
+      if parent = self.parent
         pos = parent.absolute_position + pos
       end
       pos
@@ -72,20 +96,36 @@ class Boleite::GUI
     def size=(size)
       @allocation.width = size.x
       @allocation.height = size.y
-      @repaint = true
+      state_change.emit
     end
 
     requires self.parent.nil? || parent == nil
     requires parent != self
     def parent=(parent)
       @parent = WeakRef(Widget).new parent
+      state_change.emit
+    end
+
+    def parent=(val : Nil)
+      @parent = nil
     end
 
     def parent
-      if parent = @parent
-        parent.value 
+      if parent = @parent.try(&.value)
+        parent
       else
-        @parent
+        nil
+      end
+    end
+
+    protected def setup_input_hooks
+      
+    end
+
+    protected def on_state_change
+      @repaint = true
+      if parent = self.parent
+        parent.state_change.emit
       end
     end
   end
