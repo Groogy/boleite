@@ -44,7 +44,7 @@ class Boleite::Shape
     vertices = @vertices.get_vertices(renderer.gfx)
     shader = @vertices.get_shader(renderer.gfx)
     transform = Matrix.mul transform, self.transformation
-    drawcall = DrawCallContext.new vertices, shader, Matrix44f32.identity
+    drawcall = DrawCallContext.new vertices, shader, transform
     drawcall.uniforms["color"] = @color
     renderer.draw drawcall
   end
