@@ -4,6 +4,8 @@ end
 class Boleite::Shape
   struct Vertex < Vertex
     @pos : Vector2f32
+
+    getter pos
   
     def initialize(@pos)
     end
@@ -24,6 +26,14 @@ class Boleite::Shape
     def set(index, pos)
       @vertices[index] = Vertex.new pos
       @rebuild = true
+    end
+
+    def get(index)
+      @vertices[index].pos
+    end
+
+    def size
+      @vertices.size
     end
 
     def clear

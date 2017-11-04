@@ -7,8 +7,6 @@ class Boleite::Shape
   include Drawable
   include Transformable
 
-  getter size
-
   @vertices = Vertices.new
   @color = Color.white
 
@@ -25,9 +23,18 @@ class Boleite::Shape
     @vertices.add pos
   end
 
-  def []=(index, pos)
+  def []=(index, pos) : Vector2f32
     @vertices.set index, pos
   end
+
+  def [](index) : Vector2f32
+    @vertices.get index
+  end
+
+  def num_vertices
+    @vertices.size
+  end
+
 
   def clear_vertices
     @vertices.clear
