@@ -1,3 +1,5 @@
+require "./default_design/*"
+
 class Boleite::GUI
   class Graphics
     @gfx : GraphicsContext
@@ -24,7 +26,7 @@ class Boleite::GUI
 
     def draw(widget)
       drawer = @design.get_drawer widget
-      drawer.render(self)
+      drawer.render(widget, self)
     end
 
     def render
