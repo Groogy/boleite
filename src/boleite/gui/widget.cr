@@ -17,9 +17,9 @@ class Boleite::GUI
 
     Cute.signal mouse_enter
     Cute.signal mouse_leave
-    Cute.signal mouse_over(x : Float64, y : Float64)
-    Cute.signal left_click(x : Float64, y : Float64)
-    Cute.signal right_click(x : Float64, y : Float64)
+    Cute.signal mouse_over(pos : Vector2f)
+    Cute.signal left_click(pos : Vector2f)
+    Cute.signal right_click(pos : Vector2f)
     Cute.signal state_change
     Cute.signal pulse
 

@@ -50,7 +50,7 @@ class Boleite::GUI
     def translate(event : InputEvent)
       event = event.as(MousePosEvent)
       pos = @widget.absolute_position
-      {event.x - pos.x, event.y - pos.y}
+      {event.pos - pos.x}
     end
   end
 
@@ -76,7 +76,7 @@ class Boleite::GUI
 
     def translate(event : InputEvent)
       pos = @widget.absolute_position
-      {@last_pos.x - pos.x, @last_pos.y - pos.y}
+      {@last_pos - pos}
     end
 
     def handle_button_state(event : MouseButtonEvent) : Bool
