@@ -5,7 +5,7 @@ class Boleite::InputReceiver
     abstract def for?(type) : Bool
   end
 
-  class GlueImp(A, P) < Glue
+  abstract class GlueImp(A, P) < Glue
     def initialize(@action : A, @callback : P)
     end
 
@@ -16,21 +16,34 @@ class Boleite::InputReceiver
     def interested?(input) : Bool
       @action.interested? input
     end
+  end
 
+  class GlueProc(A, P) < GlueImp(A, P)
     def execute(input) : Nil
       args = @action.translate input
       @callback.call *args
     end
   end
 
+  class GlueSignal(A, P) < GlueImp(A, P)
+    def execute(input) : Nil
+      args = @action.translate input
+      @callback.emit *args
+    end
+  end
+
   @actions = [] of Glue
 
   def register(action_type, proc)
-    @actions << GlueImp.new(action_type.new, proc)
+    register_instance action_type.new, proc
+  end
+
+  def register_instance(action, signal : Cute::Signal)
+    @actions << GlueSignal.new action, signal
   end
 
   def register_instance(action, proc)
-    @actions << GlueImp.new action, proc
+    @actions << GlueProc.new action, proc
   end
 
   def unregister(action_type)
