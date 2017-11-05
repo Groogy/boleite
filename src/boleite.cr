@@ -1,6 +1,7 @@
 require "crystal-clear"
 require "lib_glfw3"
 require "lib_gl"
+require "cute"
 require "./boleite/math/*"
 require "./boleite/backend/*"
 require "./boleite/graphics/*"

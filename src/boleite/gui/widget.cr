@@ -1,5 +1,4 @@
 require "weak_ref"
-require "cute"
 
 class Boleite::GUI
   abstract class Widget
