@@ -13,22 +13,26 @@ class Boleite::GUI
     @visible = true
     @enabled = true
     @repaint = true
+    @mouse_focus = false
 
     Cute.signal mouse_enter
     Cute.signal mouse_leave
-    Cute.signal mouse_over
-    Cute.signal left_click
-    Cute.signal right_click
-    Cute.signal key_pressed
-    Cute.signal key_released
-    Cute.signal text_entered
+    Cute.signal mouse_over(x : Float64, y : Float64)
+    Cute.signal left_click(x : Float64, y : Float64)
+    Cute.signal right_click(x : Float64, y : Float64)
     Cute.signal state_change
     Cute.signal pulse
 
     def initialize
       state_change.on &->on_state_change
+      mouse_enter.on &->on_mouse_enter
+      mouse_leave.on &->on_mouse_leave
 
-      @input.register_instance WidgetMouseEnter.new(self), ->{ mouse_enter.emit }
+      @input.register_instance WidgetMouseEnter.new(self), mouse_enter
+      @input.register_instance WidgetMouseLeave.new(self), mouse_leave
+      @input.register_instance WidgetMouseOver.new(self), mouse_over
+      @input.register_instance WidgetMouseClick.new(self, Mouse::Left), left_click
+      @input.register_instance WidgetMouseClick.new(self, Mouse::Right), right_click
     end
 
     def name=(name)
@@ -70,6 +74,10 @@ class Boleite::GUI
       @repaint = false
     end
 
+    def has_mouse_focus?
+      @mouse_focus
+    end
+
     def position
       Vector2f.new @allocation.left, @allocation.top
     end
@@ -86,6 +94,14 @@ class Boleite::GUI
         pos = parent.absolute_position + pos
       end
       pos
+    end
+
+    def absolute_allocation
+      pos = absolute_position
+      allocation = @allocation.dup
+      allocation.left = pos.x
+      allocation.top = pos.y
+      allocation
     end
 
     def size
@@ -117,15 +133,19 @@ class Boleite::GUI
       end
     end
 
-    protected def setup_input_hooks
-      
-    end
-
     protected def on_state_change
       @repaint = true
       if parent = self.parent
         parent.state_change.emit
       end
+    end
+
+    protected def on_mouse_enter
+      @mouse_focus = true
+    end
+
+    protected def on_mouse_leave
+      @mouse_focus = false
     end
   end
 end
