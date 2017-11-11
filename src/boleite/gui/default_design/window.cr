@@ -40,20 +40,20 @@ class Boleite::GUI
       end
 
       def update_drawables_header(drawables, window)
-        no_offset = Vector2f.zero
+        offset = Vector2f.new 0.0, -window.header_size
         header_size = Vector2f.new window.size.x, window.header_size
         pos = window.position
         size = window.size
-        update_border drawables.header_border, pos, header_size, window.border_size, no_offset
-        update_body drawables.header, pos, size, PRIMARY_COLOR, no_offset
+        update_border drawables.header_border, pos, header_size, window.border_size, offset
+        update_body drawables.header, pos, size, PRIMARY_COLOR, offset
       end
 
       def update_drawables_body(drawables, window)
-        header_offset = Vector2f.new 0.0, window.header_size
+        no_offset = Vector2f.zero
         pos = window.position
         size = window.size
-        update_border drawables.body_border, pos, size, window.border_size, header_offset
-        update_body drawables.body, pos, size, SECONDARY_COLOR, header_offset
+        update_border drawables.body_border, pos, size, window.border_size, no_offset
+        update_body drawables.body, pos, size, SECONDARY_COLOR, no_offset
       end
 
       def update_body(shape, pos, size, color, offset)
