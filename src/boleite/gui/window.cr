@@ -28,5 +28,10 @@ class Boleite::GUI
     def border_size=(size)
       @border_size = size
     end
+
+    def header_allocation
+      pos = absolute_position
+      FloatRect.new pos.x, pos.y - @header_size + @border_size, size.x, @header_size
+    end
   end
 end
