@@ -16,6 +16,8 @@ class Boleite::InputRouter
   end
 
   def process(event : InputEvent)
-    @receivers.each &.process(event)
+    @receivers.each do |receiver|
+      receiver.process(event) unless event.claimed?
+    end
   end
 end

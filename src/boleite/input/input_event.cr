@@ -1,4 +1,13 @@
 abstract class Boleite::InputEvent
+  @claimed = false
+
+  def claim
+    @claimed = true
+  end
+
+  def claimed?
+    @claimed
+  end
 end
 
 class Boleite::ClosedEvent < Boleite::InputEvent
