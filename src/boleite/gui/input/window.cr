@@ -18,6 +18,7 @@ class Boleite::GUI
     end
 
     def translate(event : InputEvent)
+      event.claim
       {@pos - @last}
     end
   end
