@@ -4,7 +4,7 @@ class Boleite::GUI
     @pos = Vector2f.zero
     @last = Vector2f.zero
 
-    def initialize(@widget : Widget)
+    def initialize(@widget : Window)
     end
 
     def interested?(event : InputEvent) : Bool
@@ -12,7 +12,11 @@ class Boleite::GUI
         @last = @pos
         @pos = event.pos
       elsif event.is_a? MouseButtonEvent
-        @dragging = event.button == Mouse::Left && event.action != InputAction::Release
+        @dragging = event.button == Mouse::Left
+        @dragging = @dragging && event.action != InputAction::Release
+        @dragging = @dragging && @widget.header_allocation.contains? @pos
+      else
+        @dragging = false
       end
       @dragging
     end
