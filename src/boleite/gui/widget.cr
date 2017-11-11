@@ -88,6 +88,10 @@ class Boleite::GUI
       state_change.emit
     end
 
+    def move(pos)
+      self.position = self.position + pos
+    end
+
     def absolute_position
       pos = position
       if parent = self.parent

@@ -10,9 +10,15 @@ class Boleite::GUI
     getter header_size
     getter border_size
 
+    Cute.signal header_drag(pos : Vector2f)
+
     def initialize
       super
       self.min_size = DEFAULT_SIZE
+
+      header_drag.on &->move(Vector2f)
+      
+      @input.register_instance WindowHeaderDrag.new(self), header_drag
     end
 
     def header_size=(size)

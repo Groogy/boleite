@@ -11,6 +11,10 @@ class Boleite::GUI
     delegate :"[]", to: @children
     getter min_size
 
+    def initialize
+      super
+    end
+
     requires child.parent.nil?
     ensures @children.count child == 1
     def add(child)
