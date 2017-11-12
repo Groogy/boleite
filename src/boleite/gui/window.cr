@@ -17,6 +17,7 @@ class Boleite::GUI
       self.min_size = DEFAULT_SIZE
 
       @header_label.position = Vector2f.new @border_size, @border_size
+      @header_label.parent = self
 
       state_change.on &->update_header_size
       header_drag.on &->move(Vector2f)
