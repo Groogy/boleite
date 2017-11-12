@@ -20,13 +20,13 @@ class Boleite::GUI
       @renderer.clear Color.transparent
     end
 
-    def draw(drawable : Drawable)
-      @renderer.draw drawable
+    def draw(drawable : Drawable, transform = Matrix44f32.identity)
+      @renderer.draw drawable, transform 
     end
 
-    def draw(widget)
+    def draw(widget, transform = Matrix44f32.identity)
       drawer = @design.get_drawer widget
-      drawer.render(widget, self)
+      drawer.render(widget, transform, self)
     end
 
     def render

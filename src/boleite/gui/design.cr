@@ -1,6 +1,6 @@
 class Boleite::GUI
   abstract class DesignDrawer
-    abstract def render(widget, graphics)
+    abstract def render(widget, transform, graphics)
   end
 
   abstract class Design

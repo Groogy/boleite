@@ -20,11 +20,11 @@ class Boleite::GUI
         WindowDrawables.new
       end
 
-      def render(widget, graphics)
+      def render(widget, transform, graphics)
         window = widget.as(Window)
         drawables = @cache.find widget
         update_drawables drawables, window
-        draw_drawables drawables, graphics
+        draw_drawables drawables, transform, graphics
       end
 
       def update_drawables(drawables, window)
@@ -32,11 +32,11 @@ class Boleite::GUI
         update_drawables_body drawables, window
       end
 
-      def draw_drawables(drawables, graphics)
-        graphics.draw drawables.header_border
-        graphics.draw drawables.header
-        graphics.draw drawables.body_border
-        graphics.draw drawables.body
+      def draw_drawables(drawables, transform, graphics)
+        graphics.draw drawables.header_border, transform
+        graphics.draw drawables.header, transform
+        graphics.draw drawables.body_border, transform
+        graphics.draw drawables.body, transform
       end
 
       def update_drawables_header(drawables, window)
