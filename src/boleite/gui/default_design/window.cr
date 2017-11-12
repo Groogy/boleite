@@ -25,6 +25,9 @@ class Boleite::GUI
         drawables = @cache.find widget
         update_drawables drawables, window
         draw_drawables drawables, transform, graphics
+
+        transform = Matrix.mul transform, drawables.header.transformation
+        graphics.draw window.header_label, transform
       end
 
       def update_drawables(drawables, window)
