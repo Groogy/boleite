@@ -7,10 +7,18 @@ class Boleite::GUI
     SECONDARY_COLOR = Colorf.new 0.195f32, 0.195f32, 0.117f32, 1f32
     BORDER_COLOR = Colorf.new 0.078f32, 0.078f32, 0.078f32, 1f32
 
-    @window = WindowDesign.new
+    def initialize(gfx)
+      @font = Boleite::Font.new gfx, "arial.ttf"
+      @window = WindowDesign.new
+      @label = LabelDesign.new @font
+    end
 
     def get_drawer(window : Window)
       @window
+    end
+
+    def get_drawer(label : Label)
+      @label
     end
   end
 end

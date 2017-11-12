@@ -13,7 +13,7 @@ class Boleite::GUI
       target = @gfx.main_target
       @camera = Camera2D.new target.width.to_f32, target.height.to_f32, 0f32, 1f32
       @renderer = Renderer.new @gfx, @camera
-      @design = DefaultDesign.new
+      @design = DefaultDesign.new @gfx
     end
 
     def clear
