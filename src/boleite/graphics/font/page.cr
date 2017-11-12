@@ -59,7 +59,8 @@ class Boleite::Font
       glyph.advance = raw_glyph.value.advance.x >> 6
       width, height = bitmap.width + 2, bitmap.rows + 2 # Add padding to glyph space
       glyph.texture_rect = find_glyph_rect(width, height)
-      glyph.texture_rect.shrink 1 # Remove the padding
+      glyph.texture_rect.width = glyph.texture_rect.width - 2
+      glyph.texture_rect.height = glyph.texture_rect.height - 2
       glyph.bounds.left   = raw_glyph.value.bitmap_left.to_f
       glyph.bounds.top    = raw_glyph.value.bitmap.rows - raw_glyph.value.bitmap_top.to_f
       glyph.bounds.width  = raw_glyph.value.bitmap.width.to_f
@@ -123,6 +124,7 @@ class Boleite::Font
         buffer += bitmap.pitch
       end
       rect = glyph.texture_rect
+      tmp = {width, rect.left, @texture.size.x}
       @texture.update(pixels, width, height, rect.left, rect.top, 8)
     end
   end
