@@ -90,9 +90,8 @@ class Boleite::Text
       min, max = glyph.bounds.bounds
       min, max = min.to_f32, max.to_f32
       tex_min, tex_max = glyph.texture_rect.bounds
-      tex_min, tex_max = tex_min.to_f32 / texture_size.to_f32, tex_max.to_f32 / texture_size.to_f32
-      tex_min.y = 1 - tex_min.y
-      tex_max.y = 1 - tex_max.y
+      tex_min, tex_max = tex_min.to_f / texture_size.to_f, tex_max.to_f / texture_size.to_f
+      tex_min, tex_max = tex_min.to_f32, tex_max.to_f32
       vertices << Vertex.new(min.x + advance, min.y - top, tex_min.x, tex_min.y, color)
       vertices << Vertex.new(min.x + advance, max.y - top, tex_min.x, tex_max.y, color)
       vertices << Vertex.new(max.x + advance, min.y - top, tex_max.x, tex_min.y, color)
