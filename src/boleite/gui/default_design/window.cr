@@ -6,7 +6,7 @@ class Boleite::GUI
   end
 
   class DefaultDesign < Design
-    class WindowDesign < DesignDrawer
+    class WindowDesign < ContainerDesign
       struct WindowDrawables
         property body, body_border, header, header_border
 
@@ -28,6 +28,8 @@ class Boleite::GUI
 
         transform = Matrix.mul transform, drawables.header.transformation
         graphics.draw window.header_label, transform
+
+        render_children widget, transform, graphics
       end
 
       def update_drawables(drawables, window)
