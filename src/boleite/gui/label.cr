@@ -31,7 +31,7 @@ class Boleite::GUI
       state_change.emit
     end
 
-    def orientation(@orientation)
+    def orientation=(@orientation)
       state_change.emit
     end
   end
