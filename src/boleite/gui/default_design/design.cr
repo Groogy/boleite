@@ -11,6 +11,7 @@ class Boleite::GUI
       @font = Boleite::Font.new gfx, "arial.ttf"
       @window = WindowDesign.new
       @label = LabelDesign.new @font
+      @button = ButtonDesign.new
     end
 
     def get_drawer(window : Window)
@@ -19,6 +20,10 @@ class Boleite::GUI
 
     def get_drawer(label : Label)
       @label
+    end
+
+    def get_drawer(button : Button)
+      @button
     end
   end
 end
