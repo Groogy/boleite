@@ -26,9 +26,10 @@ class Boleite::GUI
         update_drawables drawables, window
         draw_drawables drawables, transform, graphics
 
-        transform = Matrix.mul transform, drawables.header.transformation
-        graphics.draw window.header_label, transform
+        header_transform = Matrix.mul transform, drawables.header.transformation
+        graphics.draw window.header_label, header_transform
 
+        transform = Matrix.mul transform, drawables.body.transformation
         render_children widget, transform, graphics
       end
 
