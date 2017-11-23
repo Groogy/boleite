@@ -5,6 +5,7 @@ class Boleite::GUI
     include CrystalClear
 
     getter name, allocation, input
+    getter? repaint
   
     @name = ""
     @input = InputHandler.new
@@ -64,10 +65,6 @@ class Boleite::GUI
     def enabled=(flag)
       @enabled = flag
       state_change.emit
-    end
-
-    def repaint?
-      @repaint
     end
 
     def clear_repaint

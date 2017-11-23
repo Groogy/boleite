@@ -18,10 +18,18 @@ class Boleite::GUI
   end
 
   def render
-    @graphics.clear
-    @roots.each do |root|
-      @graphics.draw root
+    repaint_widgets = find_repaint_widgets
+    repaint_widgets.each do |widget|
+      @graphics.clear widget.absolute_allocation
+    end
+    repaint_widgets.each do |widget|
+      @graphics.draw widget
     end
     @graphics.render
+  end
+
+  def find_repaint_widgets
+    widgets = @roots.select &.repaint?
+    widgets
   end
 end
