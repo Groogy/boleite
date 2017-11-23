@@ -22,6 +22,15 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
     GL.safe_call { LibGL.clear LibGL::DEPTH_BUFFER_BIT }
   end
 
+  def scissor=(rect : IntRect) : Void
+    GL.safe_call { LibGL.enable LibGL::SCISSOR_TEST }
+    GL.safe_call { LibGL.scissor rect.left, rect.top, rect.width, rect.height }
+  end
+
+  def scissor=(arg : Nil) : Void
+    GL.safe_call { LibGL.disable LibGL::SCISSOR_TEST }
+  end
+
   def present
     GLFW.safe_call{ LibGLFW3.swapBuffers(@glfw_surface.ptr) }
   end

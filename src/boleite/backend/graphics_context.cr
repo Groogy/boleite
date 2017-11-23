@@ -4,6 +4,9 @@ abstract class Boleite::GraphicsContext
   abstract def clear_depth() : Void
   abstract def present : Void
 
+  abstract def scissor=(rect : IntRect) : Void
+  abstract def scissor=(arg : Nil) : Void
+
   abstract def create_vertex_buffer_object : VertexBufferObject
   abstract def create_vertex_buffer : VertexBuffer
   abstract def create_shader(parser : ShaderParser) : Shader
