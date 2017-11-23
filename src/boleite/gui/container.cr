@@ -13,6 +13,8 @@ class Boleite::GUI
 
     def initialize
       super
+
+      @input.register_instance ContainerInputPass.new(self), ->pass_input_to_children(InputEvent)
     end
 
     requires child.parent.nil?
@@ -56,6 +58,12 @@ class Boleite::GUI
 
     def min_size=(@min_size)
       self.size = @min_size if @min_size.x >= size.x || @min_size.y >= size.y
+    end
+
+    protected def pass_input_to_children(event : InputEvent)
+      each_widget do |child|
+        child.input.process event unless event.claimed?
+      end
     end
   end
 end
