@@ -64,8 +64,15 @@ class Boleite::GUI
     abstract def reset_acc_allocation
     abstract def update_acc_allocation
 
+    protected def update_body_allocation
+      alloc = self.allocation
+      self.each_widget { |child| alloc.merge_relative child.allocation }
+      @allocation = alloc
+    end
+
     protected def on_state_change
       update_acc_allocation
+      update_body_allocation
       super
     end
 
