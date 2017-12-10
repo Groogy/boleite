@@ -72,6 +72,15 @@ struct Boleite::Rect(Type)
     @height += amount * 2
   end
 
+  def merge(rect)
+    @width = {@left + @width, rect.left + rect.width}.max
+    @height = {@top + @height, rect.top + rect.height}.max
+    @left = {@left, rect.left}.min
+    @top = {@top, rect.top}.min
+    @width -= @left
+    @height -= @top
+  end
+
   private macro def_conv_meth(name, type)
     {% if type == TYPE %}
       def {{name}}
