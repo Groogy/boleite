@@ -66,10 +66,10 @@ struct Boleite::Rect(Type)
   end
 
   def expand(amount)
-    @left -= amount * 2
-    @top -= amount * 2
-    @width += amount
-    @height += amount
+    @left -= amount
+    @top -= amount
+    @width += amount * 2
+    @height += amount * 2
   end
 
   private macro def_conv_meth(name, type)
