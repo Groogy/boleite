@@ -20,7 +20,8 @@ class Boleite::GUI
   def render
     repaint_widgets = find_repaint_widgets
     repaint_widgets.each do |widget|
-      @graphics.clear widget.absolute_allocation
+      @graphics.clear widget.acc_allocation
+      widget.reset_acc_allocation
     end
     repaint_widgets.each do |widget|
       @graphics.draw widget

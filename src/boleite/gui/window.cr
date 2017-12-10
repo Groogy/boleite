@@ -45,6 +45,17 @@ class Boleite::GUI
       @header_label.character_size = size
     end
 
+    def reset_acc_allocation
+      @acc_allocation = @allocation
+      @acc_allocation.merge header_allocation
+    end
+
+    def update_acc_allocation
+      @acc_allocation.merge @allocation
+      @acc_allocation.merge header_allocation
+      @acc_allocation.expand @border_size * 2
+    end
+
     protected def update_header_size
       @header_label.size = Vector2f.new size.x, @header_size
     end

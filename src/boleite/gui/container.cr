@@ -7,9 +7,10 @@ class Boleite::GUI
 
     @children = [] of Widget
     @min_size = Vector2f.new 0.0, 0.0
+    @acc_allocation = FloatRect.new
 
     delegate :"[]", to: @children
-    getter min_size
+    getter min_size, acc_allocation
 
     def initialize
       super
@@ -58,6 +59,14 @@ class Boleite::GUI
 
     def min_size=(@min_size)
       self.size = @min_size if @min_size.x >= size.x || @min_size.y >= size.y
+    end
+
+    abstract def reset_acc_allocation
+    abstract def update_acc_allocation
+
+    protected def on_state_change
+      update_acc_allocation
+      super
     end
 
     protected def pass_input_to_children(event : InputEvent)
