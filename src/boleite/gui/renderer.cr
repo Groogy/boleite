@@ -58,7 +58,9 @@ class Boleite::GUI
     end
 
     def clear(rect : IntRect, color : Colorf)
-      rect.top = @texture.size.y.to_i - rect.top
+      top = @texture.size.y.to_i - rect.top
+      bottom = top - rect.height
+      rect.top = bottom
       @framebuffer.activate do
         @gfx.scissor = rect
         @gfx.clear color
