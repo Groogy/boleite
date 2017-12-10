@@ -23,6 +23,8 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
   end
 
   def scissor=(rect : IntRect) : Void
+    rect.left = {rect.left, 0}.max
+    rect.top = {rect.top, 0}.max
     GL.safe_call { LibGL.enable LibGL::SCISSOR_TEST }
     GL.safe_call { LibGL.scissor rect.left, rect.top, rect.width, rect.height }
   end
