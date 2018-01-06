@@ -3,7 +3,7 @@ struct Boleite::VectorImp(Type, Size)
     def marshal(obj, node)
       tmp = Array(Serializer::Type).new(Size)
       obj.elements.each do |value|
-        tmp << value.to_i
+        tmp << value.to_f
       end
       node.value = tmp
     end
@@ -11,7 +11,7 @@ struct Boleite::VectorImp(Type, Size)
     def unmarshal(node)
       arr = node.value.as(Array(Serializer::Type))
       VectorImp(Type, Size).new do |index|
-        Type.new(arr[index].as(Int32))
+        Type.new(arr[index].as(Float64))
       end
     end
   end

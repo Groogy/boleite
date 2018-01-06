@@ -4,7 +4,7 @@ class Boleite::Serializer
   class Exception < Exception
   end
 
-  alias Type = Bool | Int32 | Float64 | String | Hash(Type, Type) | Array(Type) | Node | Nil
+  alias Type = Bool | Int64 | Float64 | String | Hash(Type, Type) | Array(Type) | Node | Nil
 
   struct ValueWrapper
     def initialize(@value : Type = nil)
@@ -45,40 +45,40 @@ class Boleite::Serializer
       end
     end
 
-    def marshal(index : Int32, string : String)
-      marshal_primitive(index, string, Array(Type))
+    def marshal(index : Int, string : String)
+      marshal_primitive(index.to_i64, string, Array(Type))
     end
 
     def marshal(key : String, string : String)
       marshal_primitive(key, string, Hash(Type, Type))
     end
 
-    def marshal(index : Int32, int : Int)
-      marshal_primitive(index, int.to_i32, Array(Type))
+    def marshal(index : Int, int : Int)
+      marshal_primitive(index.to_i64, int.to_i64, Array(Type))
     end
 
     def marshal(key : String, int : Int)
-      marshal_primitive(key, int.to_i32, Hash(Type, Type))
+      marshal_primitive(key, int.to_i64, Hash(Type, Type))
     end
 
-    def marshal(index : Int32, float : Float)
-      marshal_primitive(index, float.to_f64, Array(Type))
+    def marshal(index : Int, float : Float)
+      marshal_primitive(index.to_i64, float.to_f64, Array(Type))
     end
 
     def marshal(key : String, float : Float)
       marshal_primitive(key, float.to_f64, Hash(Type, Type))
     end
 
-    def marshal(index : Int32, bool : Bool)
-      marshal_primitive(index, bool, Array(Type))
+    def marshal(index : Int, bool : Bool)
+      marshal_primitive(index.to_i64, bool, Array(Type))
     end
 
     def marshal(key : String, bool : Bool)
       marshal_primitive(key, bool, Hash(Type, Type))
     end
 
-    def marshal(index : Int32, obj)
-      marshal_obj(index, obj, Array(Type))
+    def marshal(index : Int, obj)
+      marshal_obj(index.to_i64, obj, Array(Type))
     end
 
     def marshal(key : String, obj)
@@ -102,54 +102,40 @@ class Boleite::Serializer
       end
     end
 
-    def unmarshal_string(index : Int32)
-      unmarshal_primitive(index, String, Array(Type))
+    def unmarshal_string(index : Int)
+      unmarshal_primitive(index.to_i64, String, Array(Type))
     end
 
     def unmarshal_string(key : String)
       unmarshal_primitive(key, String, Hash(Type, Type))
     end
 
-    def unmarshal_int(index : Int32)
-      unmarshal_primitive(index, Int32, Array(Type))
+    def unmarshal_int(index : Int)
+      unmarshal_primitive(index.to_i64, Int64, Array(Type))
     end
 
     def unmarshal_int(key : String)
-      unmarshal_primitive(key, Int32, Hash(Type, Type))
+      unmarshal_primitive(key, Int64, Hash(Type, Type))
     end
 
-    def unmarshal_float(index : Int32)
-      unmarshal_primitive(index, Float64, Array(Type))
+    def unmarshal_float(index : Int)
+      unmarshal_primitive(index.to_i64, Float64, Array(Type))
     end
 
     def unmarshal_float(key : String)
       unmarshal_primitive(key, Float64, Hash(Type, Type))
     end
 
-    def unmarshal_bool(index : Int32)
-      val = unmarshal_primitive(index, String, Array(Type))
-      if val == "true"
-        true
-      elsif val == "false"
-        false
-      else
-        raise Exception.new("Unmarshaling a boolean, got \"#{val}\" while expecting \"true\" or \"false\".")
-      end
+    def unmarshal_bool(index : Int)
+      unmarshal_primitive(index.to_i64, Bool, Array(Type))
     end
 
     def unmarshal_bool(key : String)
-      val = unmarshal_primitive(key, String, Hash(Type, Type))
-      if val == "true"
-        true
-      elsif val == "false"
-        false
-      else
-        raise Exception.new("Unmarshaling a boolean, got \"#{val}\" while expecting \"true\" or \"false\".")
-      end
+      unmarshal_primitive(key, Bool, Hash(Type, Type))
     end
 
-    def unmarshal(index : Int32, type)
-      unmarshal_obj(index, type, Array(Type))
+    def unmarshal(index : Int, type)
+      unmarshal_obj(index.to_i64, type, Array(Type))
     end
 
     def unmarshal(key : String, type)
@@ -221,11 +207,17 @@ class Boleite::Serializer
         translate_yaml_hash(data)
       when String
         translate_yaml_string(data)
+      when Int64
+        data
+      when Float64
+        data
+      when Bool
+        data
       end
     end
 
     def translate_yaml_string(data : String) : Type
-      if val = data.to_i?
+      if val = data.to_i64?
         return val
       elsif val = data.to_f?
         return val
