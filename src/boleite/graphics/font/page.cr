@@ -48,7 +48,7 @@ class Boleite::Font
     private def load_glyph(code)
       apply_size
       flags = LibFreeType::Load::RENDER
-      error = LibFreeType.load_Char @face, code.hash, flags
+      error = LibFreeType.load_Char @face, code.ord, flags
       raise Error.new("Failed to load glyph for #{code}") if error != LibFreeType::Err_Ok
     end
 
