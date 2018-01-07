@@ -12,6 +12,7 @@ class Boleite::GUI
       @window = WindowDesign.new
       @label = LabelDesign.new @font
       @button = ButtonDesign.new
+      @layout = LayoutDesign.new
     end
 
     def get_drawer(window : Window)
@@ -24,6 +25,10 @@ class Boleite::GUI
 
     def get_drawer(button : Button)
       @button
+    end
+
+    def get_drawer(layout : Layout)
+      @layout
     end
   end
 end
