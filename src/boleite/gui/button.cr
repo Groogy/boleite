@@ -10,7 +10,7 @@ class Boleite::GUI
 
     getter label, border_size
 
-    Cute.signal click
+    Cute.signal click(pos : Vector2f)
 
     def initialize
       super
@@ -20,7 +20,8 @@ class Boleite::GUI
 
       state_change.on &->update_label_size
 
-      @input.register_instance ButtonClick.new(self), click
+      tmp = Boleite::GUI::WidgetBasicClick.new(self, Boleite::Mouse::Left)
+      @input.register_instance tmp, click
     end
 
     def initialize(text, size = Vector2f.zero)

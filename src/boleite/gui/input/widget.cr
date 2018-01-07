@@ -87,4 +87,39 @@ class Boleite::GUI
       old_state == true && old_state != @state
     end
   end
+
+  class WidgetBasicClick
+    @pos = Vector2f.zero
+    @clicked_inside = false
+
+    def initialize(@widget : Widget, @button : Mouse)
+    end
+
+    def interested?(event : InputEvent) : Bool
+      if event.is_a? MousePosEvent
+        @pos = event.pos
+      elsif event.is_a? MouseButtonEvent
+        if @widget.absolute_allocation.contains? @pos
+          if event.button == @button && event.action == InputAction::Press
+            @clicked_inside = true
+          end
+        else
+          @clicked_inside = false
+        end
+
+        if @clicked_inside
+          event.claim
+        end
+        
+        return @clicked_inside && event.action == InputAction::Release
+      end
+      return false
+    end
+
+    def translate(event : InputEvent)
+      event.claim
+      pos = @widget.absolute_position
+      {@pos - pos}
+    end
+  end
 end
