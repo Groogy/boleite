@@ -52,7 +52,7 @@ class Boleite::GUI
       end
 
       def calc_text_pos(label, screen_size)
-        pos = Vector2f.zero
+        pos = label.position
         case label.orientation
         when Label::Orientation::Center
           pos = label.size / 2.0
