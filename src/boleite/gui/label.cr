@@ -17,7 +17,7 @@ class Boleite::GUI
     end
 
     def initialize(text, wanted_size)
-      super
+      super()
 
       self.size = wanted_size
       self.text = text
