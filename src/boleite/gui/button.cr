@@ -17,8 +17,8 @@ class Boleite::GUI
 
       state_change.on &->update_label_size
 
-      tmp = Boleite::GUI::WidgetBasicClick.new(self, Boleite::Mouse::Left)
-      @input.register_instance tmp, click
+      clicker = Boleite::GUI::WidgetBasicClick.new self, Boleite::Mouse::Left
+      @input.register_instance clicker, click
     end
 
     def initialize(text, size = Vector2f.zero)
