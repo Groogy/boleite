@@ -50,7 +50,7 @@ class Boleite::GUI
         header_size = Vector2f.new window.size.x, window.header_size
         pos = window.position
         size = window.size
-        update_border drawables.header_border, pos, header_size, window.border_size, offset
+        update_border drawables.header_border, pos, header_size, BORDER_SIZE, offset
         update_body drawables.header, pos, size, PRIMARY_COLOR, offset
       end
 
@@ -58,7 +58,7 @@ class Boleite::GUI
         no_offset = Vector2f.zero
         pos = window.position
         size = window.size
-        update_border drawables.body_border, pos, size, window.border_size, no_offset
+        update_border drawables.body_border, pos, size, BORDER_SIZE, no_offset
         update_body drawables.body, pos, size, SECONDARY_COLOR, no_offset
       end
 

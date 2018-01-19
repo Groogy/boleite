@@ -31,7 +31,7 @@ class Boleite::GUI
       def update_drawables(drawables, button)
         pos = button.position
         size = button.size
-        update_border drawables.border, pos, size, button.border_size
+        update_border drawables.border, pos, size, BORDER_SIZE
         update_body drawables.body, pos, size, SECONDARY_COLOR
       end
 

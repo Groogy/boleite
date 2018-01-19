@@ -3,12 +3,9 @@ class Boleite::GUI
   end
 
   class Button < Widget
-    DEFAULT_BORDER_SIZE = 1.0
-
-    @border_size = DEFAULT_BORDER_SIZE
     @label = Label.new
 
-    getter label, border_size
+    getter label
 
     Cute.signal click(pos : Vector2f)
 
@@ -28,10 +25,6 @@ class Boleite::GUI
       self.initialize
       self.label_text = text
       self.size = size
-    end
-
-    def border_size=(size)
-      @border_size = size
     end
 
     def label_text=(text)

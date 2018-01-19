@@ -2,13 +2,11 @@ class Boleite::GUI
   class Window < Container
     DEFAULT_SIZE = Vector2f.new 100.0, 30.0
     DEFAULT_HEADER_SIZE = 20.0
-    DEFAULT_BORDER_SIZE = 1.0
 
     @header_size = DEFAULT_HEADER_SIZE
-    @border_size = DEFAULT_BORDER_SIZE
     @header_label = Label.new
 
-    getter header_size, border_size, header_label
+    getter header_size, header_label
 
     Cute.signal header_drag(pos : Vector2f)
 
@@ -16,7 +14,7 @@ class Boleite::GUI
       super
       self.min_size = DEFAULT_SIZE
 
-      @header_label.position = Vector2f.new @border_size, @border_size
+      @header_label.position = Vector2f.zero
       @header_label.parent = self
 
       state_change.on &->update_header_size
@@ -28,13 +26,9 @@ class Boleite::GUI
       @header_size = size
     end
 
-    def border_size=(size)
-      @border_size = size
-    end
-
     def header_allocation
       pos = absolute_position
-      FloatRect.new pos.x, pos.y - @header_size + @border_size, size.x, @header_size
+      FloatRect.new pos.x, pos.y - @header_size, size.x, @header_size
     end
 
     def header_text=(text)
@@ -53,7 +47,7 @@ class Boleite::GUI
     def update_acc_allocation
       @acc_allocation.merge @allocation
       @acc_allocation.merge header_allocation
-      @acc_allocation.expand @border_size * 2
+      @acc_allocation.expand 2.0
     end
 
     protected def update_header_size
