@@ -9,7 +9,12 @@ class Boleite::GUI
       if event.is_a? MousePosEvent
         @pos = event.pos
       end
-      @widget.absolute_allocation.contains? @pos
+      case event
+      when MousePosEvent, MouseButtonEvent, MouseScrollEvent
+        return @widget.absolute_allocation.contains? @pos
+      else
+        return true
+      end
     end
 
     def translate(event : InputEvent)
