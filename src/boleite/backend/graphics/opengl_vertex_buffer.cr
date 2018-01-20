@@ -80,6 +80,7 @@ end
 
 class Boleite::Private::OpenGLVertexBuffer < Boleite::VertexBuffer
   @buffer_id : LibGL::UInt = 0_u32
+  @target = LibGL::ARRAY_BUFFER
   
   def initialize
     GL.safe_call { LibGL.genBuffers 1, pointerof(@buffer_id) }
@@ -90,13 +91,21 @@ class Boleite::Private::OpenGLVertexBuffer < Boleite::VertexBuffer
   end
 
   def activate
-    GL.safe_call { LibGL.bindBuffer LibGL::ARRAY_BUFFER, @buffer_id }
+    GL.safe_call { LibGL.bindBuffer @target, @buffer_id }
+  end
+
+  def set_vertices_target
+    @target = LibGL::ARRAY_BUFFER
+  end
+
+  def set_indices_target
+    @target = LibGL::ELEMENT_ARRAY_BUFFER
   end
   
   def build
     if needs_rebuild?
       activate
-      GL.safe_call { LibGL.bufferData LibGL::ARRAY_BUFFER, size, @data.to_unsafe, LibGL::STATIC_DRAW }
+      GL.safe_call { LibGL.bufferData @target, size, @data.to_unsafe, LibGL::STATIC_DRAW }
       @rebuild = false
     end        
   end

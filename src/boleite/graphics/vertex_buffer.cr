@@ -87,6 +87,7 @@ abstract class Boleite::VertexBufferObject
   @primitive = Primitive::Triangles
   @layout = VertexLayout.new
   @update_layout = true
+  @indices_buffer : Int32?
 
   property :primitive
 
@@ -115,12 +116,31 @@ abstract class Boleite::VertexBufferObject
     @buffers[index]
   end
 
+  def set_indices(index)
+    if tmp = @indices_buffer
+      @buffers[tmp].set_vertices_target
+    end
+    @indices_buffer = index
+    @buffers[index].set_indices_target
+  end
+
+  def set_indices(val : Nil)
+    if tmp = @indices_buffer
+      @buffers[tmp].set_vertices_target
+    end
+    @indices_buffer = nil
+  end
+
   def num_vertices
-    size = @layout.vertex_size
-    if size <= 0
-      0
+    if tmp = @indices_buffer
+      @buffers[tmp].size / sizeof(Int32)
     else
-      total_buffer_size / size
+      size = @layout.vertex_size
+      if size <= 0
+        0
+      else
+        total_buffer_size / size
+      end
     end
   end
 
@@ -154,7 +174,19 @@ abstract class Boleite::VertexBuffer
   def add_data(vertex : Vertex) : Void
     vertex_size = sizeof(typeof(vertex))
     data = pointerof(vertex).as(UInt8*).to_slice(vertex_size)
-    add_data(data)
+    add_data data
+  end
+
+  def add_data(index : Int32) : Void
+    size = sizeof(Int32)
+    data = pointerof(index).as(UInt8*).to_slice(size)
+    add_data data
+  end
+
+  def add_data(index : UInt32) : Void
+    size = sizeof(UInt32)
+    data = pointerof(index).as(UInt8*).to_slice(size)
+    add_data data
   end
 
   def add_data(slice : Slice(UInt8)) : Void
@@ -176,5 +208,7 @@ abstract class Boleite::VertexBuffer
     @rebuild
   end
 
+  abstract def set_vertices_target
+  abstract def set_indices_target
   abstract def build
 end
