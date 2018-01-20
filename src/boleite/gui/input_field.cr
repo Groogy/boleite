@@ -7,11 +7,10 @@ class Boleite::GUI
     @input_focus = false
 
     getter label
-    setter input_focus
+    getter? input_focus
 
     Cute.signal click(pos : Vector2f)
     Cute.signal text_entered(char : Char)
-    Cute.signal key_pressed(key : Key, action : InputAction)
     Cute.signal lose_input_focus
 
     def initialize
@@ -21,15 +20,16 @@ class Boleite::GUI
       @label.parent = self
 
       state_change.on &->update_label_size
-      text_entered.on &->(char : Char) { self.value = self.value + char }
-      key_pressed.on &->self.handle_special_keys(Key, InputAction)
+      text_entered.on &->handle_text_input(Char)
       click.on &->(pos : Vector2f) { self.input_focus = true }
       lose_input_focus.on &-> { self.input_focus = false }
 
       clicker = WidgetBasicClick.new self, Mouse::Left
       @input.register_instance clicker, click
       @input.register_instance InputFieldEnterText.new(self), text_entered
-      @input.register_instance InputFieldKeyPress.new(self), key_pressed
+      @input.register_instance InputFieldKeyPress.new(self, Key::Left), ->move_cursor_back
+      @input.register_instance InputFieldKeyPress.new(self, Key::Right), ->move_cursor_forward
+      @input.register_instance InputFieldKeyPress.new(self, Key::Backspace), ->handle_backspace
       @input.register_persistent_instance InputFieldLoseFocus.new(self), lose_input_focus
     end
 
@@ -41,6 +41,7 @@ class Boleite::GUI
 
     def value=(text)
       @label.text = text
+      @label.cursor_position = text.size
       state_change.emit
     end
 
@@ -48,20 +49,39 @@ class Boleite::GUI
       @label.text
     end
 
-    def input_focus?
-      @input_focus
+    def input_focus=(@input_focus)
+      @label.use_cursor = @input_focus
     end
 
     protected def update_label_size
       @label.size = self.size
     end
 
-    protected def handle_special_keys(key : Key, action : InputAction)
-      return if action == InputAction::Release
-      case key
-      when Key::Backspace
-        self.value = self.value.rchop
+    protected def handle_text_input(char : Char)
+      pos = @label.cursor_position
+      @label.text = @label.text.insert pos, char
+      @label.cursor_position += 1
+      state_change.emit
+    end
+
+    protected def move_cursor_back
+      @label.cursor_position -= 1
+      state_change.emit
+    end
+
+    protected def move_cursor_forward
+      @label.cursor_position += 1
+      state_change.emit
+    end
+
+    protected def handle_backspace
+      cursor = @label.cursor_position
+      text = @label.text
+      if cursor > 0
+        self.value = text[0, cursor-1] + text[cursor, text.size]
+        @label.cursor_position -= 1 if cursor < text.size
       end
+      state_change.emit
     end
   end
 end

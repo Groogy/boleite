@@ -18,17 +18,21 @@ class Boleite::GUI
   end
   
   class InputFieldKeyPress
-    def initialize(@widget : InputField)
+    def initialize(@widget : InputField, @key : Key)
     end
 
     def interested?(event : InputEvent) : Bool
-      @widget.input_focus? && event.is_a? KeyEvent
+      if @widget.input_focus? && event.is_a? KeyEvent
+        event = event.as(KeyEvent)
+        event.key == @key && event.action != InputAction::Release
+      else
+        false
+      end
     end
 
     def translate(event : InputEvent)
-      event = event.as(KeyEvent)
       event.claim
-      {event.key, event.action}
+      Tuple.new
     end
   end
 
