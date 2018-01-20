@@ -21,7 +21,8 @@ class Boleite::GUI
       end
 
       def update_text(text, label)
-        string, screen_size = crop_text label
+        string = insert_cursor label
+        string, screen_size = crop_text string, label
         pos = calc_text_pos label, screen_size
         text.text = string
         text.size = label.character_size
@@ -32,10 +33,17 @@ class Boleite::GUI
         graphics.draw text, transform
       end
 
-      def crop_text(label)
+      def insert_cursor(label)
+        string = label.text.dup
+        if label.use_cursor?
+          string = string.insert label.cursor_position, '|'
+        end
+        string
+      end
+
+      def crop_text(string, label)
         size = 0.0
         character_size = label.character_size
-        string = label.text.dup
         string.each_char_with_index do |char, index|
           glyph = @font.get_glyph char, character_size
           size += glyph.advance
