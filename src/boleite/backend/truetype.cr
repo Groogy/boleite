@@ -58,6 +58,7 @@ lib LibFreeType
   alias UInt    = LibC::UInt
   alias F26Dot6 = LibC::Long
   alias Pos     = LibC::Long
+  alias Fixed   = LibC::Long
 
   type Library    = Void*
   
@@ -77,6 +78,24 @@ lib LibFreeType
     y : Pos
   end
 
+  struct Generic
+    data : Void*
+    finalizer : Void*
+  end
+
+  struct SizeMetrics
+    x_ppem : LibC::UShort
+    y_ppem : LibC::UShort
+
+    x_scale : Fixed
+    y_scale : Fixed
+
+    ascender    : Pos
+    descender   : Pos
+    height      : Pos
+    max_advance : Pos
+  end
+
   struct GlyphSlotRec
     padding1 : UInt8[128] # How far to the first member I want
     advance : Vector
@@ -87,11 +106,19 @@ lib LibFreeType
   end
   type GlyphSlot  = GlyphSlotRec*
 
+  struct SizeRec
+    face : Face
+    generic : Generic
+    metrics : SizeMetrics
+  end
+  type Size = SizeRec*
+
   struct FaceRec
     padding1 : UInt8[16] # How far to the first member I want
     face_flags : Long
     padding : UInt8[128] # How far to the second member I want
     glyph : GlyphSlot
+    size : Size
   end
   type Face    = FaceRec*
 

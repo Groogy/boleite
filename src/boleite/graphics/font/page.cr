@@ -40,6 +40,12 @@ class Boleite::Font
       end
     end
 
+    def get_linespacing : Float64
+      apply_size
+      metrics = @face.value.size.value.metrics
+      metrics.height.to_f / (1 << 6).to_f
+    end
+
     private def apply_size
       error = LibFreeType.set_Pixel_Sizes @face, @size, @size
       raise Error.new("Failed to set charset size to #{@size}") if error != LibFreeType::Err_Ok

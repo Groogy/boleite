@@ -8,12 +8,8 @@ class Boleite::Text
   include Transformable
 
   class Line
-    getter glyphs, top, text
+    getter glyphs, text
     def initialize(@glyphs : Array(Font::Glyph), @text : String)
-      @top = 0.0
-      @glyphs.each do |glyph|
-        @top = glyph.bounds.height if glyph.bounds.height > @top
-      end
     end
   end
 

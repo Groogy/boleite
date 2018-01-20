@@ -65,8 +65,9 @@ class Boleite::Text
       vertices = [] of Vertex
       texture_size = data.font.texture_for(data.size).size
       baseline = 0
+      linespacing = data.font.get_linespacing(data.size)
       data.lines.each do |line|
-        baseline += line.top
+        baseline += linespacing
         colors = data.formatter.format line.text, data.default_color
         build_line_vertices data.font, vertices, line, colors, baseline, texture_size, data.size
       end

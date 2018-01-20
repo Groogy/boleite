@@ -43,6 +43,11 @@ class Boleite::Font
     page.get_kerning first, second
   end
 
+  def get_linespacing(size : UInt32) : Float64
+    page = get_page size
+    page.get_linespacing
+  end
+
   def get_page(size) : Page
     page = @pages[size]?
     unless page
