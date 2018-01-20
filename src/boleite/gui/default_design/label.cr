@@ -47,7 +47,7 @@ class Boleite::GUI
         string.each_char_with_index do |char, index|
           glyph = @font.get_glyph char, character_size
           size += glyph.advance
-          if size > label.size.x && index > 3
+          if !label.use_cursor? && size > label.size.x && index > 3
             if index > 3
               string = string[0, index-3] + "..."
             else
