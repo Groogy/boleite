@@ -7,6 +7,7 @@ class Boleite::GUI
     @input_focus = false
 
     getter label
+    setter input_focus
 
     Cute.signal click(pos : Vector2f)
     Cute.signal text_entered(char : Char)
@@ -49,9 +50,6 @@ class Boleite::GUI
 
     def input_focus?
       @input_focus
-    end
-
-    def input_focus=(@input_focus)
     end
 
     protected def update_label_size

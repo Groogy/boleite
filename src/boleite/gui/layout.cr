@@ -9,17 +9,10 @@ class Boleite::GUI
     @handling_state_change = false
 
     getter padding, style
+    setter_state padding, style
 
     def initialize(@style : Style)
       super()
-    end
-
-    def padding=(@padding)
-      state_change.emit
-    end
-
-    def style=(@style)
-      state_change.emit
     end
 
     protected def on_state_change

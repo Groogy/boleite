@@ -6,6 +6,7 @@ class Boleite::GUI
 
     getter name, allocation, input
     getter? repaint
+    setter_state name, visible, enabled
   
     @name = ""
     @input = InputHandler.new
@@ -36,11 +37,6 @@ class Boleite::GUI
       @input.register_instance WidgetMouseClick.new(self, Mouse::Right), right_click
     end
 
-    def name=(name)
-      @name = name
-      state_change.emit
-    end
-
     def visible?
       visible = @visible
       if parent = self.parent && visible
@@ -49,22 +45,12 @@ class Boleite::GUI
       visible
     end
 
-    def visible=(flag)
-      @visible = flag
-      state_change.emit
-    end
-
     def enabled?
       enabled = @enabled
       if parent = self.parent && enabled
         enabled &= parent.enabled?
       end
       enabled
-    end
-
-    def enabled=(flag)
-      @enabled = flag
-      state_change.emit
     end
 
     def clear_repaint
