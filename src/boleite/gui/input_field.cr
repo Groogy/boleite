@@ -11,6 +11,7 @@ class Boleite::GUI
 
     Cute.signal click(pos : Vector2f)
     Cute.signal text_entered(char : Char)
+    Cute.signal key_pressed(key : Key, action : InputAction)
     Cute.signal lose_input_focus
 
     def initialize
@@ -30,6 +31,7 @@ class Boleite::GUI
       @input.register_instance InputFieldKeyPress.new(self, Key::Left), ->move_cursor_back
       @input.register_instance InputFieldKeyPress.new(self, Key::Right), ->move_cursor_forward
       @input.register_instance InputFieldKeyPress.new(self, Key::Backspace), ->handle_backspace
+      @input.register_instance InputFieldCatchAllKey.new(self), key_pressed
       @input.register_persistent_instance InputFieldLoseFocus.new(self), lose_input_focus
     end
 
