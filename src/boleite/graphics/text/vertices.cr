@@ -64,7 +64,7 @@ class Boleite::Text
     def build_vertices(gfx, data) : Array(Vertex)
       vertices = [] of Vertex
       texture_size = data.font.texture_for(data.size).size
-      baseline = 0
+      baseline = -3
       linespacing = data.font.get_linespacing(data.size)
       data.lines.each do |line|
         baseline += linespacing
