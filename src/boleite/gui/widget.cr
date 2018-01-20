@@ -16,6 +16,7 @@ class Boleite::GUI
     @enabled = true
     @repaint = true
     @mouse_focus = false
+    @in_state_change = false
 
     Cute.signal mouse_enter
     Cute.signal mouse_leave
@@ -122,9 +123,12 @@ class Boleite::GUI
 
     protected def on_state_change
       @repaint = true
+      return if @in_state_change
+      @in_state_change = true
       if parent = self.parent
         parent.state_change.emit
       end
+      @in_state_change = false
     end
 
     protected def on_mouse_enter
