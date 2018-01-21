@@ -23,7 +23,11 @@ class Boleite::Private::OpenGLVertexBufferObject < Boleite::VertexBufferObject
       update_layout
 
       primitive = self.class.translate_primitive(@primitive)
-      GL.safe_call { LibGL.drawArraysInstanced primitive, 0, num_vertices, instances }
+      if @indices_buffer
+        GL.safe_call { LibGL.drawElementsInstanced primitive, num_vertices, LibGL::UNSIGNED_INT, nil, instances }
+      else
+        GL.safe_call { LibGL.drawArraysInstanced primitive, 0, num_vertices, instances }
+      end
 
       clear_tmp_buffers
     end
