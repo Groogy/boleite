@@ -142,6 +142,13 @@ class Boleite::Serializer
       unmarshal_obj(key, type, Hash(Type, Type))
     end
 
+    def each
+      hash = @value.as(Hash(Type, Type))
+      hash.each do |key, value|
+        yield key, value
+      end
+    end
+
     def to_yaml(io : IO)
       unless @value.nil?
         conv = Translator.new().translate(@value)
