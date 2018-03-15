@@ -64,13 +64,18 @@ class Boleite::Font
       bitmap = raw_glyph.value.bitmap
       glyph.advance = raw_glyph.value.advance.x >> 6
       width, height = bitmap.width + 2, bitmap.rows + 2 # Add padding to glyph space
-      glyph.texture_rect = find_glyph_rect(width, height)
-      glyph.texture_rect.width = glyph.texture_rect.width - 2
-      glyph.texture_rect.height = glyph.texture_rect.height - 2
-      glyph.bounds.left   = raw_glyph.value.bitmap_left.to_f
-      glyph.bounds.top    = raw_glyph.value.bitmap.rows - raw_glyph.value.bitmap_top.to_f
-      glyph.bounds.width  = raw_glyph.value.bitmap.width.to_f
-      glyph.bounds.height = raw_glyph.value.bitmap.rows.to_f
+      texture_rect = find_glyph_rect(width, height)
+      texture_rect.left += 1
+      texture_rect.top += 1
+      texture_rect.width -= 2
+      texture_rect.height -= 2
+      glyph.texture_rect = texture_rect
+      bounds = glyph.bounds
+      bounds.left   = raw_glyph.value.bitmap_left.to_f
+      bounds.top    = raw_glyph.value.bitmap.rows - raw_glyph.value.bitmap_top.to_f
+      bounds.width  = raw_glyph.value.bitmap.width.to_f
+      bounds.height = raw_glyph.value.bitmap.rows.to_f
+      glyph.bounds = bounds
       render_glyph_to_texture glyph, width, height
       glyph
     end
@@ -130,8 +135,12 @@ class Boleite::Font
         buffer += bitmap.pitch
       end
       rect = glyph.texture_rect
-      tmp = {width, rect.left, @texture.size.x}
-      @texture.update(pixels, width, height, rect.left, rect.top, 8)
+
+      x = rect.left - 1
+      y = rect.top - 1
+      w = rect.width + 2
+      h = rect.height + 2
+      @texture.update(pixels, w, h, x, y, 8)
     end
   end
 end
