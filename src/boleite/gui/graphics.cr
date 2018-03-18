@@ -33,5 +33,9 @@ class Boleite::GUI
     def render
       @renderer.present
     end
+
+    def target_size
+      @gfx.main_target.size
+    end
   end
 end

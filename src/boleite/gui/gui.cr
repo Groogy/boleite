@@ -2,6 +2,8 @@ class Boleite::GUI
   @graphics : Graphics
   @input : InputRouter
   @roots = [] of Container
+
+  delegate target_size, to: @graphics
   
   def initialize(gfx, @input)
     @graphics = Graphics.new gfx
