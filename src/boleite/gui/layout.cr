@@ -15,6 +15,16 @@ class Boleite::GUI
       super()
     end
 
+    requires style == :vertical || style == :horizontal
+    def initialize(style : Symbol)
+      @style = case style
+      when :vertical then Style::Vertical
+      when :horizontal then Style::Horizontal
+      else Style::Vertical
+      end
+      super()
+    end
+
     protected def on_state_change
       return if @handling_state_change
       @handling_state_change = true
