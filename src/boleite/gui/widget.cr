@@ -31,6 +31,7 @@ class Boleite::GUI
       mouse_enter.on &->on_mouse_enter
       mouse_leave.on &->on_mouse_leave
 
+      @input.widget = self
       @input.register_instance WidgetMouseEnter.new(self), mouse_enter
       @input.register_instance WidgetMouseLeave.new(self), mouse_leave
       @input.register_instance WidgetMouseOver.new(self), mouse_over
