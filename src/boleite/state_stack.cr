@@ -12,6 +12,9 @@ class Boleite::StateStack
   requires state.nil? == false
   def push(state : State)
     state.next = @state
+    if prev_state = @state
+      prev_state.disable
+    end
     @state = state
     state.enable
   end
@@ -22,6 +25,9 @@ class Boleite::StateStack
     @state = old_state.next
     old_state.next = nil
     old_state.disable
+    if new_state = @state
+      new_state.enable
+    end
     old_state
   end
 
