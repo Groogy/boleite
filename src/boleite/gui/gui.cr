@@ -16,7 +16,7 @@ class Boleite::GUI
 
   def remove_root(root : Container)
     root = @roots.delete root
-    @input.unregister root if root
+    @input.unregister root.input if root
   end
 
   def render
