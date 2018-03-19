@@ -40,7 +40,7 @@ class Boleite::GUI
 
     def visible?
       visible = @visible
-      if parent = self.parent && visible
+      if visible && (parent = self.parent)
         visible &= parent.visible?
       end
       visible
@@ -48,7 +48,7 @@ class Boleite::GUI
 
     def enabled?
       enabled = @enabled
-      if parent = self.parent && enabled
+      if enabled && (parent = self.parent)
         enabled &= parent.enabled?
       end
       enabled
