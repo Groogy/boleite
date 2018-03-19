@@ -26,7 +26,7 @@ class Boleite::GUI
       widget.reset_acc_allocation
     end
     repaint_widgets.each do |widget|
-      @graphics.draw widget
+      @graphics.draw widget if widget.visible?
     end
     @graphics.render
   end
