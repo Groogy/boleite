@@ -35,4 +35,8 @@ class Boleite::GUI
     widgets = @roots.select &.repaint?
     widgets
   end
+
+  def each_root
+    @roots.each { |root| yield root }
+  end
 end
