@@ -12,7 +12,9 @@ class Boleite::InputRouter
   end
 
   def unregister(receiver)
-    @receivers.remove(receiver)
+    obj = @receivers.delete receiver
+    puts obj
+
   end
 
   def process(event : InputEvent)
