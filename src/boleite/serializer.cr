@@ -192,7 +192,7 @@ class Boleite::Serializer
       when Node
         translate(data.value)
       else
-        data.to_s
+        data
       end
     end
 
