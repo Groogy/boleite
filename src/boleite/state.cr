@@ -1,12 +1,12 @@
 abstract class Boleite::State
-  @state : State | Nil
+  @next : State | Nil
 
   def initialize
-    @state = nil
+    @next = nil
   end
 
   def next
-    @state
+    @next
   end
 
   def next=(@next : State | Nil)
