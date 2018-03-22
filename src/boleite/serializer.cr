@@ -1,10 +1,10 @@
 require "yaml"
 
-class Boleite::Serializer
+class Boleite::Serializer(AttachedData)
   class Exception < Exception
   end
 
-  alias Type = Bool | Int64 | Float64 | String | Hash(Type, Type) | Array(Type) | Node | Nil
+  alias Type = Bool | Int64 | Float64 | String | Hash(Type, Type) | Array(Type) | BaseNode | Nil
 
   struct ValueWrapper
     def initialize(@value : Type = nil)
@@ -19,10 +19,24 @@ class Boleite::Serializer
     end
   end
 
-  class Node
-    property :value
+  abstract class BaseNode
+    @value : Type
+    
+    def to_yaml(io : IO)
+      unless @value.nil?
+        conv = Translator.new().translate(@value)
+        YAML.dump(conv, io)
+      end
+    end
 
-    def initialize(@value : Type = nil)
+    abstract def value
+  end
+
+  class Node(AttachedData) < BaseNode
+    property value
+    getter data
+
+    def initialize(@data : AttachedData, @value : Type = nil)
     end
 
     private macro marshal_primitive(key, value, expected_target)
@@ -35,7 +49,7 @@ class Boleite::Serializer
     end
 
     private macro marshal_obj(key, obj, expected_target)
-      child = Node.new()
+      child = Node.new @data
       child.internal_marshal({{obj}})
       @value = {{expected_target}}.new if @value.nil?
       if target = @value.as? {{expected_target}}
@@ -95,7 +109,7 @@ class Boleite::Serializer
 
     private macro unmarshal_obj(key, type, expected_target)
       if target = @value.as? {{expected_target}}
-        child = Node.new(target[{{key}}])
+        child = Node.new @data, target[{{key}}]
         child.internal_unmarshal({{type}})
       else
         raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected {{expected_target}}")
@@ -149,13 +163,6 @@ class Boleite::Serializer
       end
     end
 
-    def to_yaml(io : IO)
-      unless @value.nil?
-        conv = Translator.new().translate(@value)
-        YAML.dump(conv, io)
-      end
-    end
-
     protected def internal_marshal(obj)
       serializer = obj.class.serializer
       serializer.marshal(obj, self)
@@ -189,7 +196,7 @@ class Boleite::Serializer
         translate_array(data)
       when Hash(Type, Type)
         translate_hash(data)
-      when Node
+      when BaseNode
         translate(data.value)
       else
         data
@@ -234,20 +241,21 @@ class Boleite::Serializer
     end
   end
 
-  @root : Node | Nil = nil
+  @root : BaseNode | Nil = nil
+  @data : AttachedData
   
-  def initialize()
+  def initialize(@data : AttachedData)
   end
 
   def marshal(obj)
-    if root = Node.new
+    if root = Node.new @data
       root.internal_marshal(obj)
       @root = root
     end
   end
 
   def unmarshal(data : YAML::Type, expected_type)
-    if root = Node.new
+    if root = Node.new @data
       @root = root
       root.build_internal_data(data)
       root.internal_unmarshal(expected_type)
