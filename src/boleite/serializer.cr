@@ -163,9 +163,37 @@ class Boleite::Serializer(AttachedData)
       end
     end
 
+    protected def internal_marshal(list : Array(Type))
+      value = Array(Type).new list.size
+      list.each { |val| value << val }
+      @value = value
+    end
+
+    protected def internal_marshal(list : Array(U)) forall U
+      value = Array(Type).new list.size
+      list.each do |val|
+        child = Node.new @data
+        child.internal_marshal(val)
+        value << child
+      end
+      @value = value
+    end
+
     protected def internal_marshal(obj)
       serializer = obj.class.serializer
       serializer.marshal(obj, self)
+    end
+
+    protected def internal_unmarshal(klass : Array(U).class) forall U
+      if value = @value.as? Array(Type)
+        list = klass.new
+        value.each do |val|
+          list << val.as(U)
+        end
+        list
+      else
+        raise Exception.new "Serialization::Node value of wrong type! Have #{@value.class}, expected Array(Type)"
+      end
     end
 
     protected def internal_unmarshal(klass)
