@@ -179,6 +179,13 @@ class Boleite::Serializer(AttachedData)
       @value = value
     end
 
+    protected def internal_marshal(tuple : Tuple(*U)) forall U
+      @value = Array(Type).new(tuple.size) { nil }
+      {% for klass, index in U %}
+        marshal {{ index }}, tuple[{{ index }}]
+      {% end %}
+    end
+
     protected def internal_marshal(obj)
       serializer = obj.class.serializer
       serializer.marshal(obj, self)
