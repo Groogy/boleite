@@ -22,8 +22,9 @@ class Boleite::GUI
   def render
     repaint_widgets = find_repaint_widgets
     repaint_widgets.each do |widget|
-      @graphics.clear widget.acc_allocation
+      allocation = widget.acc_allocation
       widget.reset_acc_allocation
+      @graphics.clear allocation
     end
     repaint_widgets.each do |widget|
       @graphics.draw widget if widget.visible?
@@ -33,6 +34,12 @@ class Boleite::GUI
 
   def find_repaint_widgets
     widgets = @roots.select &.repaint?
+    widgets.each do |widget|
+      allocation = widget.acc_allocation
+      widgets += @roots.select do |other|
+        !widgets.includes?(other) && other.acc_allocation.intersects? allocation
+      end
+    end
     widgets
   end
 
