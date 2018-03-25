@@ -2,6 +2,8 @@ class Boleite::Camera3D < Boleite::Camera
   @update_transform = true
   @pos = Vector3f.zero
   @rot = Vector3f.zero
+
+  getter width, height, near, far
   
   def initialize(@fov : Float32, @width : Float32, @height : Float32, @near : Float32, @far : Float32)
     aspect = width / height
