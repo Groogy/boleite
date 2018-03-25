@@ -8,10 +8,14 @@ abstract class Boleite::Camera
   end
 
   def inverse_transformation
-    Matrix.inverse(self.transformation)
+    Matrix.inverse self.transformation
   end
 
   def projection
     @projection
+  end
+
+  def inverse_projection
+    Matrix.inverse self.projection
   end
 end
