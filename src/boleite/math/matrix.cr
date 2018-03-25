@@ -33,6 +33,26 @@ module Boleite::Matrix
     tmp
   end
 
+  def self.mul(left : MatrixImp(T, 3, 9), right : VectorImp(T, 3)) forall T
+    tmp = VectorImp(T, 3).zero
+    3.times do |x|
+      3.times do |y|
+        tmp[x] += left[x, y] * right[y]
+      end
+    end
+    tmp
+  end
+
+  def self.mul(left : MatrixImp(T, 4, 16), right : VectorImp(T, 4)) forall T
+    tmp = VectorImp(T, 4).zero
+    4.times do |x|
+      4.times do |y|
+        tmp[x] += left[x, y] * right[y]
+      end
+    end
+    tmp
+  end
+
   def self.left(mat : MatrixImp(T, 4, 16)) forall T
     VectorImp(T, 3).new(mat[0, 0], mat[0, 1], mat[0, 2])
   end
