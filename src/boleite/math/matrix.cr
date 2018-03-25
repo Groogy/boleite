@@ -213,6 +213,16 @@ module Boleite::Matrix
     end
   end
 
+  def self.transpose(mat : MatrixImp(T, N, M)) forall T, N, M
+    trans = mat.class.identity
+    N.times do |x|
+      N.times do |y|
+        trans[y, x] = mat[x, y]
+      end
+    end
+    trans
+  end
+
   def self.calculate_fov_projection(fov : T, aspect : T, near : T, far : T, left_handed : Bool) forall T
     result = MatrixImp(T, 4, 16).identity
     one = T.new(1)
