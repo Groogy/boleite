@@ -61,7 +61,7 @@ class Boleite::InputReceiver
 
   def unregister(action_type)
     @actions.select! do |action|
-      action.for? action_Type
+      action.for? action_type
     end
   end
 
