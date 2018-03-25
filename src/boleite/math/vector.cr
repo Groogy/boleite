@@ -45,4 +45,27 @@ module Boleite::Vector
       left.x * right.y - left.y * right.x
     )
   end
+
+  def self.distance_to_ray(origin : VectorImp(T, 3), dir : VectorImp(T, 3), point : VectorImp(T, 3)) forall T
+    cross = self.cross dir, point - origin
+    self.magnitude cross
+  end
+
+  def self.closest_point_on_segment(a : VectorImp(T, 3), b : VectorImp(T, 3), point : VectorImp(T, 3), clamp = true) forall T
+    ap = point - a
+    ab = b - a
+    ab2 = square_magnitude ab
+    ap_ab = dot ap, ab
+    t = ap_ab / ab2
+    if clamp
+      t = T.zero if t < 0
+      t = T.new 1 if t > 1
+    end
+    a + ab * t
+  end
+
+  def self.distance_to_segment(a : VectorImp(T, 3), b : VectorImp(T, 3), point : VectorImp(T, 3), clamp = true) forall T
+    closest = closest_point_on_segment a, b, point, clamp
+    magnitude closest - point
+  end
 end
