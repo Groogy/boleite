@@ -46,6 +46,15 @@ module Boleite::Vector
     )
   end
 
+  def self.project(pos : VectorImp(T, 3), mat : MatrixImp(T, 4, 16)) forall T
+    x, y, z = pos.x, pos.y, pos.z
+    w = T.new(1) / (x * mat[3, 0] + y * mat[3, 1] + z * mat[3, 2] + mat[3, 3])
+    pos.x = (x * mat[0, 0] + y * mat[0, 1] + z * mat[0, 2] + mat[0, 3]) * w
+    pos.y = (x * mat[1, 0] + y * mat[1, 1] + z * mat[1, 2] + mat[1, 3]) * w
+    pos.z = (x * mat[2, 0] + y * mat[2, 1] + z * mat[2, 2] + mat[2, 3]) * w
+    pos
+  end
+
   def self.distance_to_ray(origin : VectorImp(T, 3), dir : VectorImp(T, 3), point : VectorImp(T, 3)) forall T
     cross = self.cross dir, point - origin
     self.magnitude cross
