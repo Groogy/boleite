@@ -46,6 +46,19 @@ module Boleite::Vector
     )
   end
 
+  def self.inside_shape?(v : Indexable(VectorImp(T, 2)), p : VectorImp(T, 2)) forall T
+    cn = 0
+    v.each_index do |i|
+      n = (i + 1) % v.size
+      if (v[i].y <= p.y && v[n].y > p.y) ||
+         (v[i].y > p.y && v[n].y <= p.y)
+         vt = (p.y - v[i].y).to_f / (v[n].y - v[i].y)
+         cn += 1 if p.x < v[i].x + vt * (v[n].x - v[i].x)
+      end
+    end
+    cn % 2 == 1
+  end
+
   def self.distance_to_ray(origin : VectorImp(T, 3), dir : VectorImp(T, 3), point : VectorImp(T, 3)) forall T
     cross = self.cross dir, point - origin
     self.magnitude cross
