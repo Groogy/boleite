@@ -1,5 +1,4 @@
 class Boleite::Camera3D < Boleite::Camera  
-  @update_transform = true
   @pos = Vector3f.zero
   @rot = Vector3f.zero
 
@@ -43,14 +42,6 @@ class Boleite::Camera3D < Boleite::Camera
 
   def rotate(x, y, z)
     self.rotation = rotation + Vector3f.new(x, y, z)
-  end
-
-  def transformation
-    if @update_transform
-      update_transformation
-      @update_transform = false
-    end
-    @transform
   end
 
   def update_transformation

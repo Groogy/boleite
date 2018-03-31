@@ -8,4 +8,8 @@ class Boleite::Camera2D < Boleite::Camera
     @near = near
     @far = far
   end
+
+  def update_transformation
+    @transform = Matrix44f32.identity
+  end
 end
