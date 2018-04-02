@@ -34,9 +34,11 @@ class Boleite::Serializer(AttachedData)
 
   class Node(AttachedData) < BaseNode
     property value
-    getter data
+    getter data, key
 
-    def initialize(@data : AttachedData, @value : Type = nil)
+    @key : String | Int32 | Nil
+
+    def initialize(@data : AttachedData, @value : Type, @key)
     end
 
     private macro marshal_primitive(key, value, expected_target)
@@ -49,7 +51,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     private macro marshal_obj(key, obj, expected_target)
-      child = Node.new @data
+      child = Node.new @data, nil, {{key}}
       child.internal_marshal({{obj}})
       @value = {{expected_target}}.new if @value.nil?
       if target = @value.as? {{expected_target}}
@@ -109,7 +111,7 @@ class Boleite::Serializer(AttachedData)
 
     private macro unmarshal_obj(key, type, expected_target)
       if target = @value.as? {{expected_target}}
-        child = Node.new @data, target[{{key}}]
+        child = Node.new @data, target[{{key}}], {{key}}
         child.internal_unmarshal({{type}})
       else
         raise Exception.new("Serialization::Node value of wrong type! Have #{@value.class}, expected {{expected_target}}")
@@ -283,18 +285,16 @@ class Boleite::Serializer(AttachedData)
   end
 
   def marshal(obj)
-    if root = Node.new @data
-      root.internal_marshal(obj)
-      @root = root
-    end
+    root = Node.new @data, nil, nil
+    root.internal_marshal(obj)
+    @root = root
   end
 
   def unmarshal(data : YAML::Type, expected_type)
-    if root = Node.new @data
-      @root = root
-      root.build_internal_data(data)
-      root.internal_unmarshal(expected_type)
-    end
+    root = Node.new @data, nil, nil
+    @root = root
+    root.build_internal_data(data)
+    root.internal_unmarshal(expected_type)
   end
 
   def dump(io : IO)
