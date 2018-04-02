@@ -6,19 +6,6 @@ class Boleite::Serializer(AttachedData)
 
   alias Type = Bool | Int64 | Float64 | String | Hash(Type, Type) | Array(Type) | BaseNode | Nil
 
-  struct ValueWrapper
-    def initialize(@value : Type = nil)
-    end
-
-    def [](key)
-      @value[key]
-    end
-
-    def []=(key, value)
-      @value[key] = value
-    end
-  end
-
   abstract class BaseNode
     @value : Type
     
