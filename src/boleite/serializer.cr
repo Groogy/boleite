@@ -183,13 +183,31 @@ class Boleite::Serializer(AttachedData)
     protected def internal_unmarshal(klass : Array(U).class) forall U
       if value = @value.as? Array(Type)
         list = klass.new
-        value.each do |val|
-          list << val.as(U)
+        value.each_with_index do |val, index|
+          child = Node.new @data, val, index
+          list << child.internal_unmarshal(U).as(U)
         end
         list
       else
         raise Exception.new "Serialization::Node value of wrong type! Have #{@value.class}, expected Array(Type)"
       end
+    end
+
+    protected def internal_unmarshal(klass : Hash(U, V).class) forall U, V
+      if value = @value.as? Hash(Type, Type)
+        list = klass.new
+        value.each do |key, val| 
+          child = Node.new @data, val, key.as(String)
+          list[key.as(U)] = child.internal_unmarshal(V).as(V)
+        end
+        list
+      else
+        raise Exception.new "Serialization::Node value of wrong type! Have #{@value.class}, expected Hash(Type, Type)"
+      end
+    end
+
+    protected def internal_unmarshal(klass : Type.class) : Type
+      @value
     end
 
     protected def internal_unmarshal(klass)
