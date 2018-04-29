@@ -11,7 +11,7 @@ struct Boleite::VectorImp(Type, Size)
     def unmarshal(node)
       arr = node.value.as(Array(Serializer::Type))
       VectorImp(Type, Size).new do |index|
-        Type.new(arr[index].as(Float64))
+        Type.new(arr[index].as(Number))
       end
     end
   end
