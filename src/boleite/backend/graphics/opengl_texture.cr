@@ -15,6 +15,7 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
   @size = Vector2u.zero
   @depth = false
   @smooth = true
+  @repeating = false
   @object_id : LibGL::UInt = 0u32
 
   def self.translate_format(format, type)
@@ -77,6 +78,8 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
         LibGL.texImage2D LibGL::TEXTURE_2D, 0, format, width, height, 0, LibGL::RGBA, LibGL::UNSIGNED_BYTE, nil
         LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_MIN_FILTER, @smooth ? LibGL::LINEAR : LibGL::NEAREST
         LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_MAG_FILTER, @smooth ? LibGL::LINEAR : LibGL::NEAREST
+        LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_WRAP_S, @repeating ? LibGL::REPEAT : LibGL::CLAMP
+        LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_WRAP_T, @repeating ? LibGL::REPEAT : LibGL::CLAMP
       end
     end
   end
@@ -137,6 +140,21 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
       end
     end
     @smooth
+  end
+
+  def is_repeating? : Bool
+    @repeating
+  end
+  
+  def repeating?(val : Bool) : Bool
+    @repeating = val
+    activate do
+      GL.safe_call do
+        LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_WRAP_S, @repeating ? LibGL::REPEAT : LibGL::CLAMP
+        LibGL.texParameteri LibGL::TEXTURE_2D, LibGL::TEXTURE_WRAP_T, @repeating ? LibGL::REPEAT : LibGL::CLAMP
+      end
+    end
+    @repeating
   end
 
   def activate(&block)
