@@ -15,6 +15,8 @@ class Boleite::GUI
     def initialize
       super
 
+      pulse.on { @children.each &.pulse.emit }
+
       @input.register_instance ContainerInputPass.new(self), ->pass_input_to_children(InputEvent)
     end
 

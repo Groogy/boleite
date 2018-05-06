@@ -46,4 +46,8 @@ class Boleite::GUI
   def each_root
     @roots.each { |root| yield root }
   end
+
+  def pulse
+    each_root &.pulse.emit
+  end
 end
