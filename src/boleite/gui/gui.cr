@@ -1,12 +1,20 @@
 class Boleite::GUI
   @graphics : Graphics
-  @input : InputRouter
+  @input = InputRouter.new
   @roots = [] of Container
 
   delegate target_size, to: @graphics
   
-  def initialize(gfx, @input)
+  def initialize(gfx)
     @graphics = Graphics.new gfx
+  end
+
+  def enable(parent_input)
+    parent_input.register @input
+  end
+
+  def disable(parent_input)
+    parent_input.unregister @input
   end
 
   def add_root(root : Container)
