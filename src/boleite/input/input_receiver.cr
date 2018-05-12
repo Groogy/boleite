@@ -1,4 +1,4 @@
-class Boleite::InputReceiver
+class Boleite::InputReceiver < Boleite::InputProcessor
   abstract class Glue
     abstract def interested?(input) : Bool
     abstract def execute(input) : Nil

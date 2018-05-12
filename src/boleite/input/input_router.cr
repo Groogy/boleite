@@ -1,12 +1,13 @@
-class Boleite::InputRouter
+class Boleite::InputRouter < Boleite::InputProcessor
   include CrystalClear
   
-  @receivers = [] of InputReceiver
+  @receivers = [] of InputProcessor
 
   def initialize()
   end
 
   requires @receivers.includes?(receiver) == false
+  requires receiver != self
   def register(receiver)
     @receivers << receiver
   end
