@@ -47,6 +47,17 @@ class Boleite::GUI
       @acc_allocation.expand 2.0
     end
 
+    def set_next_to(other : Window)
+      other_pos = other.absolute_position
+      other_size = other.size
+
+      if p = parent
+        other_pos -= p.absolute_position
+      end
+
+      self.position = other_pos + other_size * 0.5
+    end
+
     protected def update_header_size
       @header_label.size = Vector2f.new size.x, @header_size
     end
