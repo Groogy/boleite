@@ -12,6 +12,12 @@ class Boleite::InputRouter < Boleite::InputProcessor
     @receivers << receiver
   end
 
+  requires @receivers.includes?(receiver) == false
+  requires receiver != self
+  def register_at(index, receiver)
+    @receivers.insert index, receiver
+  end
+
   def unregister(receiver)
     obj = @receivers.delete receiver
   end
