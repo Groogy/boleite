@@ -27,7 +27,6 @@ class Boleite::GUI
     def draw(widget, transform = Matrix44f32.identity)
       drawer = @design.get_drawer widget
       drawer.render(widget, transform, self)
-      widget.clear_repaint
     end
 
     def render
