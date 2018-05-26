@@ -59,6 +59,10 @@ class Boleite::GUI
       @repaint = false
     end
 
+    def mark_dirty
+      @repaint = true
+    end
+
     def has_mouse_focus?
       @mouse_focus
     end
