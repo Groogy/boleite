@@ -5,8 +5,8 @@ class Boleite::GUI
 
   delegate target_size, to: @graphics
   
-  def initialize(gfx)
-    @graphics = Graphics.new gfx
+  def initialize(gfx, default_font)
+    @graphics = Graphics.new gfx, default_font
   end
 
   def enable(parent_input)

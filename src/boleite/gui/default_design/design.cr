@@ -8,8 +8,9 @@ class Boleite::GUI
     BORDER_COLOR = Colorf.new 0.078f32, 0.078f32, 0.078f32, 1f32
     BORDER_SIZE = 1.0
 
-    def initialize(gfx)
-      @font = Boleite::Font.new gfx, "arial.ttf"
+    @font : Font
+
+    def initialize(gfx, @font)
       @window = WindowDesign.new
       @label = LabelDesign.new @font
       @text_box = TextBoxDesign.new @font

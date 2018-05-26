@@ -9,11 +9,11 @@ class Boleite::GUI
 
     property design
     
-    def initialize(@gfx)
+    def initialize(@gfx, default_font)
       target = @gfx.main_target
       @camera = Camera2D.new target.width.to_f32, target.height.to_f32, 0f32, 1f32
       @renderer = Renderer.new @gfx, @camera
-      @design = DefaultDesign.new @gfx
+      @design = DefaultDesign.new @gfx, default_font
     end
 
     def clear(rect : FloatRect)
