@@ -193,12 +193,12 @@ class Boleite::Serializer(AttachedData)
       end
     end
 
-    protected def internal_unmarshal(klass : Hash(U, V).class) forall U, V
+    protected def internal_unmarshal(klass : Hash(X, Y).class) : Hash(X, Y) forall X, Y
       if value = @value.as? Hash(Type, Type)
         list = klass.new
         value.each do |key, val| 
           child = Node.new @data, val, key.as(String)
-          list[key.as(U)] = child.internal_unmarshal(V).as(V)
+          list[key.as(X)] = child.internal_unmarshal(Y).as(Y)
         end
         list
       else
