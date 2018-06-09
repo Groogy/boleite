@@ -23,6 +23,14 @@ class Boleite::GUI
     parent_input.unregister @router
   end
 
+  def global_input_router
+    @router
+  end
+
+  def global_input_receiver
+    @receiver
+  end
+
   requires !@roots.includes? root
   def add_root(root : Container)
     @router.register root.input
