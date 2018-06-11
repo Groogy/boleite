@@ -49,7 +49,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def marshal(index : Int, string : String)
-      marshal_primitive(index.to_i64, string, Array(Type))
+      marshal_primitive(index.to_i32, string, Array(Type))
     end
 
     def marshal(key : String, string : String)
@@ -57,7 +57,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def marshal(index : Int, int : Int)
-      marshal_primitive(index.to_i64, int.to_i64, Array(Type))
+      marshal_primitive(index.to_i32, int.to_i64, Array(Type))
     end
 
     def marshal(key : String, int : Int)
@@ -65,7 +65,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def marshal(index : Int, float : Float)
-      marshal_primitive(index.to_i64, float.to_f64, Array(Type))
+      marshal_primitive(index.to_i32, float.to_f64, Array(Type))
     end
 
     def marshal(key : String, float : Float)
@@ -81,7 +81,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def marshal(index : Int, obj)
-      marshal_obj(index.to_i64, obj, Array(Type))
+      marshal_obj(index.to_i32, obj, Array(Type))
     end
 
     def marshal(key : String, obj)
@@ -106,7 +106,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def unmarshal_string(index : Int)
-      unmarshal_primitive(index.to_i64, String, Array(Type))
+      unmarshal_primitive(index.to_i32, String, Array(Type))
     end
 
     def unmarshal_string(key : String)
@@ -114,7 +114,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def unmarshal_int(index : Int)
-      unmarshal_primitive(index.to_i64, Int64, Array(Type))
+      unmarshal_primitive(index.to_i32, Int64, Array(Type))
     end
 
     def unmarshal_int(key : String)
@@ -122,7 +122,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def unmarshal_float(index : Int)
-      unmarshal_primitive(index.to_i64, Float64, Array(Type))
+      unmarshal_primitive(index.to_i32, Float64, Array(Type))
     end
 
     def unmarshal_float(key : String)
@@ -130,7 +130,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def unmarshal_bool(index : Int)
-      unmarshal_primitive(index.to_i64, Bool, Array(Type))
+      unmarshal_primitive(index.to_i32, Bool, Array(Type))
     end
 
     def unmarshal_bool(key : String)
@@ -138,7 +138,7 @@ class Boleite::Serializer(AttachedData)
     end
 
     def unmarshal(index : Int, type)
-      unmarshal_obj(index.to_i64, type, Array(Type))
+      unmarshal_obj(index.to_i32, type, Array(Type))
     end
 
     def unmarshal(key : String, type)
@@ -160,8 +160,8 @@ class Boleite::Serializer(AttachedData)
 
     protected def internal_marshal(list : Array(U)) forall U
       value = Array(Type).new list.size
-      list.each do |val|
-        child = Node.new @data
+      list.each_with_index do |val, index|
+        child = Node.new @data, nil, index
         child.internal_marshal(val)
         value << child
       end
