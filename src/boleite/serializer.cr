@@ -215,24 +215,25 @@ class Boleite::Serializer(AttachedData)
       serializer.unmarshal(self)
     end
 
-    protected def build_internal_data(data : YAML::Type)
+    protected def build_internal_data(data : YAML::Any)
       translator = Translator.new
       @value = translator.translate_yaml(data)
     end
   end
 
   struct Translator
-    def translate_array(data : Array(Type)) : YAML::Type
-      data.map { |item| translate(item).as(YAML::Type) } 
+    def translate_array(data : Array(Type)) : YAML::Any
+      ary = data.map { |item| translate(item).as(YAML::Any) }
+      YAML::Any.new ary
     end
 
-    def translate_hash(data : Hash(Type, Type)) : YAML::Type
-      hash = {} of YAML::Type => YAML::Type
+    def translate_hash(data : Hash(Type, Type)) : YAML::Any
+      hash = {} of YAML::Any => YAML::Any
       data.each { |key, value| hash[translate(key)] = translate(value) }
-      hash
+      YAML::Any.new hash
     end
     
-    def translate(data : Type) : YAML::Type
+    def translate(data : Type) : YAML::Any
       case data
       when Array(Type)
         translate_array(data)
@@ -241,34 +242,34 @@ class Boleite::Serializer(AttachedData)
       when BaseNode
         translate(data.value)
       else
-        data
+        YAML::Any.new data
       end
     end
 
-    def translate_yaml_array(data : Array(YAML::Type)) : Type
+    def translate_yaml_array(data : Array(YAML::Any)) : Type
       data.map { |item| translate_yaml(item).as(Type) }
     end
 
-    def translate_yaml_hash(data : Hash(YAML::Type, YAML::Type)) : Type
+    def translate_yaml_hash(data : Hash(YAML::Any, YAML::Any)) : Type
       hash = {} of Type => Type
       data.each { |key, value| hash[translate_yaml(key)] = translate_yaml(value) }
       hash
     end
 
-    def translate_yaml(data : YAML::Type) : Type
-      case data
-      when Array(YAML::Type)
-        translate_yaml_array(data)
-      when Hash(YAML::Type, YAML::Type)
-        translate_yaml_hash(data)
+    def translate_yaml(data : YAML::Any) : Type
+      case data.raw
+      when Array(YAML::Any)
+        translate_yaml_array data.as_a
+      when Hash(YAML::Any, YAML::Any)
+        translate_yaml_hash data.as_h
       when String
-        translate_yaml_string(data)
+        translate_yaml_string data.as_s
       when Int64
-        data
+        data.as_i64
       when Float64
-        data
+        data.as_f
       when Bool
-        data
+        data.raw.as(Bool)
       end
     end
 
@@ -295,7 +296,7 @@ class Boleite::Serializer(AttachedData)
     @root = root
   end
 
-  def unmarshal(data : YAML::Type, expected_type)
+  def unmarshal(data : YAML::Any, expected_type)
     root = Node.new @data, nil, nil
     @root = root
     root.build_internal_data(data)
@@ -307,6 +308,6 @@ class Boleite::Serializer(AttachedData)
   end
 
   def read(io : IO)
-    YAML.parse(io).raw
+    YAML.parse(io)
   end
 end
