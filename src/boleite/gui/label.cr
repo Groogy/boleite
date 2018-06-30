@@ -7,7 +7,7 @@ class Boleite::GUI
     end
 
     @text = ""
-    @character_size = 20u32
+    @character_size = 12u32
     @orientation = Orientation::Left
     @use_cursor = false
     @cursor_position = 0
