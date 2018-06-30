@@ -16,8 +16,8 @@ blend
 {
   enabled = true;
   function = Add;
-  sourceFactor = SourceAlpha;
-  destinationFactor = OneMinusSourceAlpha;
+  sourceFactor = One;
+  destinationFactor = One;
 }
 
 vertex
