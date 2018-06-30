@@ -52,48 +52,48 @@ class Boleite::Image
     ptr = LibFreeImage.getBits native
     pitch = LibFreeImage.getPitch native
 
+    @pixels = Bytes.new byte_size
+
+    bytes = 0
     @height.times do |y|
       pixel = ptr
       @width.times do |x|
         case @bpp
-        when 16; convert_16bit(pixel)
-        when 24; convert_24bit(pixel)
-        when 32; convert_32bit(pixel)
+        when 16; convert_16bit pixel, bytes
+        when 24; convert_24bit pixel, bytes
+        when 32; convert_32bit pixel, bytes
         end
         pixel += @bpp / 8
+        bytes += @bpp / 8
       end
       ptr += pitch
     end
-    
-    ptr = LibFreeImage.getBits native
-    @pixels = Bytes.new byte_size
-    @pixels.copy_from ptr, byte_size
   end
 
-  private def convert_16bit(pixel) : Void
+  private def convert_16bit(pixel, index) : Void
     red = pixel[LibFreeImage::RGBA_RED]
     green = pixel[LibFreeImage::RGBA_GREEN]
-    pixel[0] = red
-    pixel[1] = green
+    @pixels[index + 0] = red
+    @pixels[index + 1] = green
   end
 
-  private def convert_24bit(pixel) : Void
+  private def convert_24bit(pixel, index) : Void
     red = pixel[LibFreeImage::RGBA_RED]
     green = pixel[LibFreeImage::RGBA_GREEN]
     blue = pixel[LibFreeImage::RGBA_BLUE]
-    pixel[0] = red
-    pixel[1] = green
-    pixel[2] = blue
+    @pixels[index + 0] = red
+    @pixels[index + 1] = green
+    @pixels[index + 2] = blue
   end
 
-  private def convert_32bit(pixel) : Void
+  private def convert_32bit(pixel, index) : Void
     red = pixel[LibFreeImage::RGBA_RED]
     green = pixel[LibFreeImage::RGBA_GREEN]
     blue = pixel[LibFreeImage::RGBA_BLUE]
     alpha = pixel[LibFreeImage::RGBA_ALPHA]
-    pixel[0] = red
-    pixel[1] = green
-    pixel[2] = blue
-    pixel[3] = alpha
+    @pixels[index + 0] = red
+    @pixels[index + 1] = green
+    @pixels[index + 2] = blue
+    @pixels[index + 3] = alpha
   end
 end
