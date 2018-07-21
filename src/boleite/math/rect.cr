@@ -59,33 +59,29 @@ struct Boleite::Rect(Type)
   end
 
   def shrink(amount)
-    @left += amount
-    @top += amount
-    @width -= amount * 2
-    @height -= amount * 2
+    self.class.new @left + amount, @top + amount, @width - amount * 2, @height - amount * 2
   end
 
   def expand(amount)
-    @left -= amount
-    @top -= amount
-    @width += amount * 2
-    @height += amount * 2
+    self.class.new @left - amount, @top - amount, @width + amount * 2, @height + amount * 2
   end
 
   def merge(rect)
-    @width = {@left + @width, rect.left + rect.width}.max
-    @height = {@top + @height, rect.top + rect.height}.max
-    @left = {@left, rect.left}.min
-    @top = {@top, rect.top}.min
-    @width -= @left
-    @height -= @top
+    width = {@left + @width, rect.left + rect.width}.max
+    height = {@top + @height, rect.top + rect.height}.max
+    left = {@left, rect.left}.min
+    top = {@top, rect.top}.min
+    width -= left
+    height -= top
+    self.class.new left, top, width, height
   end
 
   def merge_relative(rect)
-    @left = {@left + rect.left, @left}.min
-    @top = {@top + rect.top, @top}.min
-    @width = rect.left + rect.width if rect.left + rect.width > @width
-    @height = rect.top + rect.height if rect.top + rect.height > @height
+    left = {@left + rect.left, @left}.min
+    top = {@top + rect.top, @top}.min
+    width = rect.left + rect.width > @width ? rect.left + rect.width : @width
+    height = rect.top + rect.height > @height ? rect.top + rect.height : @height
+    self.class.new left, top, width, height
   end
 
   private macro def_conv_meth(name, type)

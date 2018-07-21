@@ -37,14 +37,13 @@ class Boleite::GUI
     end
 
     def reset_acc_allocation
-      @acc_allocation = @allocation
-      @acc_allocation.merge header_allocation
+      @acc_allocation = @allocation.merge header_allocation
     end
 
     def update_acc_allocation
-      @acc_allocation.merge @allocation
-      @acc_allocation.merge header_allocation
-      @acc_allocation.expand 2.0
+      @acc_allocation = @acc_allocation.merge @allocation
+      @acc_allocation = @acc_allocation.merge header_allocation
+      @acc_allocation = @acc_allocation.expand 2.0
     end
 
     def set_next_to(other : Window)

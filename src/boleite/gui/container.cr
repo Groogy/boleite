@@ -68,7 +68,7 @@ class Boleite::GUI
 
     protected def update_body_allocation
       alloc = self.allocation
-      self.each_widget { |child| alloc.merge_relative child.allocation }
+      self.each_widget { |child| alloc = alloc.merge_relative child.allocation }
       @allocation = alloc
     end
 
