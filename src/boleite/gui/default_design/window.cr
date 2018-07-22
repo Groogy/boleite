@@ -30,6 +30,9 @@ class Boleite::GUI
         graphics.draw window.header_label, header_transform
 
         transform = Matrix.mul transform, drawables.body.transformation
+        if button = window.close_button
+          graphics.draw button, transform
+        end
         render_children widget, transform, graphics
       end
 

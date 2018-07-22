@@ -5,8 +5,9 @@ class Boleite::GUI
 
     @header_size = DEFAULT_HEADER_SIZE
     @header_label = Label.new
+    @close_button : Button?
 
-    getter header_size, header_label
+    getter header_size, header_label, close_button
     setter_state header_size
 
     Cute.signal header_drag(pos : Vector2f)
@@ -57,8 +58,32 @@ class Boleite::GUI
       self.position = other_pos + other_size * 0.5
     end
 
+    def add_close_button(&block)
+      button = Button.new "X", Vector2f.new(20.0, @header_size)
+      button.click.on { |pos| block.call }
+      button.parent = self
+      @close_button = button
+      state_change.emit
+    end
+
+    def remove_close_button
+      @close_button = nil
+      state_change.emit
+    end
+
     protected def update_header_size
       @header_label.size = Vector2f.new size.x, @header_size
+      if button = @close_button
+        button.position = Vector2f.new size.x - 20.0, -@header_size
+        button.size = Vector2f.new 20.0, @header_size
+      end
+    end
+
+    protected def pass_input_to_children(event : InputEvent)
+      if button = @close_button
+        button.input.process event
+      end
+      super event unless event.claimed?
     end
   end
 end
