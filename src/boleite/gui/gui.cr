@@ -32,9 +32,10 @@ class Boleite::GUI
   end
 
   requires !@roots.includes? root
-  def add_root(root : Container)
+  def add_root(root : Window)
     @router.register root.input
     @roots << root
+    root.mark_dirty
   end
 
   def remove_root(root : Window)
