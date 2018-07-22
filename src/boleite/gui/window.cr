@@ -22,6 +22,7 @@ class Boleite::GUI
       state_change.on &->update_header_size
       header_drag.on &->move(Vector2f)
       @input.register_instance WindowHeaderDrag.new(self), header_drag
+      @input.register_instance WindowClaimLeftovers.new(self), ->{}
     end
 
     def header_allocation

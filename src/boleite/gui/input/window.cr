@@ -26,4 +26,18 @@ class Boleite::GUI
       {@pos - @last}
     end
   end
+
+  class WindowClaimLeftovers
+    def initialize(@widget : Window)
+    end
+
+    def interested?(event : InputEvent) : Bool
+      @widget.has_mouse_focus?
+    end
+
+    def translate(event : InputEvent)
+      event.claim
+      Tuple.new
+    end
+  end
 end
