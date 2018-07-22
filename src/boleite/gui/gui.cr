@@ -39,7 +39,15 @@ class Boleite::GUI
 
   def remove_root(root : Window)
     result = @roots.delete root
-    @router.unregister result.input if result
+    if result
+      @router.unregister result.input
+      allocation = root.acc_allocation
+      allocation = allocation.expand 2.0
+      @graphics.clear allocation
+      each_root do |r|
+        r.mark_dirty if allocation.intersects? r.acc_allocation
+      end
+    end
   end
 
   requires @roots.includes? root
