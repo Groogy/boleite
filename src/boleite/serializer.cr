@@ -48,6 +48,22 @@ class Boleite::Serializer(AttachedData)
       end
     end
 
+    def has_key?(k : String)
+      if hsh = @value.as?(Hash(Type, Type))
+        hsh.has_key? k
+      else
+        false
+      end
+    end
+
+    def has_index?(i : Int)
+      if ary = @value.as?(Array(Type))
+        i >= 0 && i < ary.size
+      else
+        false
+      end
+    end
+
     def marshal(index : Int, string : String)
       marshal_primitive(index.to_i32, string, Array(Type))
     end
