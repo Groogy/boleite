@@ -57,7 +57,10 @@ class Boleite::GUI
           end
           wrapped += char
           if size + next_advance >= box.size.x
-            wrapped += '\n'
+            char = '\n'
+            wrapped += char
+          end
+          if char == '\n'
             size = 0.0
             rows += 1
           end
