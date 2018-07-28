@@ -49,12 +49,15 @@ class Boleite::GUI
         string.each_char_with_index do |char, index|
           glyph = @font.get_glyph char, character_size
           size += glyph.advance
-          wrapped += char
-          if size >= box.size.x
-            char = '\n'
-            wrapped += char
+          if index + 1 < string.size
+            next_glyph = @font.get_glyph string[index+1], character_size
+            next_advance = next_glyph.advance
+          else
+            next_advance = 0
           end
-          if char == '\n'
+          wrapped += char
+          if size + next_advance >= box.size.x
+            wrapped += '\n'
             size = 0.0
             rows += 1
           end
