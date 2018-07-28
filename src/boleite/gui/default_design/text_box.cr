@@ -49,7 +49,6 @@ class Boleite::GUI
         string.each_char_with_index do |char, index|
           glyph = @font.get_glyph char, character_size
           size += glyph.advance
-          char = string[index]
           wrapped += char
           if size >= box.size.x
             char = '\n'
