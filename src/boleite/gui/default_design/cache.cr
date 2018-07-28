@@ -4,7 +4,21 @@ class Boleite::GUI
 
   class DefaultDesign < Design
     class DrawableCache(T)
-      @drawables = [] of {UInt64, T}
+      PURGE_TARGET = 1000
+
+      class DrawableData(T)
+        @id : UInt64
+        @ref : WeakRef(Widget)
+        @drawable : T
+
+        getter id, ref, drawable
+
+        def initialize(@id, @ref, @drawable)
+        end
+      end
+
+      @drawables = [] of DrawableData(T)
+      @counter = 0
       
       def initialize()
         @allocator = ->(widget : Widget) { T.new }
@@ -18,19 +32,30 @@ class Boleite::GUI
       end
 
       def find(widget)
+        @counter += 1
+        purge if @counter >= PURGE_TARGET
+        find_ref widget
+      end
+
+      def find_ref(widget)
         id = widget.object_id
-        index = @drawables.bsearch_index { |x| x[0] >= id }
+        index = @drawables.bsearch_index { |x| x.id >= id }
         if index
-          tup = @drawables[index]
-          return tup[1] if tup[0] == id
-          tup = {id, @allocator.call(widget)}
-          @drawables.insert index, tup
-          return tup[1]
+          data = @drawables[index]
+          return data.drawable if data.id == id
+          data = DrawableData(T).new id, WeakRef.new(widget.as(Widget)), @allocator.call(widget)
+          @drawables.insert index, data
+          return data.drawable
         else
-          tup = {id, @allocator.call(widget)}
-          @drawables.push tup
-          return tup[1]
+          data = DrawableData(T).new id, WeakRef.new(widget.as(Widget)), @allocator.call(widget)
+          @drawables.push data
+          return data.drawable
         end
+      end
+
+      def purge
+        @drawables.clear
+        @counter = 0
       end
     end
   end
