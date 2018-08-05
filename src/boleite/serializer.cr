@@ -129,12 +129,28 @@ class Boleite::Serializer(AttachedData)
       unmarshal_primitive(key, String, Hash(Type, Type))
     end
 
+    def unmarshal_string?(id, default)
+      if has? id
+        unmarshal_string id
+      else
+        default
+      end
+    end
+
     def unmarshal_int(index : Int)
       unmarshal_primitive(index.to_i32, Int64, Array(Type))
     end
 
     def unmarshal_int(key : String)
       unmarshal_primitive(key, Int64, Hash(Type, Type))
+    end
+
+    def unmarshal_int?(id, default)
+      if has? id
+        unmarshal_int id
+      else
+        default
+      end
     end
 
     def unmarshal_float(index : Int)
@@ -145,6 +161,14 @@ class Boleite::Serializer(AttachedData)
       unmarshal_primitive(key, Float64, Hash(Type, Type))
     end
 
+    def unmarshal_float?(id, default)
+      if has? id
+        unmarshal_float id
+      else
+        default
+      end
+    end
+
     def unmarshal_bool(index : Int)
       unmarshal_primitive(index.to_i32, Bool, Array(Type))
     end
@@ -153,12 +177,28 @@ class Boleite::Serializer(AttachedData)
       unmarshal_primitive(key, Bool, Hash(Type, Type))
     end
 
+    def unmarshal_bool?(id, default)
+      if has? id
+        unmarshal_bool id
+      else
+        default
+      end
+    end
+
     def unmarshal(index : Int, type)
       unmarshal_obj(index.to_i32, type, Array(Type))
     end
 
     def unmarshal(key : String, type)
       unmarshal_obj(key, type, Hash(Type, Type))
+    end
+
+    def unmarshal?(id, type, default)
+      if has? id
+        unmarshal id, type
+      else
+        default
+      end
     end
 
     def each
