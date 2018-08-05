@@ -48,7 +48,7 @@ class Boleite::Serializer(AttachedData)
       end
     end
 
-    def has_key?(k : String)
+    def has?(k : String)
       if hsh = @value.as?(Hash(Type, Type))
         hsh.has_key? k
       else
@@ -56,7 +56,7 @@ class Boleite::Serializer(AttachedData)
       end
     end
 
-    def has_index?(i : Int)
+    def has?(i : Int)
       if ary = @value.as?(Array(Type))
         i >= 0 && i < ary.size
       else
