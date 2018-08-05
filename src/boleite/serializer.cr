@@ -168,6 +168,14 @@ class Boleite::Serializer(AttachedData)
       end
     end
 
+    def each_child
+      hash = @value.as(Hash(Type, Type))
+      hash.each do |key, value|
+        child = Node.new @data, value, key.as(String)
+        yield child
+      end
+    end
+
     protected def internal_marshal(list : Array(Type))
       value = Array(Type).new list.size
       list.each { |val| value << val }
