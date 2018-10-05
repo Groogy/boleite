@@ -9,6 +9,7 @@ class Boleite::Shape
 
   @vertices = Vertices.new
   @color = Color.white
+  @custom_shader : Shader?
 
   property color
 
@@ -35,14 +36,15 @@ class Boleite::Shape
     @vertices.size
   end
 
-
   def clear_vertices
     @vertices.clear
   end
 
   protected def internal_render(renderer, transform)
     vertices = @vertices.get_vertices(renderer.gfx)
-    shader = @vertices.get_shader(renderer.gfx)
+    unless shader = @custom_shader
+      shader = @vertices.get_shader(renderer.gfx)
+    end
     transform = Matrix.mul transform, self.transformation
     drawcall = DrawCallContext.new vertices, shader, transform
     drawcall.uniforms["color"] = @color
