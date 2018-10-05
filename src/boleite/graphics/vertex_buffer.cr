@@ -4,6 +4,7 @@ enum Boleite::Primitive
   LinesStrip
   Triangles
   TrianglesStrip
+  TriangleFan
 end
 
 abstract struct Boleite::Vertex

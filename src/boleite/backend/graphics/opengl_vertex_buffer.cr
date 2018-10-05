@@ -68,6 +68,7 @@ class Boleite::Private::OpenGLVertexBufferObject < Boleite::VertexBufferObject
     when Primitive::LinesStrip; LibGL::LINE_STRIP
     when Primitive::Triangles; LibGL::TRIANGLES
     when Primitive::TrianglesStrip; LibGL::TRIANGLE_STRIP
+    when Primitive::TriangleFan; LibGL::TRIANGLE_FAN
     else raise ArgumentError.new "Invalid primitive given! Received #{primitive}"
     end
   end
