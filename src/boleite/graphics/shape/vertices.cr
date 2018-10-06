@@ -17,6 +17,7 @@ class Boleite::Shape
     @vbo : VertexBufferObject?
     @vertices = [] of Vertex
     @rebuild = true
+    @primitive = Primitive::Triangles
 
     def add(pos)
       @vertices << Vertex.new pos
@@ -41,6 +42,17 @@ class Boleite::Shape
       @rebuild = true
     end
 
+    def primitive
+      @primitive
+    end
+
+    def primitive=(p)
+      @primitive = p
+      if vbo = @vbo
+        vbo.primitive = @primitive
+      end
+    end
+
     def get_vertices(gfx) : VertexBufferObject
       vbo = @vbo
       if vbo.nil?
@@ -60,7 +72,7 @@ class Boleite::Shape
       ]
       vbo = gfx.create_vertex_buffer_object
       vbo.layout = layout
-      vbo.primitive = Primitive::Triangles
+      vbo.primitive = @primitive
       vbo.create_buffer
       vbo
     end

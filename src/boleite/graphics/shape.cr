@@ -11,9 +11,18 @@ class Boleite::Shape
   @color = Color.white
   @custom_shader : Shader?
 
-  property color
+  property color, custom_shader
+  delegate primitive, to: @vertices
 
   def initialize()
+  end
+
+  def initialize(p : Primitive)
+    @vertices.primitive = p
+  end
+
+  def primitive=(p)
+    @vertices.primitive = p
   end
 
   def add_vertex(x, y)
