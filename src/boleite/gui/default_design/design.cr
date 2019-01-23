@@ -17,6 +17,7 @@ class Boleite::GUI
       @button = ButtonDesign.new
       @layout = LayoutDesign.new
       @input_field = InputFieldDesign.new
+      @desktop = DesktopDesign.new
     end
 
     def get_drawer(window : Window)
@@ -41,6 +42,10 @@ class Boleite::GUI
 
     def get_drawer(field : InputField)
       @input_field
+    end
+
+    def get_drawer(desktop : Desktop)
+      @desktop
     end
   end
 end
