@@ -4,7 +4,7 @@ class Boleite::GUI
   @graphics : Graphics
   @router = InputRouter.new
   @receiver = InputReceiver.new
-  @roots = [] of Window
+  @roots = [] of Root
 
   delegate target_size, to: @graphics
   
@@ -32,13 +32,13 @@ class Boleite::GUI
   end
 
   requires !@roots.includes? root
-  def add_root(root : Window)
+  def add_root(root : Root)
     @router.register root.input
     @roots << root
     root.mark_dirty
   end
 
-  def remove_root(root : Window)
+  def remove_root(root : Root)
     result = @roots.delete root
     if result
       @router.unregister result.input
@@ -52,7 +52,7 @@ class Boleite::GUI
   end
 
   requires @roots.includes? root
-  def move_to_front(root : Window)
+  def move_to_front(root : Root)
     if @roots.last != root
       @roots.delete root
       @router.unregister root.input
@@ -63,7 +63,7 @@ class Boleite::GUI
   end
 
   def render
-    repaint_widgets = [] of Window
+    repaint_widgets = [] of Root
     repaint_flags = find_repaint_widgets
     repaint_flags.each_with_index do |flag, index|
       if flag
@@ -114,7 +114,10 @@ class Boleite::GUI
     @roots.reverse.each do |root|
       next unless root.visible?
 
-      if root.absolute_allocation.contains?(pos)|| root.header_allocation.contains?(pos)
+      to_front = false
+      to_front = true if root.absolute_allocation.contains? pos
+      to_front = true if !to_front && root.is_a? Window && root.header_allocation.contains?(pos)
+      if to_front
         move_to_front root
         break
       end

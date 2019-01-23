@@ -1,5 +1,6 @@
 class Boleite::GUI
-  class Window < Container
+  class Window < Root
+
     DEFAULT_SIZE = Vector2f.new 100.0, 30.0
     DEFAULT_HEADER_SIZE = 24.0
 
