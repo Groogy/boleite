@@ -31,6 +31,13 @@ class Boleite::StateStack
     old_state
   end
 
+  requires empty? == false
+  requires state.nil? == false
+  def replace(state : State)
+    pop
+    push state
+  end
+
   def clear
     while !empty?
       pop
