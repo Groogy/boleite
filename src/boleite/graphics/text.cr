@@ -42,8 +42,10 @@ class Boleite::Text
   end
 
   def default_color=(val)
+    if val != @default_color
+      @vertices.mark_for_rebuild
+    end
     @default_color = val
-    @vertices.mark_for_rebuild
   end
 
   protected def internal_render(renderer, transform)
