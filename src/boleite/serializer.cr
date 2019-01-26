@@ -252,6 +252,13 @@ class Boleite::Serializer(AttachedData)
           list << child.internal_unmarshal(U).as(U)
         end
         list
+      elsif value = @value.as? Hash(Type, Type)
+        list = klass.new
+        value.each do |key, value|
+          child = Node.new @data, value, key.as(String)
+          list << child.internal_unmarshal(U).as(U)
+        end
+        list
       else
         raise Exception.new "Serialization::Node value of wrong type! Have #{@value.class}, expected Array(Type)"
       end
