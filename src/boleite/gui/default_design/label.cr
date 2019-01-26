@@ -27,6 +27,7 @@ class Boleite::GUI
         text.text = string
         text.size = label.character_size
         text.position = pos
+        text.default_color = label.color
       end
 
       def draw_text(text, transform, graphics)

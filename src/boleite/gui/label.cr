@@ -11,10 +11,11 @@ class Boleite::GUI
     @orientation = Orientation::Left
     @use_cursor = false
     @cursor_position = 0
+    @color = Color.white
 
-    getter text, character_size, orientation, cursor_position
+    getter text, character_size, orientation, cursor_position, color
     getter? use_cursor
-    setter_state text, character_size, orientation, use_cursor, cursor_position
+    setter_state text, character_size, orientation, use_cursor, cursor_position, color
 
     def initialize()
       super
