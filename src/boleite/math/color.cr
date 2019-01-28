@@ -23,6 +23,14 @@ module Boleite::Color
     Colorf.new 1f32, 1f32, 0f32, 1f32
   end
 
+  def self.pink
+    Colorf.new 1f32, 0f32, 1f32, 1f32
+  end
+
+  def self.cyan
+    Colorf.new 0f32, 1f32, 1f32, 1f32
+  end
+
   def self.transparent
     Colorf.new 0f32, 0f32, 0f32, 0f32
   end
