@@ -26,12 +26,12 @@ class Boleite::Sprite
 
   def texture_rect=(rect)
     @texture_rect = rect
-    @vertices.update_uv_vertices @size, @texture_rect
+    @vertices.update_uv_vertices @texture.size, @texture_rect
   end
 
   def size=(size)
     @size = size
-    @vertices.update_uv_vertices @size, @texture_rect
+    @vertices.update_uv_vertices @texture.size, @texture_rect
   end
 
   protected def internal_render(renderer, transform)
