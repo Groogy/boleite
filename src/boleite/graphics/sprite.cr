@@ -7,7 +7,7 @@ class Boleite::Sprite
   include Drawable
   include Transformable
 
-  getter texture, size
+  getter texture, texture_rect, size
 
   @size : Vector2u
   @vertices = Vertices.new
@@ -18,8 +18,10 @@ class Boleite::Sprite
     @vertices.update_uv_vertices @size, @texture_rect
   end
 
-  def texture_rect
-    @texture_rect
+  def texture=(@texture)
+    @size = @texture.size
+    @texture_rect = IntRect.new(0, 0, @size.x.to_i, @size.y.to_i)
+    @vertices.update_uv_vertices @size, @texture_rect
   end
 
   def texture_rect=(rect)
