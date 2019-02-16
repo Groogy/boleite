@@ -5,19 +5,23 @@ class Boleite::Image
   @width : UInt32
   @height : UInt32
   @bpp : UInt32
-  @pixels : Bytes
+  @pixels : Pointer(UInt8)
 
-  getter width, height, bpp
+  getter width, height, bpp, pixels
 
   def self.load_file(file)
     Image.new file
   end
 
   def initialize(@width, @height, @bpp = 32u32)
-    @pixels = Bytes.new byte_size
+    @pixels = Pointer(UInt8).malloc byte_size
   end
 
   def initialize(@width, @height, @bpp, @pixels)
+  end
+
+  def initialize(@width, @height, @bpp, pixels)
+    @pixels = pixels.pointer
   end
 
   def initialize(file : String)
@@ -32,16 +36,12 @@ class Boleite::Image
     Vector2u.new(@width, @height)
   end
 
-  def byte_size
-    width * height * bpp
+  def byte_size : UInt64
+    width.to_u64 * height.to_u64 * bpp.to_u64
   end
 
   def clone
     self.class.new @width, @height, @bpp, @pixels.clone
-  end
-
-  def pixels : Bytes
-    @pixels
   end
 
   def update(x, y, w, h, color : Colori)
@@ -57,7 +57,7 @@ class Boleite::Image
   end
 
   def set_pixel(x, y, color : Colori)
-    index = (x + y * self.height) * @bpp / 8
+    index = (x + y * width) * (@bpp / 8)
     @pixels[index + 0] = color.r if @bpp >= 8
     @pixels[index + 1] = color.g if @bpp >= 16
     @pixels[index + 2] = color.b if @bpp >= 24
