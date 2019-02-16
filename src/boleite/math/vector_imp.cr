@@ -208,4 +208,7 @@ module Boleite
   alias Color32f  = Vector4f32
   alias Color64f  = Vector4f64
   alias Colorf    = Color32f
+
+  alias Color8i    = Vector4u8
+  alias Colori     = Color8i
 end
