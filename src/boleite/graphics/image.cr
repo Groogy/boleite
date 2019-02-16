@@ -44,6 +44,30 @@ class Boleite::Image
     @pixels
   end
 
+  def update(x, y, w, h, color : Colori)
+    update IntRect.new(x, y, w, h), color
+  end
+
+  def update(rect, color : Colori)
+    rect.height.times do |y|
+      rect.width.times do |x|
+        set_pixel rect.left + x, rect.top + y, color
+      end
+    end
+  end
+
+  def set_pixel(x, y, color : Colori)
+    index = (x + y * self.height) * @bpp / 8
+    @pixels[index + 0] = color.r if @bpp >= 8
+    @pixels[index + 1] = color.g if @bpp >= 16
+    @pixels[index + 2] = color.b if @bpp >= 24
+    @pixels[index + 3] = color.a if @bpp >= 32
+  end
+
+  def fill(color : Coliri)
+    update 0, 0, width, height, color
+  end
+
   protected def initialize(native : LibFreeImage::FIBITMAP*)
     @width = LibFreeImage.getWidth native
     @height = LibFreeImage.getHeight native
