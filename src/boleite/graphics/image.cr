@@ -13,7 +13,7 @@ class Boleite::Image
     Image.new file
   end
 
-  def initialize(@width, @height, @bpp = 32)
+  def initialize(@width, @height, @bpp = 32u32)
     @pixels = Bytes.new byte_size
   end
 
@@ -64,8 +64,8 @@ class Boleite::Image
     @pixels[index + 3] = color.a if @bpp >= 32
   end
 
-  def fill(color : Coliri)
-    update 0, 0, width, height, color
+  def fill(color : Colori)
+    update 0, 0, width.to_i, height.to_i, color
   end
 
   protected def initialize(native : LibFreeImage::FIBITMAP*)
