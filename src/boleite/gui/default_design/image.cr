@@ -34,6 +34,7 @@ class Boleite::GUI
         else
           sprite.texture = @undefined
         end
+        sprite.size = image.size.to_u32
       end
 
       def draw_sprite(sprite, transform, graphics)

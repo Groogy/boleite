@@ -10,8 +10,12 @@ class Boleite::GUI
     end
 
     def initialize(@texture)
-      super
-      self.size = @texture.size
+      super()
+      if texture = @texture
+        self.size = texture.size.to_f
+      else
+        self.size = Vector2f.zero
+      end
     end
   end
 end
