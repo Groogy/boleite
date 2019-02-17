@@ -8,9 +8,11 @@ class Boleite::Sprite
   include Transformable
 
   getter texture, texture_rect, size
+  property color
 
   @size : Vector2u
   @vertices = Vertices.new
+  @color = Color.white
 
   def initialize(@texture : Texture)
     @size = @texture.size
@@ -43,6 +45,7 @@ class Boleite::Sprite
     transform = Matrix.mul scale_transform, transform
     drawcall = DrawCallContext.new vertices, shader, transform
     drawcall.uniforms["colorTexture"] = texture
+    drawcall.uniforms["modulateColor"] = color
     drawcall.buffers << uv
     renderer.draw drawcall
   end

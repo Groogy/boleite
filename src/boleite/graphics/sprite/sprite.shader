@@ -35,12 +35,13 @@ fragment
 {
   layout(location = 0) out vec4 outputColor;
   uniform sampler2D colorTexture;
+  uniform vec4 modulateColor;
   in VertexData {
     vec2 uv;
   } inputVertex;
   void main()
   {
     vec4 color = texture(colorTexture, inputVertex.uv);
-    outputColor = color;
+    outputColor = color * modulateColor;
   }
 }
