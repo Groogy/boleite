@@ -22,14 +22,14 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     @@internal_formats[{format, type}]
   end
 
-  def self.translate_bpp(bpp)
-    case bpp
-    when 8; LibGL::RED
-    when 16; LibGL::RG
-    when 24; LibGL::RGB
-    when 32; LibGL::RGBA
+  def self.translate_external_format(format)
+    case format
+    when Format::Red; LibGL::RED
+    when Format::RG; LibGL::RG
+    when Format::RGB; LibGL::RGB
+    when Format::RGBA; LibGL::RGBA
     else
-      raise ArgumentError.new "Invalid bits per pixel format given!(#{bpp})"
+      raise ArgumentError.new "Invalid external data format given!(#{format})"
     end
   end
 
@@ -89,10 +89,10 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
   requires x_dest + width <= @size.x
   requires y_dest + height <= @size.y
   requires @depth == false
-  def update(pixels, width, height, x_dest, y_dest, bpp)
+  def update(pixels : Pointer(UInt8), width, height, x_dest, y_dest, format : Format)
     activate do
       GL.safe_call do
-        external_format = self.class.translate_bpp(bpp)
+        external_format = self.class.translate_external_format format
         alignment = self.class.translate_unpack_alignment @format
         LibGL.pixelStorei LibGL::UNPACK_ALIGNMENT, alignment
         LibGL.texSubImage2D LibGL::TEXTURE_2D, 0, x_dest, y_dest, width, height, external_format, LibGL::UNSIGNED_BYTE, pixels
@@ -100,6 +100,22 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
       end
     end
   end
+
+  requires x_dest + width <= @size.x
+  requires y_dest + height <= @size.y
+  requires @depth == false
+  def update(pixels : Pointer(Float32), width, height, x_dest, y_dest, format : Format)
+    activate do
+      GL.safe_call do
+        external_format = self.class.translate_external_format format
+        alignment = self.class.translate_unpack_alignment @format
+        LibGL.pixelStorei LibGL::UNPACK_ALIGNMENT, alignment
+        LibGL.texSubImage2D LibGL::TEXTURE_2D, 0, x_dest, y_dest, width, height, external_format, LibGL::FLOAT, pixels
+        LibGL.pixelStorei LibGL::UNPACK_ALIGNMENT, 4
+      end
+    end
+  end
+
 
   requires x + texture.size.x <= @size.x
   requires y + texture.size.y <= @size.y

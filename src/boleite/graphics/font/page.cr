@@ -140,7 +140,7 @@ class Boleite::Font
       y = rect.top - 1
       w = rect.width + 2
       h = rect.height + 2
-      @texture.update(pixels, w, h, x, y, 8)
+      @texture.update(pixels, w.to_u32, h.to_u32, x.to_u32, y.to_u32, Texture::Format::Red)
     end
   end
 end
