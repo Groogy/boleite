@@ -33,9 +33,11 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     end
   end
 
-  def self.translate_unpack_alignment(bpp)
-    case bpp
-    when 32; 4
+  def self.translate_unpack_alignment(format)
+    case format
+    when Format::RGBA; 4
+    when Format::RGB; 3
+    when Format::RG; 2
     else; 1
     end
   end
@@ -91,7 +93,7 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     activate do
       GL.safe_call do
         external_format = self.class.translate_bpp(bpp)
-        alignment = self.class.translate_unpack_alignment bpp
+        alignment = self.class.translate_unpack_alignment @format
         LibGL.pixelStorei LibGL::UNPACK_ALIGNMENT, alignment
         LibGL.texSubImage2D LibGL::TEXTURE_2D, 0, x_dest, y_dest, width, height, external_format, LibGL::UNSIGNED_BYTE, pixels
         LibGL.pixelStorei LibGL::UNPACK_ALIGNMENT, 4
