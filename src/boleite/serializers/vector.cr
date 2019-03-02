@@ -1,7 +1,7 @@
 struct Boleite::VectorImp(Type, Size)
   struct ObjSerializer(Type, Size)
     def marshal(obj, node)
-      tmp = Array(Serializer::Type).new(Size)
+      tmp = Array(SerializableType).new(Size)
       obj.elements.each do |value|
         tmp << value.to_f
       end
@@ -9,7 +9,7 @@ struct Boleite::VectorImp(Type, Size)
     end
 
     def unmarshal(node)
-      arr = node.value.as(Array(Serializer::Type))
+      arr = node.value.as(Array(SerializableType))
       VectorImp(Type, Size).new do |index|
         Type.new(arr[index].as(Number))
       end

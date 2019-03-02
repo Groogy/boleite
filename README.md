@@ -56,8 +56,8 @@ class MyApplication < Boleite::Application
     if File.exists? CONFIGURATION_FILE
       File.open(CONFIGURATION_FILE, "r") do |file|
         serializer = Boleite::Serializer.new nil
-        data = serializer.read(file)
-        config = serializer.unmarshal(data, MyConfiguration)
+        serializer.read(file)
+        config = serializer.unmarshal(MyConfiguration)
         config.as(MyConfiguration)
       end
     else

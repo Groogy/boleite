@@ -1,11 +1,11 @@
 struct Boleite::Version
   struct ObjSerializer
     def marshal(obj, node)
-      node.value = [obj.major.to_i64, obj.minor.to_i64, obj.patch.to_i64] of Serializer::Type
+      node.value = [obj.major.to_i64, obj.minor.to_i64, obj.patch.to_i64] of SerializableType
     end
     
     def unmarshal(node)
-      arr = node.value.as(Array(Serializer::Type))
+      arr = node.value.as(Array(SerializableType))
       arr = arr.map { |item| item.as(Int64) }
 
       Version.new(arr[0].to_u8, arr[1].to_u8, arr[2].to_u8)
