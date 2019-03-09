@@ -64,6 +64,16 @@ class Boleite::Image
     @pixels[index + 3] = color.a if @bpp >= 32
   end
 
+  def get_pixel(x, y)
+    r, g, b, a = 0
+    index = (x + y * width) * (@bpp / 8)
+    r = @pixels[index + 0] if @bpp >= 8
+    g = @pixels[index + 1] if @bpp >= 16
+    b = @pixels[index + 2] if @bpp >= 24
+    a = @pixels[index + 3] if @bpp >= 32
+    Colori.new r, g, b, a
+  end
+
   def fill(color : Colori)
     update 0, 0, width.to_i, height.to_i, color
   end
