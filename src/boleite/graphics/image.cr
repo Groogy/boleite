@@ -56,6 +56,8 @@ class Boleite::Image
     end
   end
 
+  requires x >= 0 && x < @width
+  requires y >= 0 && y < @height
   def set_pixel(x, y, color : Colori)
     index = (x + y * width) * (@bpp / 8)
     @pixels[index + 0] = color.r if @bpp >= 8
@@ -64,6 +66,8 @@ class Boleite::Image
     @pixels[index + 3] = color.a if @bpp >= 32
   end
 
+  requires x >= 0 && x < @width
+  requires y >= 0 && y < @height
   def get_pixel(x, y)
     r, g, b, a = 0
     index = (x + y * width) * (@bpp / 8)
