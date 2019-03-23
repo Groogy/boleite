@@ -191,9 +191,7 @@ abstract class Boleite::VertexBuffer
   end
 
   def add_data(slice : Slice(UInt8)) : Void
-    slice.each do |byte|
-      @data << byte
-    end
+    @data.concat slice
     @rebuild = true
   end
 
