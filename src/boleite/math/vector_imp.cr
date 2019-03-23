@@ -20,23 +20,20 @@ struct Boleite::VectorImp(Type, Size)
   end
 
   def initialize(elements : Array(Type))
-    @elements = StaticArray(Type, Size).new(Type.zero)
-    elements.each_index do |index|
-      @elements[index] = elements[index]
+    @elements = StaticArray(Type, Size).new do |index|
+      elements[index]
     end
   end
 
   def initialize(&block)
-    @elements = StaticArray(Type, Size).new(Type.zero)
-    @elements.map_with_index! do |value, index|
+    @elements = StaticArray(Type, Size).new do |index|
       yield index
     end
   end
   
   def initialize(*args)
-    @elements = StaticArray(Type, Size).new(Type.zero)
-    args.each_index do |index|
-      @elements[index] = args[index]
+    @elements = StaticArray(Type, Size).new do |index|
+      args[index]
     end
   end
 
