@@ -23,6 +23,11 @@ abstract class Boleite::Random
     generate.to_f / UInt32::MAX
   end
 
+  # Method used by standard library
+  def rand(max : Int) : Int
+    get_int 0, max
+  end
+
   Contracts.ignore_method generate
 
   protected abstract def generate : UInt32
