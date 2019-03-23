@@ -1,4 +1,5 @@
 class Boleite::Image
+  include CrystalClear
   class Error < Exception
   end
   
@@ -68,8 +69,15 @@ class Boleite::Image
 
   requires x >= 0 && x < @width
   requires y >= 0 && y < @height
+  def set_pixel(x, y, color : Colorf)
+    converted = (color * 255).to_u8
+    set_pixel x, y, color
+  end
+
+  requires x >= 0 && x < @width
+  requires y >= 0 && y < @height
   def get_pixel(x, y)
-    r, g, b, a = 0
+    r, g, b, a = 0u8, 0u8, 0u8, 0u8
     index = (x + y * width) * (@bpp / 8)
     r = @pixels[index + 0] if @bpp >= 8
     g = @pixels[index + 1] if @bpp >= 16
