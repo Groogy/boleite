@@ -154,6 +154,14 @@ struct Boleite::VectorImp(Type, Size)
   def_conv_meth(to_i, Int32)
   def_conv_meth(to_u, UInt32)
   def_conv_meth(to_f, Float64)
+
+  def to_s(io : IO)
+    io << "Vec"
+    io << SIZE
+    io << "{"
+    @elements.join ", ", io, &.inspect(io)
+    io << "}"
+  end
 end
 
 module Boleite
