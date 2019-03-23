@@ -164,7 +164,7 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
     @repeating
   end
   
-  def repeating?(val : Bool) : Bool
+  def repeating=(val : Bool) : Bool
     @repeating = val
     activate do
       GL.safe_call do

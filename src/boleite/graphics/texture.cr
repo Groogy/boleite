@@ -67,7 +67,7 @@ abstract class Boleite::Texture
   abstract def smooth=(val : Bool) : Bool
   
   abstract def is_repeating? : Bool
-  abstract def repeating?(val : Bool) : Bool
+  abstract def repeating=(val : Bool) : Bool
 
   abstract def activate(&block)
 end
