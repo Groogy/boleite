@@ -157,7 +157,7 @@ struct Boleite::VectorImp(Type, Size)
 
   def to_s(io : IO)
     io << "Vec"
-    io << SIZE
+    io << {% SIZE %}
     io << "{"
     @elements.join ", ", io, &.inspect(io)
     io << "}"
