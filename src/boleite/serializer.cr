@@ -269,6 +269,11 @@ class Boleite::Serializer(AttachedData)
       end
     end
 
+    def get_child(key : String)
+      hash = @value.as(Hash(SerializableType, SerializableType))
+      Node.new @data, hash[key], key
+    end
+
     def each
       hash = @value.as(Hash(SerializableType, SerializableType))
       hash.each do |key, value|
