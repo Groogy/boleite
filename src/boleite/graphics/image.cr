@@ -98,7 +98,7 @@ class Boleite::Image
     ptr = LibFreeImage.getBits native
     pitch = LibFreeImage.getPitch native
 
-    @pixels = Bytes.new byte_size
+    @pixels = Pointer(UInt8).malloc byte_size
 
     bytes = 0
     @height.times do |y|
