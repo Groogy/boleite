@@ -12,6 +12,14 @@ depth
   function = Always;
 }
 
+blend
+{
+  enabled = true;
+  function = Add;
+  sourceFactor = SourceAlpha;
+  destinationFactor = OneMinusSourceAlpha;
+}
+
 vertex
 {
   layout(location = 0) in vec2 position;
