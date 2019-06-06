@@ -47,7 +47,7 @@ abstract class Boleite::Texture
   end
 
   def update(bytes : Bytes, width : UInt32, height : UInt32, x_dest : UInt32, y_dest : UInt32, format : Format) : Void
-    update bytes.pointer(0), width, height, x_dest, y_dest, format
+    update bytes.to_unsafe, width, height, x_dest, y_dest, format
   end
 
   abstract def create(width : UInt32, height : UInt32, format : Format, type : Type) : Void
