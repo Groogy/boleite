@@ -35,7 +35,7 @@ vertex
     vec4 worldPos = world * vec4(position, 0, 1);
     vec4 viewPos = camera * worldPos;
     gl_Position = projection * viewPos;
-    outputVertex.uv = vec2(uv.x, 1-uv.y);
+    outputVertex.uv = uv;
   }
 }
 
