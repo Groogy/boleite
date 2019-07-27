@@ -32,6 +32,16 @@ lib LibAssImp
     POLYGON = 0x8
   end
 
+  @[Flags]
+  enum SceneFlags
+    Incomplete
+    Validated
+    ValidationWarning
+    NonVerboseFormat
+    Terrain
+    AllowShared
+  end
+
   enum MorphingMethod
     VERTEX_BLEND = 0x1
     MORPH_NORMALIZED = 0x2
