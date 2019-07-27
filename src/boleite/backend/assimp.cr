@@ -5,9 +5,9 @@ lib LibAssImp
   MAX_NUMBER_OF_TEXTURECOORDS = 0x8
   HINTMAXTEXTURELEN = 9
 
-  type Real = Float32
-  type Int = Int32
-  type UInt = UInt32
+  alias Real = Float32
+  alias Int = Int32
+  alias UInt = UInt32
 
   struct String
     length : LibC::ULong
@@ -25,7 +25,7 @@ lib LibAssImp
     META_MAX = 7
   end
 
-  enum PrimitiveType
+  enum PrimitiveType : UInt32
     POINT = 0x1
     LINE = 0x2
     TRIANGLE = 0x4
