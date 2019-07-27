@@ -190,9 +190,19 @@ abstract class Boleite::VertexBuffer
     add_data data
   end
 
+  def add_data(value : Float32) : Void
+    size = sizeof(Float32)
+    data = pointerof(value).as(UInt8*).to_slice(size)
+    add_data data
+  end
+
   def add_data(slice : Slice(UInt8)) : Void
     @data.concat slice
     @rebuild = true
+  end
+
+  def add_data(*args) : Void
+    args.each { |a| add_data a }
   end
 
   def clear : Void
