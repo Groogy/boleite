@@ -103,7 +103,7 @@ class Boleite::Font
     end
 
     private def create_row(width, height) : Row
-      row_height = height + height / 10
+      row_height = height + height // 10
       size = @texture.size
       max_size = @gfx.texture_maximum_size
       while @next_row + row_height >= size.y || width >= size.x

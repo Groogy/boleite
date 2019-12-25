@@ -60,7 +60,7 @@ class Boleite::Image
   requires x >= 0 && x < @width
   requires y >= 0 && y < @height
   def set_pixel(x, y, color : Colori)
-    index = (x + y * width) * (@bpp / 8)
+    index = (x + y * width) * (@bpp // 8)
     @pixels[index + 0] = color.r if @bpp >= 8
     @pixels[index + 1] = color.g if @bpp >= 16
     @pixels[index + 2] = color.b if @bpp >= 24
@@ -78,7 +78,7 @@ class Boleite::Image
   requires y >= 0 && y < @height
   def get_pixel(x, y)
     r, g, b, a = 0u8, 0u8, 0u8, 0u8
-    index = (x + y * width) * (@bpp / 8)
+    index = (x + y * width) * (@bpp // 8)
     r = @pixels[index + 0] if @bpp >= 8
     g = @pixels[index + 1] if @bpp >= 16
     b = @pixels[index + 2] if @bpp >= 24
@@ -109,8 +109,8 @@ class Boleite::Image
         when 24; convert_24bit pixel, bytes
         when 32; convert_32bit pixel, bytes
         end
-        pixel += @bpp / 8
-        bytes += @bpp / 8
+        pixel += @bpp // 8
+        bytes += @bpp // 8
       end
       ptr += pitch
     end

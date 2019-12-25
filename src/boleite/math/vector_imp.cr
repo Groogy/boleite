@@ -103,10 +103,12 @@ struct Boleite::VectorImp(Type, Size)
   def_vector_math(:-, VectorImp(Type, Size))
   def_vector_math(:*, VectorImp(Type, Size))
   def_vector_math(:/, VectorImp(Type, Size))
+  def_vector_math(://, VectorImp(Type, Size))
   def_vector_math(:+, Type)
   def_vector_math(:-, Type)
   def_vector_math(:*, Type)
   def_vector_math(:/, Type)
+  def_vector_math(://, Type)
 
   protected def do_math(a : self, b : self, &block) : self
     @elements.each_index do |i|
