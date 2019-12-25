@@ -4,7 +4,7 @@ struct Boleite::MatrixImp(Type, Dimension, Size)
   TYPE = Type
 
   private macro to_coord(index)
-    Vector2u8.new({{index}}.to_u8 % Dimension, {{index}}.to_u8 / Dimension)
+    Vector2u8.new({{index}}.to_u8 % Dimension, {{index}}.to_u8 // Dimension)
   end
 
   private macro to_index(x, y)
