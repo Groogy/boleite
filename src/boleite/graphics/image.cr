@@ -71,7 +71,7 @@ class Boleite::Image
   requires y >= 0 && y < @height
   def set_pixel(x, y, color : Colorf)
     converted = (color * 255).to_u8
-    set_pixel x, y, color
+    set_pixel x, y, converted
   end
 
   requires x >= 0 && x < @width

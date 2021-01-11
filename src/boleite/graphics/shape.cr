@@ -33,7 +33,7 @@ class Boleite::Shape
     @vertices.add pos
   end
 
-  def []=(index, pos) : Vector2f32
+  def []=(index, pos)
     @vertices.set index, pos
   end
 

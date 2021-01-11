@@ -8,7 +8,7 @@ class Boleite::Font
     @code = Char::ZERO
 
     def self.generate_hash(code) : UInt64
-      code.hash.to_i64.to_u64
+      code.hash.to_u64
     end
 
     def generate_hash : UInt64
