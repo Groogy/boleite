@@ -1,11 +1,11 @@
 class Boleite::Clock
   def initialize
-    @start = Time.utc_now
+    @start = Time.utc
   end
 
   def restart
     old = @start
-    @start = Time.utc_now
+    @start = Time.utc
     @start - old
   end
 
