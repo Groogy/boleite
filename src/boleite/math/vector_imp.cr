@@ -110,6 +110,12 @@ struct Boleite::VectorImp(Type, Size)
   def_vector_math(:/, Type)
   def_vector_math(://, Type)
 
+  def -()
+    self.class.new do |index|
+      -self[index]
+    end
+  end
+
   protected def do_math(a : self, b : self, &block) : self
     @elements.each_index do |i|
       @elements[i] = yield a[i], b[i]
