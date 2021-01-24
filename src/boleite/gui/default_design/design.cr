@@ -41,6 +41,10 @@ class Boleite::GUI
       @layout
     end
 
+    def get_drawer(layout : GridLayout)
+      @layout
+    end
+
     def get_drawer(field : InputField)
       @input_field
     end
