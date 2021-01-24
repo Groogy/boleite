@@ -33,6 +33,7 @@ class Boleite::GUI
     def remove(child)
       child = @children.delete child
       child.parent = nil if child
+      state_change.emit
       child
     end
 
@@ -51,6 +52,7 @@ class Boleite::GUI
         child.parent = nil
       end
       @children.clear
+      state_change.emit
     end
 
     def each_widget
@@ -66,7 +68,13 @@ class Boleite::GUI
     abstract def reset_acc_allocation
     abstract def update_acc_allocation
 
+    protected def reset_body_allocation
+      @allocation.width = @min_size.x
+      @allocation.height = @min_size.y
+    end
+
     protected def update_body_allocation
+      reset_body_allocation
       alloc = self.allocation
       self.each_widget { |child| alloc = alloc.merge_relative child.allocation }
       @allocation = alloc
