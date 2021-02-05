@@ -1,20 +1,26 @@
 class Boleite::GUI
-  class RootMouseOver
+  class RootMouseOver 
+    @pos = Vector2f.zero
+    @clicked_inside = false
+    
     def initialize(@gui : GUI)
     end
 
     def interested?(event : InputEvent) : Bool
       if event.is_a? MousePosEvent
+        @pos = event.pos
+      elsif event.is_a? MouseButtonEvent
         @gui.each_root do |root|
-          return true if root.allocation.contains? event.pos
+          if root.absolute_allocation.contains? @pos
+            return event.action == InputAction::Release
+          end
         end
       end
-      false
+      return false
     end
 
     def translate(event : InputEvent)
-      event = event.as(MousePosEvent)
-      {event.pos}
+      {@pos}
     end
   end
 end

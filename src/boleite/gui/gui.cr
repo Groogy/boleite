@@ -57,7 +57,7 @@ class Boleite::GUI
       @roots.delete root
       @router.unregister root.input
       @roots << root
-      @router.register_at 0, root.input
+      @router.register_at 1, root.input
       root.mark_dirty
     end
   end
@@ -116,7 +116,6 @@ class Boleite::GUI
 
       to_front = false
       to_front = true if root.absolute_allocation.contains? pos
-      to_front = true if !to_front && root.is_a? Window && root.header_allocation.contains?(pos)
       if to_front
         move_to_front root
         break
