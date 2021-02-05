@@ -42,27 +42,26 @@ class Boleite::GUI
       end
 
       def draw_drawables(drawables, transform, graphics)
-        graphics.draw drawables.header_border, transform
-        graphics.draw drawables.header, transform
         graphics.draw drawables.body_border, transform
         graphics.draw drawables.body, transform
+        graphics.draw drawables.header_border, transform
+        graphics.draw drawables.header, transform
       end
 
       def update_drawables_header(drawables, window)
-        offset = Vector2f.new 0.0, -window.header_size
+        offset = Vector2f.zero
         header_size = Vector2f.new window.size.x, window.header_size
         pos = window.position
-        size = window.size
         update_border drawables.header_border, pos, header_size, BORDER_SIZE, offset
-        update_body drawables.header, pos, size, PRIMARY_COLOR, offset
+        update_body drawables.header, pos, header_size, PRIMARY_COLOR, offset
       end
 
       def update_drawables_body(drawables, window)
-        no_offset = Vector2f.zero
+        offset = Vector2f.zero
         pos = window.position
         size = window.size
-        update_border drawables.body_border, pos, size, BORDER_SIZE, no_offset
-        update_body drawables.body, pos, size, SECONDARY_COLOR, no_offset
+        update_border drawables.body_border, pos, size, BORDER_SIZE, offset
+        update_body drawables.body, pos, size, SECONDARY_COLOR, offset
       end
 
       def update_body(shape, pos, size, color, offset)

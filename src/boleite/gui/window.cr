@@ -28,7 +28,7 @@ class Boleite::GUI
 
     def header_allocation
       pos = absolute_position
-      FloatRect.new pos.x, pos.y - @header_size, size.x, @header_size
+      FloatRect.new pos.x, pos.y, size.x, @header_size
     end
 
     def header_text=(text)
@@ -40,12 +40,11 @@ class Boleite::GUI
     end
 
     def reset_acc_allocation
-      @acc_allocation = @allocation.merge header_allocation
+      @acc_allocation = @allocation
     end
 
     def update_acc_allocation
       @acc_allocation = @acc_allocation.merge @allocation
-      @acc_allocation = @acc_allocation.merge header_allocation
       @acc_allocation = @acc_allocation.expand 2.0
     end
 
@@ -73,10 +72,15 @@ class Boleite::GUI
       state_change.emit
     end
 
+    def add(child)
+      child.position += Boleite::Vector2f.new 0.0, @header_size
+      super child
+    end
+
     protected def update_header_size
       @header_label.size = Vector2f.new size.x, @header_size
       if button = @close_button
-        button.position = Vector2f.new size.x - 20.0, -@header_size
+        button.position = Vector2f.new size.x - 20.0, 0.0
         button.size = Vector2f.new 20.0, @header_size
       end
     end
