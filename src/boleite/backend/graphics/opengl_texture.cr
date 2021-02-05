@@ -89,7 +89,7 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
   requires x_dest + width <= @size.x
   requires y_dest + height <= @size.y
   requires @depth == false
-  def update(pixels : Pointer(UInt8), width, height, x_dest, y_dest, format : Format)
+  def update(pixels : Pointer(UInt8), width, height, x_dest, y_dest, format : Format) : Void
     activate do
       GL.safe_call do
         external_format = self.class.translate_external_format format
@@ -104,7 +104,7 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
   requires x_dest + width <= @size.x
   requires y_dest + height <= @size.y
   requires @depth == false
-  def update(pixels : Pointer(Float32), width, height, x_dest, y_dest, format : Format)
+  def update(pixels : Pointer(Float32), width, height, x_dest, y_dest, format : Format) : Void
     activate do
       GL.safe_call do
         external_format = self.class.translate_external_format format
@@ -119,7 +119,7 @@ class Boleite::Private::OpenGLTexture < Boleite::Texture
 
   requires x + texture.size.x <= @size.x
   requires y + texture.size.y <= @size.y
-  def update(texture, x, y)
+  def update(texture, x, y) : Void
     src_fb = OpenGLFrameBuffer.new
     dst_fb = OpenGLFrameBuffer.new
     tex_size = texture.size.to_i

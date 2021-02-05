@@ -14,15 +14,15 @@ class Boleite::Private::GLFWSurface < Boleite::RenderTarget
     end
   end
 
-  def width
+  def width : UInt32
     size.x
   end
 
-  def height
+  def height : UInt32
     size.y
   end
 
-  def size
+  def size : Boleite::Vector2u
     GLFW.safe_call do
       LibGLFW3.getWindowSize @surface, out width, out height
       Vector2u.new width.to_u32, height.to_u32

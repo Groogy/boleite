@@ -5,12 +5,12 @@ class Boleite::ForwardRenderer < Boleite::Renderer
   def initialize(@gfx : GraphicsContext, @camera : Camera, @default_shader : Shader)
   end
 
-  def clear(color : Colorf)
+  def clear(color : Colorf) : Void
     @gfx.clear color
     @gfx.clear_depth
   end
 
-  def draw(drawcall : DrawCallContext)
+  def draw(drawcall : DrawCallContext) : Void
     shader = ensure_shader drawcall.shader
     apply_shader_settings shader, drawcall.transformation, drawcall.uniforms
     drawcall.buffers.each { |buffer| drawcall.vertices.attach_buffer(buffer, true) }
@@ -19,7 +19,7 @@ class Boleite::ForwardRenderer < Boleite::Renderer
     end
   end
 
-  def present
+  def present : Void
     @gfx.present
   end
 

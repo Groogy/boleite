@@ -9,7 +9,7 @@ class Boleite::InputReceiver < Boleite::InputProcessor
     def initialize(@action : A, @callback : P)
     end
 
-    def for?(type)
+    def for?(type) : Bool
       A == type
     end
 

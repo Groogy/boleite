@@ -12,11 +12,11 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
   @attachments = {} of Symbol => AttachmentData
   @depth_texture : OpenGLTexture? = nil
   
-  def initialize
+  def initialize : Void
     GL.safe_call { LibGL.genFramebuffers 1, pointerof(@object_id) }
   end
 
-  def finalize
+  def finalize : Void
     GL.safe_call { LibGL.deleteFramebuffers 1, pointerof(@object_id) }
   end
 
@@ -31,7 +31,7 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
     result
   end
 
-  def blit(src, src_rect, dst_rect)
+  def blit(src, src_rect, dst_rect) : Void
     activate(LibGL::DRAW_FRAMEBUFFER) do
       src.activate(LibGL::READ_FRAMEBUFFER) do
         src1, src2 = src_rect.bounds
@@ -41,7 +41,7 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
     end
   end
   
-  def attach_buffer(texture : Texture, identifier : Symbol, slot : UInt8)
+  def attach_buffer(texture : Texture, identifier : Symbol, slot : UInt8) : Void
     activate do
       tex = texture.as(OpenGLTexture)
       GL.safe_call { LibGL.framebufferTexture2D LibGL::FRAMEBUFFER, LibGL::COLOR_ATTACHMENT0 + slot, LibGL::TEXTURE_2D, tex.identifier, 0 }
@@ -50,7 +50,7 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
   end
 
   requires texture.is_depth?
-  def attach_depth_buffer(texture)
+  def attach_depth_buffer(texture) : Void
     activate do
       tex = texture.as(OpenGLTexture)
       GL.safe_call { LibGL.framebufferTexture2D LibGL::FRAMEBUFFER, LibGL::DEPTH_ATTACHMENT, LibGL::TEXTURE_2D, tex.identifier, 0 }
@@ -58,7 +58,7 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
     end
   end
 
-  def detach_buffer(identifier)
+  def detach_buffer(identifier) : Void
     activate do
       attachment = @attachments[identifier]
       GL.safe_call { LibGL.framebufferTexture2D Lib::FRAMEBUFFER, LibGL::COLOR_ATTACHMENT0 + attachment.slot, LibGL::TEXTURE_2D, 0, 0 }
@@ -66,14 +66,14 @@ class Boleite::Private::OpenGLFrameBuffer < Boleite::FrameBuffer
     end
   end
 
-  def detach_depth_buffer()
+  def detach_depth_buffer() : Void
     activate do
       GL.safe_call { LibGL.framebufferTexture2D Lib::FRAMEBUFFER, LibGL::DEPTH_ATTACHMENT, LibGL::TEXTURE_2D, 0, 0 }
       @depth_texture = nil
     end
   end
 
-  def detach_all_buffers()
+  def detach_all_buffers() : Void
     activate do
       @attachments.size.times do |index|
         GL.safe_call { LibGL.framebufferTexture2D Lib::FRAMEBUFFER, LibGL::COLOR_ATTACHMENT0 + index, LibGL::TEXTURE_2D, 0, 0 }

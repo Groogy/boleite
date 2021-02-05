@@ -89,42 +89,42 @@ class Boleite::Private::OpenGLShader < Boleite::Shader
     end
   end
 
-  def has_world_transform?
+  def has_world_transform? : Bool
     @value_settings.world_transform.empty? == false
   end
 
-  def has_view_transform?
+  def has_view_transform? : Bool
     @value_settings.view_transform.empty? == false
   end
 
-  def has_projection_transform?
+  def has_projection_transform? : Bool
     @value_settings.projection_transform.empty? == false
   end
 
   requires has_world_transform?
-  def set_world_transform(value)
+  def set_world_transform(value) : Void
     set_parameter @value_settings.world_transform, value
   end
 
   requires has_view_transform?
-  def set_view_transform(value)
+  def set_view_transform(value) : Void
     set_parameter @value_settings.view_transform, value
   end
 
   requires has_projection_transform?
-  def set_projection_transform(value)
+  def set_projection_transform(value) : Void
     set_parameter @value_settings.projection_transform, value
   end
 
-  def world_transform=(value)
+  def world_transform=(value) : Void
     set_world_transform(value)
   end
 
-  def view_transform=(value)
+  def view_transform=(value) : Void
     set_view_transform(value)
   end
 
-  def projection_transform=(value)
+  def projection_transform=(value) : Void
     set_projection_transform(value)
   end
 

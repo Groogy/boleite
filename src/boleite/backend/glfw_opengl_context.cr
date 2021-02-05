@@ -9,16 +9,16 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
     GL.safe_call { LibGL.enable LibGL::CULL_FACE }
   end
 
-  def main_target
+  def main_target : Boleite::RenderTarget
     @glfw_surface
   end
 
-  def clear(color)
+  def clear(color) : Void
     GL.safe_call { LibGL.clearColor(color.r, color.g, color.b, color.a) }
     GL.safe_call { LibGL.clear LibGL::COLOR_BUFFER_BIT }
   end
 
-  def clear_depth
+  def clear_depth : Void
     GL.safe_call { LibGL.clear LibGL::DEPTH_BUFFER_BIT }
   end
 
@@ -33,7 +33,7 @@ class Boleite::Private::GLFWOpenGLContext < Boleite::GraphicsContext
     GL.safe_call { LibGL.disable LibGL::SCISSOR_TEST }
   end
 
-  def present
+  def present : Void
     GLFW.safe_call{ LibGLFW3.swapBuffers(@glfw_surface.ptr) }
   end
 

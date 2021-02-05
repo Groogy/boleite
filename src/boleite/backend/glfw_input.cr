@@ -23,12 +23,12 @@ module Boleite::Private::GLFWInput
 
   def self.bind_callbacks(window)
     GLFW.safe_call do
-      LibGLFW3.setWindowCloseCallback(window, ->self.on_window_close)
-      LibGLFW3.setKeyCallback(window, ->self.on_key)
-      LibGLFW3.setCharCallback(window, ->self.on_char)
-      LibGLFW3.setMouseButtonCallback(window, ->self.on_mouse_button)
-      LibGLFW3.setScrollCallback(window, ->self.on_scroll)
-      LibGLFW3.setCursorPosCallback(window, ->self.on_cursor_pos)
+      LibGLFW3.setWindowCloseCallback window, ->on_window_close
+      LibGLFW3.setKeyCallback window, ->on_key
+      LibGLFW3.setCharCallback window, ->on_char
+      LibGLFW3.setMouseButtonCallback window, ->on_mouse_button
+      LibGLFW3.setScrollCallback window, ->on_scroll
+      LibGLFW3.setCursorPosCallback window, ->on_cursor_pos
     end
   end
 

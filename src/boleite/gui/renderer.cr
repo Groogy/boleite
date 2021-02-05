@@ -52,12 +52,12 @@ class Boleite::GUI
       buffer.add_data Vertex.new( 1f32,  1f32, 1f32, 1f32)
     end
 
-    def clear(color : Colorf)
+    def clear(color : Colorf) : Void
       size = @texture.size.to_i
       clear IntRect.new(0, 0, size.x, size.y), color
     end
 
-    def clear(rect : IntRect, color : Colorf)
+    def clear(rect : IntRect, color : Colorf) : Void
       top = @texture.size.y.to_i - rect.top
       bottom = top - rect.height
       rect.top = bottom
@@ -69,7 +69,7 @@ class Boleite::GUI
     end
 
     requires drawcall.shader
-    def draw(drawcall : DrawCallContext)
+    def draw(drawcall : DrawCallContext) : Void
       @framebuffer.activate do
         if shader = drawcall.shader
           apply_shader_settings shader, drawcall.transformation, drawcall.uniforms
@@ -81,7 +81,7 @@ class Boleite::GUI
       end
     end
 
-    def present
+    def present : Void
       @paste_shader.set_parameter "colorTexture", @texture
       @paste_shader.activate do
         @vertices.render(1)

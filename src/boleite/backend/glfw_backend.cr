@@ -44,7 +44,7 @@ class Boleite::Private::GLFW < Boleite::Backend
   end
 
   requires config.gfx == BackendConfiguration::GfxType::OpenGL
-  def create_graphics(config : BackendConfiguration)
+  def create_graphics(config : BackendConfiguration) : GraphicsContext
     setup_main_target_settings config
     native = create_surface config.video_mode
     GLFWInput.bind_callbacks native
@@ -52,7 +52,7 @@ class Boleite::Private::GLFW < Boleite::Backend
     create_graphics_context @primary_surface, config
   end
 
-  def default_config
+  def default_config : BackendConfiguration
     config = BackendConfiguration.new
     config.gfx = BackendConfiguration::GfxType::OpenGL
     config.version = Version.new(4, 5)
