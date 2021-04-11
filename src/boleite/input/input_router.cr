@@ -22,7 +22,7 @@ class Boleite::InputRouter < Boleite::InputProcessor
     obj = @receivers.delete receiver
   end
 
-  def process(event : InputEvent)
+  def process(event : Boleite::InputEvent) : Void
     @receivers.each do |receiver|
       receiver.process event
     end

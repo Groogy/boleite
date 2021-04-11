@@ -76,7 +76,7 @@ class Boleite::InputReceiver < Boleite::InputProcessor
     @persistent_actions.clear
   end
 
-  def process(event : InputEvent)
+  def process(event : Boleite::InputEvent) : Void
     process_list(@actions, event) unless event.claimed?
     process_list(@persistent_actions, event)
   end
