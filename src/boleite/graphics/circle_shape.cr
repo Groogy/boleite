@@ -17,7 +17,6 @@ class Boleite::CircleShape
   delegate :color, :color=, to: @shape
 
   def initialize(@radius = 1.0)
-    @shape.color = Boleite::Color.red
   end
 
   def radius=(@radius)
