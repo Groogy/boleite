@@ -16,6 +16,12 @@ struct Boleite::VectorImp(Type, Size)
     @elements = StaticArray(Type, Size).new(Type.zero)
   end
 
+  def initialize(vec : VectorImp(U, Size)) forall U
+    @elements = StaticArray(Type, Size).new do |index|
+      Type.new(vec[index])
+    end
+  end
+
   def initialize(@elements : StaticArray(Type, Size))
   end
 
@@ -33,7 +39,7 @@ struct Boleite::VectorImp(Type, Size)
   
   def initialize(*args)
     @elements = StaticArray(Type, Size).new do |index|
-      args[index]
+      Type.new args[index]
     end
   end
 
