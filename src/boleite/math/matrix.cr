@@ -80,6 +80,14 @@ module Boleite::Matrix
     cpy
   end
 
+  def self.scale(matrix : MatrixImp(T, 3, 9), scale : T) forall T
+    self.scale matrix, VectorImp(T, 3).new(scale, scale, scale)
+  end
+
+  def self.scale(matrix : MatrixImp(T, 4, 16), scale : T) forall T
+    self.scale matrix, VectorImp(T, 4).new(scale, scale, scale, T.new(1))
+  end
+
   def self.scale(matrix : MatrixImp(T, 3, 9), scale : VectorImp(T, 3)) forall T
     cpy = matrix.dup
     cpy[0, 0] *= scale.x

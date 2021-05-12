@@ -46,10 +46,10 @@ module Boleite::Vector
     )
   end
 
-  def self.rotate(v : VectorImp(T, 2), radians : Float) forall T
+  def self.rotate(v : VectorImp(T, 2), radians) forall T
     VectorImp(T, 2).new(
-      v.x * Math.cos(radians) - v.y * Math.sin(radians),
-      v.x * Math.sin(radians) + v.y * Math.cos(radians)
+      v.x * T.new(Math.cos(radians)) - v.y * T.new(Math.sin(radians)),
+      v.x * T.new(Math.sin(radians)) + v.y * T.new(Math.cos(radians))
     )
   end
 
